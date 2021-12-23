@@ -1,4 +1,6 @@
-var stompClient = null;
+const url = 'http://localhost:8080';
+let stompClient = null;
+let gameId;
 
 function setConnected(connected) {
     $("#connect").prop("disabled", connected);
@@ -11,14 +13,42 @@ function setConnected(connected) {
     $("#greetings").html("");
 }
 
-function connect() {
-    var socket = new SockJS('/shed');
+function createGame() {
+    let username = document.getElementById("name").value;
+    if (username == null || username === '') {
+        alert("Please enter name");
+    } else {
+        $.ajax({
+            url: url + "/game/create",
+            type: 'POST',
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify({
+                "creator": username,
+                "numberOfDecks": 1,
+                "numberOfCards": 3,
+            }),
+            success: function (data) {
+                gameId = data.gameId;
+                alert("Game created with this gameId: " + data.gameId);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        })
+    }
+}
+
+function connect(id = null) {
+    if (id != null) gameId = id;
+    const socket = new SockJS(url + '/shed');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         setConnected(true);
-        console.log('Connected: ' + frame);
-        stompClient.subscribe('/topic/greetings', function (greeting) {
-            showGreeting(JSON.parse(greeting.body).content);
+        console.log(gameId);
+        stompClient.subscribe('/topic/action/' + gameId, function (message) {
+            showGreeting(JSON.parse(message.body).gameId);
+            console.log("subscribed to /topic/action/" + gameId);
         });
     });
 }
@@ -31,12 +61,17 @@ function disconnect() {
     console.log("Disconnected");
 }
 
-function sendName() {
-    stompClient.send("/app/hello", {}, JSON.stringify({'name': $("#name").val()}));
-}
-
 function showGreeting(message) {
     $("#greetings").append("<tr><td>" + message + "</td></tr>");
+}
+
+function sendName() {
+    stompClient.send("/topic/action/" + gameId, {},
+        JSON.stringify({
+                'gameId': gameId,
+            }
+        )
+    );
 }
 
 $(function () {
@@ -44,7 +79,13 @@ $(function () {
         e.preventDefault();
     });
     $("#connect").click(function () {
-        connect();
+        let gameId = document.getElementById("game-id").value;
+        if (gameId == null || gameId === '') {
+            createGame();
+            connect();
+        } else {
+            connect(gameId);
+        }
     });
     $("#disconnect").click(function () {
         disconnect();

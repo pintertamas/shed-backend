@@ -14,29 +14,31 @@ public class Game {
     private PriorityQueue<Player> players;
     private Deck deck;
     private GameStatus status;
-    private int amountOfCards;
-    private int amountOfDecks;
+    private int numberOfCards;
+    private int numberOfDecks;
     private int maxPlayers;
 
-    public Game(Player player, int amountOfCards, int amountOfDecks) {
+    public Game(Player player, int numberOfCards, int numberOfDecks) {
         this.gameId = UUID.randomUUID().toString();
         this.players = new PriorityQueue<>();
         this.players.add(player);
         this.deck = new Deck();
         this.status = GameStatus.NEW;
-        this.amountOfCards = amountOfCards;
-        this.amountOfDecks = amountOfDecks;
-        this.maxPlayers = 5 * amountOfDecks;
+        this.numberOfCards = numberOfCards;
+        this.numberOfDecks = numberOfDecks;
+        this.maxPlayers = 5 * numberOfDecks;
     }
 
     public void initGame() {
         getDeck().createCards();
         getDeck().shuffleDeck();
         for (Player player : getPlayers()) {
-            for (int i = 0; i < amountOfCards; i++)
-            player.getHiddenCards().add(getDeck().getCards().pop());
-            player.getHiddenCards().add(getDeck().getCards().pop());
-            player.getHiddenCards().add(getDeck().getCards().pop());
+            player.initPlayer(getNumberOfCards());
+            for (int i = 0; i < numberOfCards; i++) {
+                player.getHiddenCards().add(getDeck().getCards().pop());
+                player.getHiddenCards().add(getDeck().getCards().pop());
+                player.getHiddenCards().add(getDeck().getCards().pop());
+            }
         }
 
         setStatus(GameStatus.IN_PROGRESS);
