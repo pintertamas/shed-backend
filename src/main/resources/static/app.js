@@ -46,11 +46,35 @@ function connect(id = null) {
     stompClient.connect({}, function (frame) {
         setConnected(true);
         console.log(gameId);
-        stompClient.subscribe('/topic/action/' + gameId, function (message) {
-            showGreeting(JSON.parse(message.body).gameId);
-            console.log("subscribed to /topic/action/" + gameId);
+        stompClient.subscribe('/topic/action/' + gameId, function (response) {
+            handleGameplay(response);
         });
     });
+}
+
+function connectToRandom() {
+    let username = document.getElementById("name").value;
+    if (username == null || username === '') {
+        alert("Please enter login");
+    } else {
+        $.ajax({
+            url: url + "/game/connect/random",
+            type: 'POST',
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify({
+                "username": username
+            }),
+            success: function (data) {
+                gameId = data.gameId;
+                connect(gameId);
+                alert("Congrats you're in this lobby: " + data.gameId);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        })
+    }
 }
 
 function disconnect() {
@@ -61,11 +85,34 @@ function disconnect() {
     console.log("Disconnected");
 }
 
-function showGreeting(message) {
-    $("#greetings").append("<tr><td>" + message + "</td></tr>");
+function handleGameplay(data) {
+    console.log("connect response: " + data);
+    console.log("action: " + JSON.stringify(data));
 }
 
-function sendName() {
+function action() {
+    $.ajax({
+        url: url + "/game/action",
+        type: 'POST',
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify({
+            "gameId": gameId,
+            "player": {
+                "username": "Tomi",
+            },
+            "playedCard": {
+                "number": 5,
+            },
+        }),
+        success: function (data) {
+            alert("response: " + data);
+        },
+        error: function (error) {
+            console.log("wrong action");
+            console.log(error);
+        }
+    })
     stompClient.send("/topic/action/" + gameId, {},
         JSON.stringify({
                 'gameId': gameId,
@@ -87,10 +134,13 @@ $(function () {
             connect(gameId);
         }
     });
+    $("#connect-random").click(function () {
+        connectToRandom();
+    });
     $("#disconnect").click(function () {
         disconnect();
     });
     $("#send").click(function () {
-        sendName();
+        action();
     });
 });

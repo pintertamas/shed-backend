@@ -17,10 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Slf4j
@@ -37,7 +34,7 @@ public class GameController {
     private final GameService gameService;
     private final SimpMessagingTemplate simpMessagingTemplate;
 
-    @PostMapping("/create")
+    @RequestMapping(value = "/create", method = {RequestMethod.POST}, produces = "application/json")
     public ResponseEntity<?> create(@RequestBody GameOptionsRequest request) {
         log.info("create game request: {}", request);
         try {
@@ -51,7 +48,7 @@ public class GameController {
         }
     }
 
-    @PostMapping("/start")
+    @RequestMapping(value = "/start", method = {RequestMethod.POST}, produces = "application/json")
     public ResponseEntity<?> start(@RequestBody ConnectionRequest request) {
         log.info("start game request: {}", request);
         try {
@@ -64,7 +61,7 @@ public class GameController {
         }
     }
 
-    @PostMapping("/connect")
+    @RequestMapping(value = "/connect", method = {RequestMethod.POST}, produces = "application/json")
     public ResponseEntity<Game> connect(@RequestBody ConnectionRequest request) {
         log.info("connect request: {}", request);
         try {
@@ -77,11 +74,11 @@ public class GameController {
         }
     }
 
-    @PostMapping("/connect/random")
+    @RequestMapping(value = "/connect/random", method = {RequestMethod.POST}, produces = "application/json")
     public ResponseEntity<Game> connectRandom(@RequestBody String username) {
         log.info("connect random {}", username);
         try {
-            if (userRepository.findUserByUsername(username) == null) throw new UserNotFoundException();
+            //if (userRepository.findUserByUsername(username) == null) throw new UserNotFoundException();
             Player player = new Player(username);
             return ResponseEntity.ok(gameService.connectToRandomGame(player));
         } catch (GameNotFoundException | UserNotFoundException | LobbyIsFullException e) {
@@ -90,7 +87,7 @@ public class GameController {
         }
     }
 
-    @PostMapping("/action")
+    @RequestMapping(value = "/action", method = {RequestMethod.POST}, produces = "application/json")
     public ResponseEntity<Game> gamePlay(@RequestBody ActionRequest request) {
         log.info("action: {}", request);
         try {
