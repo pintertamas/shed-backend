@@ -43,4 +43,8 @@ public class Game {
 
         setStatus(GameStatus.IN_PROGRESS);
     }
+
+    public void addPlayer(Player newPlayer) {
+        players.add(newPlayer);
+    }
 }

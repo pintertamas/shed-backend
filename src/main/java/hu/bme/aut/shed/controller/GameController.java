@@ -8,9 +8,8 @@ import hu.bme.aut.shed.model.Player;
 import hu.bme.aut.shed.model.dto.ActionRequest;
 import hu.bme.aut.shed.model.dto.ConnectionRequest;
 import hu.bme.aut.shed.model.dto.GameOptionsRequest;
-import hu.bme.aut.shed.repository.GameRepository;
-import hu.bme.aut.shed.repository.UserRepository;
 import hu.bme.aut.shed.service.GameService;
+import hu.bme.aut.shed.storage.GameStorage;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +23,6 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 @RequestMapping("/game")
 public class GameController {
-
-    @Autowired
-    GameRepository gameRepository;
-
-    @Autowired
-    UserRepository userRepository;
 
     private final GameService gameService;
     private final SimpMessagingTemplate simpMessagingTemplate;
@@ -52,7 +45,7 @@ public class GameController {
     public ResponseEntity<?> start(@RequestBody ConnectionRequest request) {
         log.info("start game request: {}", request);
         try {
-            Game game = gameRepository.findGameByGameId(request.getGameId());
+            Game game = GameStorage.getInstance().getGameByID(request.getGameId());
             if (game == null) throw new GameNotFoundException();
             return ResponseEntity.ok(gameService.startGame(game));
         } catch (GameNotFoundException | UserNotFoundException e) {

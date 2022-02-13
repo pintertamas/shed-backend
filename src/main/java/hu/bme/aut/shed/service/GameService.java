@@ -7,23 +7,13 @@ import hu.bme.aut.shed.model.Game;
 import hu.bme.aut.shed.model.GameStatus;
 import hu.bme.aut.shed.model.Player;
 import hu.bme.aut.shed.model.dto.ActionRequest;
-import hu.bme.aut.shed.repository.GameRepository;
-import hu.bme.aut.shed.repository.UserRepository;
+import hu.bme.aut.shed.storage.GameStorage;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Objects;
 
 @Service
 @AllArgsConstructor
 public class GameService {
-
-    @Autowired
-    GameRepository gameRepository;
-
-    @Autowired
-    UserRepository userRepository;
 
     public Game createGame(String username, int numberOfCards, int numberOfDecks) throws UserNotFoundException {
         //if (userRepository.findUserByUsername(username) == null) throw new UserNotFoundException();
@@ -34,40 +24,42 @@ public class GameService {
     public Game connectPlayer(Player newPlayer, String gameId) throws GameNotFoundException, UserNotFoundException, LobbyIsFullException {
         if (newPlayer == null) throw new UserNotFoundException();
 
-        if (gameRepository.findGameByGameId(gameId) == null) {
+        Game game = GameStorage.getInstance().getGames().get(gameId);
+
+        if (game == null) {
             throw new GameNotFoundException();
         }
-
-        Game game = gameRepository.findGameByGameId(gameId);
 
         if (game.getPlayers().size() >= game.getMaxPlayers()) {
             throw new LobbyIsFullException();
         }
 
         game.getPlayers().add(newPlayer);
-        gameRepository.save(game);
+        GameStorage.getInstance().updateGame(game);
         return game;
     }
 
     public Game connectToRandomGame(Player newPlayer) throws GameNotFoundException, UserNotFoundException, LobbyIsFullException {
         if (newPlayer == null) throw new UserNotFoundException();
-        Game game = gameRepository.findAllByStatusEquals(GameStatus.NEW).stream()
+        Game game = GameStorage.getInstance().getGames().values().stream()
                 .filter(it -> it.getStatus().equals(GameStatus.NEW))
                 .findFirst().orElseThrow(GameNotFoundException::new);
-        game = connectPlayer(newPlayer, game.getGameId());
+        game.addPlayer(newPlayer);
+        game.setStatus(GameStatus.IN_PROGRESS);
+        GameStorage.getInstance().addGame(game);
         return game;
     }
 
     public Game startGame(Game game) throws GameNotFoundException, UserNotFoundException {
-        if (gameRepository.findGameByGameId(game.getGameId()) == null) throw new GameNotFoundException();
+        if (GameStorage.getInstance().getGameByID(game.getGameId()) == null) throw new GameNotFoundException();
         if (game.getPlayers().isEmpty() || game.getPlayers().peek() == null) throw new GameNotFoundException();
         game.initGame();
-        gameRepository.save(game);
+        GameStorage.getInstance().addGame(game);
         return game;
     }
 
     public Game action(ActionRequest action) throws GameNotFoundException {
-        Game game = gameRepository.findGameByGameId(action.getGameId());
+        Game game = GameStorage.getInstance().getGameByID(action.getGameId());
         // do the action if valid
         return game;
     }
