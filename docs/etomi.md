@@ -1,6 +1,6 @@
 # Haladási napló
 # 1. hét
-Elkészítettük a specifikációt amiben minden fontos dolgot leírtunk ami a projekthez tartozik,ennek készítése során is felmerült a kérdés, hogy websocket-et vagy mqtt-t 
+Elkészítettük a [specifikációt](https://github.com/pintertamas/shed-backend/blob/master/docs/specifikacio.pdf) amiben minden fontos dolgot leírtunk ami a projekthez tartozik,ennek készítése során is felmerült a kérdés, hogy websocket-et vagy mqtt-t 
 használjunk majd, de végül az mqtt mellett tettük le a voksunkat, hosszabb utánanézést követően.
 Emelett megbeszéltük, hogy hogyan fogjuk szétosztani a munkát az első pár héten.
 A terv az, hogy amíg nincsen kész az alap kommunikációt biztosító backend, addig közösen dolgozunk rajta, majd ha elkészültünk vele és képesek leszünk bármiféle információt átadni rajta, elkezdjük a mobil kliens fejlesztését is.
