@@ -3,6 +3,6 @@ A Spring backend for a university project. It lets clients communicate over the 
 
 Our documentation will be available under these links:
 
-[Pintér Tamás](https://github.com/pintertamas/shed-backend/blob/master/ptomi.md)
+[Pintér Tamás](https://github.com/pintertamas/shed-backend/blob/master/docs/ptomi.md)
 
-[Ernyei Tamás](https://github.com/pintertamas/shed-backend/blob/master/etomi.md)
+[Ernyei Tamás](https://github.com/pintertamas/shed-backend/blob/master/docs/etomi.md)
