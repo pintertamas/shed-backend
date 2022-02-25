@@ -19,7 +19,7 @@ function createGame() {
         alert("Please enter name");
     } else {
         $.ajax({
-            url: url + "/game/create",
+            url: url + "/game/create?creator=" + username + "&numberOfDecks=1&numberOfCards=3",
             type: 'POST',
             dataType: "json",
             contentType: "application/json",

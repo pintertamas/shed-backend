@@ -35,7 +35,7 @@ public class GameService {
         }
 
         game.getPlayers().add(newPlayer);
-        GameStorage.getInstance().updateGame(game);
+        GameStorage.getInstance().saveGame(game);
         return game;
     }
 

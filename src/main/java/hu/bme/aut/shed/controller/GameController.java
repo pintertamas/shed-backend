@@ -12,7 +12,6 @@ import hu.bme.aut.shed.service.GameService;
 import hu.bme.aut.shed.storage.GameStorage;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -27,13 +26,15 @@ public class GameController {
     private final GameService gameService;
     private final SimpMessagingTemplate simpMessagingTemplate;
 
-    @RequestMapping(value = "/create", method = {RequestMethod.POST}, produces = "application/json")
-    public ResponseEntity<?> create(@RequestBody GameOptionsRequest request) {
+    @RequestMapping(value = "/create", method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json")
+    public ResponseEntity<?> create(@RequestParam String creator, @RequestParam int numberOfDecks, @RequestParam int numberOfCards) {
+        GameOptionsRequest request = new GameOptionsRequest(creator, numberOfDecks, numberOfCards);
         log.info("create game request: {}", request);
         try {
             //if (userRepository.findUserByUsername(request.getCreator()) == null) throw new UserNotFoundException();
             Player player = new Player(request.getCreator());
             Game game = gameService.createGame(player.getUsername(), request.getNumberOfCards(), request.getNumberOfDecks());
+            GameStorage.getInstance().saveGame(game);
             return ResponseEntity.ok(game);
         } catch (UserNotFoundException e) {
             log.error(e.getMessage());
@@ -55,11 +56,12 @@ public class GameController {
     }
 
     @RequestMapping(value = "/connect", method = {RequestMethod.POST}, produces = "application/json")
-    public ResponseEntity<Game> connect(@RequestBody ConnectionRequest request) {
+    public ResponseEntity<Game> connect(@RequestParam String gameId, @RequestParam String username) {
+        ConnectionRequest request = new ConnectionRequest(gameId, username);
         log.info("connect request: {}", request);
         try {
-            //if (userRepository.findUserByUsername(request.getUsername()) == null) throw new UserNotFoundException();
             Player player = new Player(request.getUsername());
+            System.out.println(GameStorage.getInstance().getGames().toString());
             return ResponseEntity.ok(gameService.connectPlayer(player, request.getGameId()));
         } catch (GameNotFoundException | UserNotFoundException | LobbyIsFullException e) {
             log.error(e.getMessage());
@@ -68,7 +70,7 @@ public class GameController {
     }
 
     @RequestMapping(value = "/connect/random", method = {RequestMethod.POST}, produces = "application/json")
-    public ResponseEntity<Game> connectRandom(@RequestBody String username) {
+    public ResponseEntity<Game> connectRandom(@RequestParam String username) {
         log.info("connect random {}", username);
         try {
             //if (userRepository.findUserByUsername(username) == null) throw new UserNotFoundException();

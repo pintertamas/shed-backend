@@ -32,7 +32,7 @@ public class GameStorage {
         games.put(game.getGameId(), game);
     }
 
-    public void updateGame(Game game) {
+    public void saveGame(Game game) {
         games.put(game.getGameId(), game);
     }
 }
