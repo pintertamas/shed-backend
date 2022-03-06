@@ -9,8 +9,7 @@ A következő lépés az volt,hogy megterveztük a program adatmodeljét(lent l�
 Adatmodel: ![adatmodell](https://github.com/pintertamas/shed-backend/blob/master/docs/data_model_1.png?raw=true)
 
 # 2. hét
-A levelezős konzultáció után megpróbáltunk egy rendes [ER diagramot](https://github.com/pintertamas/shed-backend/blob/master/docs/data_model_2.png?raw=true) készíteni és frissítettük a [specifikációt](https://github.com/pintertamas/shed-backend/blob/master/docs/specifikacio2.pdf), így már látható a játék részletes szabálya és el is képzelhető, hogy a felhasználók mit fognak látni, mikor játszanak a játékkal. Ehhez csináltunk látványtervet is, ami alább látható.
-[!insert pictures here]()
+A levelezős konzultáció után megpróbáltunk egy rendes [ER diagramot](https://github.com/pintertamas/shed-backend/blob/master/docs/data_model_2.png?raw=true) készíteni és frissítettük a [specifikációt](https://github.com/pintertamas/shed-backend/blob/master/docs/specifikacio2.pdf), így már látható a játék részletes szabálya és el is képzelhető, hogy a felhasználók mit fognak látni, mikor játszanak a játékkal.
 Kicsit jobban utánanéztünk, hogy hogyan tudnánk a gyakorlatban használni a RabbitMQ-t és arra jutottunk hogy mégiscsak a websocketes megközelítés valószínűleg jobb lesz a kétirányú kommunikáció miatt számunkra.
 Megcsináltunk egy Spring alapú websocketes kommunikációt lehetővé tevő alkalmazást és Flutterben is csináltunk hozzá egy kezdetleges demo alkalmazást.
 Csináltunk egy SSL Certificatet az alábbi [tutorial](https://www.thomasvitale.com/https-spring-boot-ssl-certificate/) segítségével, így már HTTPS-t használ az alkalmazásunk.
