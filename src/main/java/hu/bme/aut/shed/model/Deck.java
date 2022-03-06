@@ -9,6 +9,7 @@ import java.util.*;
 @Setter
 public class Deck {
     private Stack<Card> cards;
+    private int deck_count;
 
     public Deck() {
         this.cards = new Stack<>();
