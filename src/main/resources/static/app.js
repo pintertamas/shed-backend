@@ -1,4 +1,4 @@
-const url = 'http://localhost:8080';
+const url = 'https://localhost:8443';
 let stompClient = null;
 let gameId;
 
@@ -43,7 +43,7 @@ function connect(id = null) {
     if (id != null) gameId = id;
     const socket = new SockJS(url + '/shed');
     stompClient = Stomp.over(socket);
-    stompClient.connect({}, function (frame) {
+    stompClient.connect({}, function () {
         setConnected(true);
         console.log(gameId);
         stompClient.subscribe('/topic/action/' + gameId, function (response) {
