@@ -22,10 +22,10 @@ public class Game {
         this.gameId = UUID.randomUUID().toString();
         this.players = new PriorityQueue<>();
         this.players.add(player);
-        this.deck = new Deck();
-        this.status = GameStatus.NEW;
         this.numberOfCards = numberOfCards;
         this.numberOfDecks = numberOfDecks;
+        this.deck = new Deck(numberOfDecks);
+        this.status = GameStatus.NEW;
         this.maxPlayers = 5 * numberOfDecks;
     }
 

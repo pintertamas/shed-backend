@@ -11,15 +11,18 @@ public class Deck {
     private Stack<Card> cards;
     private int deck_count;
 
-    public Deck() {
+    public Deck(int deck_count) {
+        this.deck_count = deck_count;
         this.cards = new Stack<>();
     }
 
     public void createCards() {
-        for (Shape shape : Shape.values()) {
-            for (int i = 2; i < 14; i++) {
-                Card newCard = new Card(shape, i);
-                this.cards.add(newCard);
+        for (int i = 0; i < deck_count; i++){
+            for (Shape shape : Shape.values()) {
+                for (int y = 2; y < 14; y++) {
+                    Card newCard = new Card(shape, y);
+                    this.cards.add(newCard);
+                }
             }
         }
     }

@@ -8,12 +8,13 @@ import java.util.ArrayList;
 @Getter
 @Setter
 public class Player implements Comparable {
+    private User user;
     private String username;
     private ArrayList<Card> hiddenCards;
     private ArrayList<Card> visibleCards;
     private ArrayList<Card> hand;
 
-    public Player(String username) {
+    public Player(String username ,User user) {
         this.username = username;
         this.hiddenCards = new ArrayList<>();
         this.visibleCards = new ArrayList<>();
