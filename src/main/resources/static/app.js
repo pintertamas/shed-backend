@@ -28,11 +28,15 @@ function createGame() {
                 "numberOfDecks": 1,
                 "numberOfCards": 3,
             }),
+            beforeSend: function (request) {
+                request.withCredentials = false;
+            },
             success: function (data) {
                 gameId = data.gameId;
                 alert("Game created with this gameId: " + data.gameId);
             },
             error: function (error) {
+                alert("error")
                 console.log(error);
             }
         })
