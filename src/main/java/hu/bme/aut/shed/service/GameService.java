@@ -18,7 +18,7 @@ public class GameService {
 
     public Game createGame(User user, int numberOfCards, int numberOfDecks) throws UserNotFoundException {
         //if (userRepository.findUserByUsername(username) == null) throw new UserNotFoundException();
-        Player player = new Player(user.getUsername(), user);
+        Player player = new Player(user);
         return new Game(player, numberOfCards, numberOfDecks);
     }
 

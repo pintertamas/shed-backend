@@ -5,6 +5,7 @@ import hu.bme.aut.shed.exception.LobbyIsFullException;
 import hu.bme.aut.shed.exception.UserNotFoundException;
 import hu.bme.aut.shed.model.Game;
 import hu.bme.aut.shed.model.Player;
+import hu.bme.aut.shed.model.User;
 import hu.bme.aut.shed.model.dto.ActionRequest;
 import hu.bme.aut.shed.model.dto.ConnectionRequest;
 import hu.bme.aut.shed.model.dto.GameOptionsRequest;
@@ -32,8 +33,7 @@ public class GameController {
         log.info("create game request: {}", request);
         try {
             //if (userRepository.findUserByUsername(request.getCreator()) == null) throw new UserNotFoundException();
-            Player player = new Player(request.getCreator());
-            Game game = gameService.createGame(player.getUsername(), request.getNumberOfCards(), request.getNumberOfDecks());
+            Game game = gameService.createGame(creator, request.getNumberOfCards(), request.getNumberOfDecks());
             GameStorage.getInstance().saveGame(game);
             return ResponseEntity.ok(game);
         } catch (UserNotFoundException e) {

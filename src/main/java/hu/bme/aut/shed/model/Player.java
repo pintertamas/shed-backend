@@ -14,8 +14,9 @@ public class Player implements Comparable {
     private ArrayList<Card> visibleCards;
     private ArrayList<Card> hand;
 
-    public Player(String username ,User user) {
-        this.username = username;
+    public Player(User user) {
+        this.user = user;
+        this.username = user.getUsername();
         this.hiddenCards = new ArrayList<>();
         this.visibleCards = new ArrayList<>();
         this.hand = new ArrayList<>();
