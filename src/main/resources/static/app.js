@@ -28,11 +28,15 @@ function createGame() {
                 "numberOfDecks": 1,
                 "numberOfCards": 3,
             }),
+            beforeSend: function (request) {
+                request.withCredentials = false;
+            },
             success: function (data) {
                 gameId = data.gameId;
                 alert("Game created with this gameId: " + data.gameId);
             },
             error: function (error) {
+                alert("error")
                 console.log(error);
             }
         })
@@ -46,7 +50,7 @@ function connect(id = null) {
     stompClient.connect({}, function () {
         setConnected(true);
         console.log(gameId);
-        stompClient.subscribe('/topic/action/' + gameId, function (response) {
+        stompClient.subscribe('/topic/' + gameId, function (response) {
             handleGameplay(response);
         });
     });
@@ -91,31 +95,10 @@ function handleGameplay(data) {
 }
 
 function action() {
-    $.ajax({
-        url: url + "/game/action",
-        type: 'POST',
-        dataType: "json",
-        contentType: "application/json",
-        data: JSON.stringify({
-            "gameId": gameId,
-            "player": {
-                "username": "Tomi",
-            },
-            "playedCard": {
-                "number": 5,
-            },
-        }),
-        success: function (data) {
-            alert("response: " + data);
-        },
-        error: function (error) {
-            console.log("wrong action");
-            console.log(error);
-        }
-    })
-    stompClient.send("/topic/action/" + gameId, {},
+    let message = document.getElementById("message").value;
+    stompClient.send("/topic/" + gameId, {},
         JSON.stringify({
-                'gameId': gameId,
+                'message': message,
             }
         )
     );
