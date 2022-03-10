@@ -4,23 +4,20 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.*;
 
 @Getter
 @Setter
-@Entity
-@Table(name = "User")
 @NoArgsConstructor
 @AllArgsConstructor
+@Document(collection = "users")
 public class User implements Comparable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     Long ID;
 
-    @Column(name = "username")
     String username;
-    @Column(name = "password")
     String password;
 
     public User(String username, String password) {

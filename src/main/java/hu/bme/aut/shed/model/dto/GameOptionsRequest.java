@@ -6,8 +6,6 @@ import lombok.Data;
 @AllArgsConstructor
 @Data
 public class GameOptionsRequest {
-    String creator;
     int numberOfDecks;
     int numberOfCards;
-
 }
