@@ -6,6 +6,7 @@ import hu.bme.aut.shed.exception.UserNotFoundException;
 import hu.bme.aut.shed.model.Game;
 import hu.bme.aut.shed.model.GameStatus;
 import hu.bme.aut.shed.model.Player;
+import hu.bme.aut.shed.model.User;
 import hu.bme.aut.shed.model.dto.ActionRequest;
 import hu.bme.aut.shed.storage.GameStorage;
 import lombok.AllArgsConstructor;
@@ -15,10 +16,9 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class GameService {
 
-    public Game createGame(String username, int numberOfCards, int numberOfDecks) throws UserNotFoundException {
+    public Game createGame(int numberOfCards, int numberOfDecks) throws UserNotFoundException {
         //if (userRepository.findUserByUsername(username) == null) throw new UserNotFoundException();
-        Player player = new Player(username);
-        return new Game(player, numberOfCards, numberOfDecks);
+        return new Game(numberOfCards, numberOfDecks);
     }
 
     public Game connectPlayer(Player newPlayer, String gameId) throws GameNotFoundException, UserNotFoundException, LobbyIsFullException {

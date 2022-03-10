@@ -18,14 +18,13 @@ public class Game {
     private int numberOfDecks;
     private int maxPlayers;
 
-    public Game(Player player, int numberOfCards, int numberOfDecks) {
+    public Game(int numberOfCards, int numberOfDecks) {
         this.gameId = UUID.randomUUID().toString();
         this.players = new PriorityQueue<>();
-        this.players.add(player);
-        this.deck = new Deck();
-        this.status = GameStatus.NEW;
         this.numberOfCards = numberOfCards;
         this.numberOfDecks = numberOfDecks;
+        this.deck = new Deck(numberOfDecks);
+        this.status = GameStatus.NEW;
         this.maxPlayers = 5 * numberOfDecks;
     }
 
