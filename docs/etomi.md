@@ -13,3 +13,8 @@ A levelezős konzultáció után megpróbáltunk egy rendes [ER diagramot](https
 Kicsit jobban utánanéztünk, hogy hogyan tudnánk a gyakorlatban használni a RabbitMQ-t és arra jutottunk hogy mégiscsak a websocketes megközelítés valószínűleg jobb lesz a kétirányú kommunikáció miatt számunkra.
 Megcsináltunk egy Spring alapú websocketes kommunikációt lehetővé tevő alkalmazást és Flutterben is csináltunk hozzá egy kezdetleges demo alkalmazást.
 Csináltunk egy SSL Certificatet az alábbi [tutorial](https://www.thomasvitale.com/https-spring-boot-ssl-certificate/) segítségével, így már HTTPS-t használ az alkalmazásunk.
+
+#3. hét
+Ezen a héten a backend részével foglalkoztam a projekteknek.Végül a mongodb mellett döntöttünk mivel ahhoz több ingyenes jól ismert online adatbázis szervert találtunk ahol nem kell megadni bankártyát.
+Springben megirtam a modelleket es egy kezdetleges játék logikát.
+Az adatmodelt fokozatosan kezdtük el javítani.
