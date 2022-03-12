@@ -63,7 +63,7 @@ public class GameController {
         ConnectionRequest request = new ConnectionRequest(gameId, username);
         log.info("connect request: {}", request);
         try {
-            User user = userRepository.findUserByUsername(request.getUsername());
+            User user = userRepository.findByUsername(request.getUsername());
             if (user == null) throw new UserNotFoundException();
 
             System.out.println(GameStorage.getInstance().getGames().toString());
@@ -79,7 +79,7 @@ public class GameController {
     public ResponseEntity<Game> connectRandom(@RequestParam String username) {
         log.info("connect random {}", username);
         try {
-            User user = userRepository.findUserByUsername(username);
+            User user = userRepository.findByUsername(username);
             if (user == null) throw new UserNotFoundException();
             Player player = new Player(user.getUsername());
             return ResponseEntity.ok(gameService.connectToRandomGame(player));

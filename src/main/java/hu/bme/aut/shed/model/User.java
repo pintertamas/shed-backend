@@ -15,7 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "users")
 public class User implements Comparable {
     @Id
-    Long ID;
+    String ID;
 
     String username;
     String password;
