@@ -9,6 +9,7 @@ import hu.bme.aut.shed.model.User;
 import hu.bme.aut.shed.model.dto.ActionRequest;
 import hu.bme.aut.shed.model.dto.ConnectionRequest;
 import hu.bme.aut.shed.model.dto.GameOptionsRequest;
+import hu.bme.aut.shed.repository.GameRepository;
 import hu.bme.aut.shed.repository.UserRepository;
 import hu.bme.aut.shed.service.GameService;
 import hu.bme.aut.shed.storage.GameStorage;
@@ -20,6 +21,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @Slf4j
 @AllArgsConstructor
@@ -28,6 +31,7 @@ public class GameController {
 
     @Autowired
     private final UserRepository userRepository;
+    private final GameRepository gameRepository;
     private final GameService gameService;
     private final SimpMessagingTemplate simpMessagingTemplate;
 
@@ -37,7 +41,8 @@ public class GameController {
         log.info("create game request: {}", request);
         try {
             Game game = gameService.createGame(request.getNumberOfCards(), request.getNumberOfDecks());
-            GameStorage.getInstance().saveGame(game);
+            //GameStorage.getInstance().saveGame(game);
+            gameRepository.save(game);
             return ResponseEntity.ok(game);
         } catch (UserNotFoundException e) {
             log.error(e.getMessage());
@@ -49,9 +54,13 @@ public class GameController {
     public ResponseEntity<?> start(@RequestBody ConnectionRequest request) {
         log.info("start game request: {}", request);
         try {
-            Game game = GameStorage.getInstance().getGameByID(request.getGameId());
-            if (game == null) throw new GameNotFoundException();
-            return ResponseEntity.ok(gameService.startGame(game));
+            //Game game = GameStorage.getInstance().getGameByID(request.getGameId());
+            Optional<Game> game = gameRepository.findById(request.getGameId());
+
+            if (game.isEmpty()) throw new GameNotFoundException();
+
+            return ResponseEntity.ok(gameService.startGame(game.get()));
+
         } catch (GameNotFoundException | UserNotFoundException e) {
             log.error(e.getMessage());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -66,7 +75,6 @@ public class GameController {
             User user = userRepository.findByUsername(request.getUsername());
             if (user == null) throw new UserNotFoundException();
 
-            System.out.println(GameStorage.getInstance().getGames().toString());
             Player player = new Player(user.getUsername());
             return ResponseEntity.ok(gameService.connectPlayer(player, request.getGameId()));
         } catch (GameNotFoundException | UserNotFoundException | LobbyIsFullException e) {
@@ -94,7 +102,7 @@ public class GameController {
         log.info("action: {}", request);
         try {
             Game game = gameService.action(request);
-            simpMessagingTemplate.convertAndSend("/topic/action/" + game.getGameId(), game);
+            simpMessagingTemplate.convertAndSend("/topic/action/" + game.getId(), game);
             return ResponseEntity.ok(game);
         } catch (GameNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

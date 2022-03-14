@@ -29,10 +29,10 @@ public class GameStorage {
     }
 
     public void addGame(Game game) {
-        games.put(game.getGameId(), game);
+        games.put(game.getId(), game);
     }
 
     public void saveGame(Game game) {
-        games.put(game.getGameId(), game);
+        games.put(game.getId(), game);
     }
 }

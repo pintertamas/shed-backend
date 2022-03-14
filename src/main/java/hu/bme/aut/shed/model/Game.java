@@ -3,14 +3,19 @@ package hu.bme.aut.shed.model;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.PriorityQueue;
 import java.util.UUID;
 
 @Getter
 @Setter
+@Document(collection = "games")
 public class Game {
-    private String gameId;
+    @Id
+    private String Id;
+
     private PriorityQueue<Player> players;
     private Deck deck;
     private GameStatus status;
@@ -19,7 +24,7 @@ public class Game {
     private int maxPlayers;
 
     public Game(int numberOfCards, int numberOfDecks) {
-        this.gameId = UUID.randomUUID().toString();
+        //this.gameId = UUID.randomUUID().toString();
         this.players = new PriorityQueue<>();
         this.numberOfCards = numberOfCards;
         this.numberOfDecks = numberOfDecks;
