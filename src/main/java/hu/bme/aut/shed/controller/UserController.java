@@ -50,14 +50,4 @@ public class UserController {
         }
     }
 
-    @PostMapping(value = "/register")
-    public ResponseEntity<?> saveUser(@Valid @RequestBody User newUser) {
-        User user = userRepository.findByUsername(newUser.getUsername());
-        if (user != null) {
-            LoggerFactory.getLogger(this.getClass()).error("USER ALREADY EXISTS: " + user);
-            return ResponseEntity.badRequest().body("User with this username already exists");
-        }
-        LoggerFactory.getLogger(this.getClass()).info("USER CREATED: " + newUser);
-        return ResponseEntity.ok(userRepository.save(newUser));
-    }
 }
