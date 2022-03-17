@@ -32,7 +32,7 @@ public class UserController {
 
     @PutMapping("/edit/")
     public ResponseEntity<User> updateUser(@RequestParam String id,@Valid @RequestBody User editedUser) {
-        Optional<User> userData = userRepository.findById(editedUser.getID());
+        Optional<User> userData = userRepository.findByID(editedUser.getID());
         if (userData.isPresent() && (Objects.equals(id, editedUser.getID()))) {
             return new ResponseEntity<>(userRepository.save(editedUser), HttpStatus.OK);
         } else {

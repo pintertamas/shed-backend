@@ -1,31 +1,43 @@
 package hu.bme.aut.shed.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.persistence.*;
 import java.util.PriorityQueue;
-import java.util.UUID;
 
 @Getter
 @Setter
-@Document(collection = "games")
+@Entity(name = "Game")
+@Table(name = "games")
 public class Game {
     @Id
-    private String Id;
+    @GeneratedValue
+    private Long Id;
 
-    private PriorityQueue<Player> players;
+    @Column()
+    private String name;
+
+    @OneToOne
     private Deck deck;
+
+    @Column()
     private GameStatus status;
+
+    @Column()
     private int numberOfCards;
+
+    @Column()
     private int numberOfDecks;
+
+    @Column()
     private int maxPlayers;
 
+    @Column
+    private boolean visibility;
+
     public Game(int numberOfCards, int numberOfDecks) {
-        //this.gameId = UUID.randomUUID().toString();
-        this.players = new PriorityQueue<>();
         this.numberOfCards = numberOfCards;
         this.numberOfDecks = numberOfDecks;
         this.deck = new Deck(numberOfDecks);
@@ -36,19 +48,14 @@ public class Game {
     public void initGame() {
         getDeck().createCards();
         getDeck().shuffleDeck();
-        for (Player player : getPlayers()) {
+        /*for (Player player : getPlayers()) {
             player.initPlayer(getNumberOfCards());
             for (int i = 0; i < numberOfCards; i++) {
                 player.getHiddenCards().add(getDeck().getCards().pop());
                 player.getHiddenCards().add(getDeck().getCards().pop());
                 player.getHiddenCards().add(getDeck().getCards().pop());
             }
-        }
-
+        }*/
         setStatus(GameStatus.IN_PROGRESS);
-    }
-
-    public void addPlayer(Player newPlayer) {
-        players.add(newPlayer);
     }
 }

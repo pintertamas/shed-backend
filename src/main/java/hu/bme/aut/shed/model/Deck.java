@@ -3,11 +3,16 @@ package hu.bme.aut.shed.model;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.*;
 
 @Getter
 @Setter
+@Entity(name = "Deck")
+@Table(name = "deck")
 public class Deck {
+
     private Stack<Card> cards;
     private int deck_count;
 
