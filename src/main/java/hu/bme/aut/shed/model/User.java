@@ -4,17 +4,23 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.Id;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "user")
+@Entity(name = "User")
+@Table(name = "users")
 public class User implements Comparable {
     @Id
-    String id;
+    @GeneratedValue
+    private Long id;
 
     String username;
     String password;
@@ -26,5 +32,13 @@ public class User implements Comparable {
     @Override
     public int compareTo(Object o) {
         return 0;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

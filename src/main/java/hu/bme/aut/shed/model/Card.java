@@ -8,7 +8,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
 @Entity(name = "card")
-@Table(name = "card")
+@Table(name = "cards")
 @Getter
 public class Card {
     @Id
