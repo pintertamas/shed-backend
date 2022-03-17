@@ -21,7 +21,7 @@ public class UserController {
 
     @GetMapping("/")
     public ResponseEntity<User> getUserById(@RequestParam Long id) {
-        Optional<User> userData = userRepository.findByID(id);
+        Optional<User> userData = userRepository.findById(id);
         if(userData.isPresent()){
             return new ResponseEntity<>(userData.get(), HttpStatus.OK);
         }
@@ -32,7 +32,7 @@ public class UserController {
 
     @PutMapping("/edit/")
     public ResponseEntity<User> updateUser(@RequestParam String id,@Valid @RequestBody User editedUser) {
-        Optional<User> userData = userRepository.findByID(editedUser.getId());
+        Optional<User> userData = userRepository.findById(editedUser.getId());
         if (userData.isPresent() && (Objects.equals(id, editedUser.getId()))) {
             return new ResponseEntity<>(userRepository.save(editedUser), HttpStatus.OK);
         } else {

@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 //TODO //Refactor this
@@ -40,11 +41,13 @@ public class GameService {
             throw new GameNotFoundException();
         }
 
-        if (game.get().getPlayers().size() >= game.get().getMaxPlayers()) {
+        //List<Player> players = playerRepository...
+
+        /*if (players.size() >= game.get().getMaxPlayers()) {
             throw new LobbyIsFullException();
         }
 
-        game.get().getPlayers().add(newPlayer);
+        game.get().getPlayers().add(newPlayer);*/
         gameRepository.save(game.get());
         return game.get();
     }
@@ -57,7 +60,6 @@ public class GameService {
         Game game = gameRepository.findAll().stream()
                 .filter(it -> it.getStatus().equals(GameStatus.NEW))
                 .findFirst().orElseThrow(GameNotFoundException::new);
-        game.addPlayer(newPlayer);
         game.setStatus(GameStatus.IN_PROGRESS);
         //GameStorage.getInstance().addGame(game);
         gameRepository.save(game);
@@ -66,8 +68,8 @@ public class GameService {
 
     public Game startGame(Game game) throws GameNotFoundException, UserNotFoundException {
         //if (GameStorage.getInstance().getGameByID(game.getId()) == null) throw new GameNotFoundException();
-        if (gameRepository.findById(game.getId()).isEmpty()) throw new GameNotFoundException();
-        if (game.getPlayers().isEmpty() || game.getPlayers().peek() == null) throw new GameNotFoundException();
+        //if (gameRepository.findById(game.getId()).isEmpty()) throw new GameNotFoundException();
+        //if (game.getPlayers().isEmpty() || game.getPlayers().peek() == null) throw new GameNotFoundException();
         game.initGame();
         //GameStorage.getInstance().addGame(game);
         gameRepository.save(game);
