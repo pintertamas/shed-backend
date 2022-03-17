@@ -2,7 +2,9 @@ package hu.bme.aut.shed.model;
 
 import javax.persistence.*;
 
+
 @Entity
+@Table(name = "PlayerCardsState")
 public class PlayerCardsState {
 
     @EmbeddedId

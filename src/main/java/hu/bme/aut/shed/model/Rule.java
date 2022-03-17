@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,4 +19,9 @@ public class Rule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
+    @ManyToMany
+    private List<Card> cardId;
+
+    @ManyToMany
+    private List<Deck> deckId;
 }
