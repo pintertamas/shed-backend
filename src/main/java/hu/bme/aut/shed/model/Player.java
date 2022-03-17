@@ -17,23 +17,23 @@ public class Player implements Comparable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @OneToOne
     private User user;
+
+    @Column()
     private String username;
-    private ArrayList<Card> hiddenCards;
-    private ArrayList<Card> visibleCards;
-    private ArrayList<Card> hand;
+
+
 
     public Player(String username) {
         this.username = username;
-        this.hiddenCards = new ArrayList<>();
-        this.visibleCards = new ArrayList<>();
-        this.hand = new ArrayList<>();
+
     }
 
     public void initPlayer(int numberOfCards) {
-        setHiddenCards(new ArrayList<>(numberOfCards));
+        /*setHiddenCards(new ArrayList<>(numberOfCards));
         setVisibleCards(new ArrayList<>(numberOfCards));
-        setHand(new ArrayList<>(numberOfCards));
+        setHand(new ArrayList<>(numberOfCards));*/
     }
 
     @Override

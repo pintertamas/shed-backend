@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Table(name = "games")
 public class Game {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column()
@@ -34,7 +34,7 @@ public class Game {
     @Column()
     private int maxPlayers;
 
-    @Column
+    @Column()
     private boolean visibility;
 
     public Game(int numberOfCards, int numberOfDecks) {

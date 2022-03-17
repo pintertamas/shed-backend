@@ -12,16 +12,16 @@ import javax.validation.constraints.Min;
 @Getter
 public class Card {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    Shape shape;
+    @Column()
+    private Shape shape;
 
     @Column()
     @Min(2)
     @Max(14)
-    int number;
+    private int number;
 
     @Override
     public String toString() {

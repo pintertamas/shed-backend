@@ -5,10 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 
 @Getter
@@ -19,11 +16,13 @@ import javax.persistence.Table;
 @Table(name = "users")
 public class User implements Comparable {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    String username;
-    String password;
+    @Column
+    private String username;
+    @Column
+    private String password;
 
     public User(String username, String password) {
         this.username = username;
@@ -34,11 +33,4 @@ public class User implements Comparable {
         return 0;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
-        return id;
-    }
 }
