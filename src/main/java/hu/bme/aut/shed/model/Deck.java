@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @Entity(name = "Deck")
-@Table(name = "deck")
+@Table(name = "decks")
 public class Deck {
     @Id
     @GeneratedValue

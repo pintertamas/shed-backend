@@ -1,13 +1,22 @@
 package hu.bme.aut.shed.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@Entity(name = "player")
+@Table(name = "players")
 public class Player implements Comparable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private User user;
     private String username;
     private ArrayList<Card> hiddenCards;
@@ -31,4 +40,5 @@ public class Player implements Comparable {
     public int compareTo(Object o) {
         return 0;
     }
+
 }
