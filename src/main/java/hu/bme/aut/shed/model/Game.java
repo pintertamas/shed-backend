@@ -1,20 +1,20 @@
 package hu.bme.aut.shed.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.Id;
 
 import javax.persistence.*;
-import java.util.PriorityQueue;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @Entity(name = "Game")
-@Table(name = "games")
+@Table(name = "game")
 public class Game {
     @Id
     @GeneratedValue
-    private Long Id;
+    private Long id;
 
     @Column()
     private String name;
@@ -26,7 +26,7 @@ public class Game {
     private GameStatus status;
 
     @Column()
-    private int numberOfCards;
+    private int numberOfCards; // amount of card users have in their hands initially
 
     @Column()
     private int numberOfDecks;
@@ -40,14 +40,14 @@ public class Game {
     public Game(int numberOfCards, int numberOfDecks) {
         this.numberOfCards = numberOfCards;
         this.numberOfDecks = numberOfDecks;
-        this.deck = new Deck(numberOfDecks);
-        this.status = GameStatus.NEW;
         this.maxPlayers = 5 * numberOfDecks;
+        this.status = GameStatus.NEW;
+        this.deck = new Deck(numberOfDecks);
     }
 
     public void initGame() {
-        getDeck().createCards();
-        getDeck().shuffleDeck();
+        //getDeck().createCards();
+        //getDeck().shuffleDeck();
         /*for (Player player : getPlayers()) {
             player.initPlayer(getNumberOfCards());
             for (int i = 0; i < numberOfCards; i++) {

@@ -11,10 +11,10 @@ import org.springframework.data.annotation.Id;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "users")
+@Document(collection = "user")
 public class User implements Comparable {
     @Id
-    String ID;
+    String id;
 
     String username;
     String password;
