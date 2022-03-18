@@ -1,5 +1,6 @@
 package hu.bme.aut.shed.config;
 
+import hu.bme.aut.shed.component.JwtAuthenticationEntryPoint;
 import hu.bme.aut.shed.filter.JwtRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

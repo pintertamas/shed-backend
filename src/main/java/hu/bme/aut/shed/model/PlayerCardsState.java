@@ -8,7 +8,7 @@ import javax.persistence.*;
 public class PlayerCardsState {
 
     @EmbeddedId
-    PlayerCardsStateKey id;
+    PlayerCardsStateKey Id;
 
     @ManyToOne
     @MapsId("cardId")

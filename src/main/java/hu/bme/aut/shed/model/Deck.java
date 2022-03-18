@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -17,11 +18,11 @@ public class Deck {
     @GeneratedValue
     private Long id;
 
-    @ManyToMany
-    private List<Card> cardId;
+    @OneToMany(mappedBy = "card")
+    private Set<CRD> cardId;
 
-    @ManyToMany
-    private List<Deck> ruleId;
+    @OneToMany(mappedBy = "rule")
+    private Set<CRD> ruleId;
 
     @Column
     private int numberOfDecks;

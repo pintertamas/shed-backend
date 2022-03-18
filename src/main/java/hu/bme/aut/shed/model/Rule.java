@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,9 +20,9 @@ public class Rule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
-    @ManyToMany
-    private List<Card> cardId;
+    @OneToMany(mappedBy = "card")
+    private Set<CRD> cardId;
 
-    @ManyToMany
-    private List<Deck> deckId;
+    @OneToMany(mappedBy = "deck")
+    private Set<CRD> deckId;
 }

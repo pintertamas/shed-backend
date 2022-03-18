@@ -6,7 +6,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import hu.bme.aut.shed.config.JwtTokenUtil;
+import hu.bme.aut.shed.component.JwtTokenUtil;
 import hu.bme.aut.shed.service.JwtUserDetailsService;
 import io.jsonwebtoken.security.SignatureException;
 import org.apache.juli.logging.LogFactory;

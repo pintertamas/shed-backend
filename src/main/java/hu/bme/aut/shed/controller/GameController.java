@@ -12,7 +12,6 @@ import hu.bme.aut.shed.model.dto.GameOptionsRequest;
 import hu.bme.aut.shed.repository.GameRepository;
 import hu.bme.aut.shed.repository.UserRepository;
 import hu.bme.aut.shed.service.GameService;
-import hu.bme.aut.shed.storage.GameStorage;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

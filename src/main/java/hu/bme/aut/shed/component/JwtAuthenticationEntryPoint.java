@@ -1,4 +1,4 @@
-package hu.bme.aut.shed.config;
+package hu.bme.aut.shed.component;
 
 import java.io.IOException;
 import java.io.Serial;

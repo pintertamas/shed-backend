@@ -1,13 +1,12 @@
 package hu.bme.aut.shed.controller;
 
-import hu.bme.aut.shed.config.JwtTokenUtil;
+import hu.bme.aut.shed.component.JwtTokenUtil;
 import hu.bme.aut.shed.model.JWT.JwtRequest;
 import hu.bme.aut.shed.model.JWT.JwtResponse;
 import hu.bme.aut.shed.model.User;
 import hu.bme.aut.shed.repository.UserRepository;
 import hu.bme.aut.shed.service.JwtUserDetailsService;
 import org.apache.juli.logging.LogFactory;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
