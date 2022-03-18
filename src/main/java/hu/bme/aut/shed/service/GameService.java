@@ -63,12 +63,25 @@ public class GameService {
         gameRepository.save(game);
         return game;
     }
+    public void initGame(Game game) {
+        //game.getDeck().createCards();
+        //getDeck().shuffleDeck();
+        /*for (Player player : getPlayers()) {
+            player.initPlayer(getNumberOfCards());
+            for (int i = 0; i < numberOfCards; i++) {
+                player.getHiddenCards().add(getDeck().getCards().pop());
+                player.getHiddenCards().add(getDeck().getCards().pop());
+                player.getHiddenCards().add(getDeck().getCards().pop());
+            }
+        }*/
+        game.setStatus(GameStatus.IN_PROGRESS);
+    }
 
     public Game startGame(Game game) throws GameNotFoundException, UserNotFoundException {
         //if (GameStorage.getInstance().getGameByID(game.getId()) == null) throw new GameNotFoundException();
         //if (gameRepository.findById(game.getId()).isEmpty()) throw new GameNotFoundException();
         //if (game.getPlayers().isEmpty() || game.getPlayers().peek() == null) throw new GameNotFoundException();
-        game.initGame();
+        initGame(game);
         //GameStorage.getInstance().addGame(game);
         gameRepository.save(game);
         return game;

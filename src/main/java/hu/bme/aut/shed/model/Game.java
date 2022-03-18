@@ -45,17 +45,4 @@ public class Game {
         this.deck = new Deck(numberOfDecks);
     }
 
-    public void initGame() {
-        //getDeck().createCards();
-        //getDeck().shuffleDeck();
-        /*for (Player player : getPlayers()) {
-            player.initPlayer(getNumberOfCards());
-            for (int i = 0; i < numberOfCards; i++) {
-                player.getHiddenCards().add(getDeck().getCards().pop());
-                player.getHiddenCards().add(getDeck().getCards().pop());
-                player.getHiddenCards().add(getDeck().getCards().pop());
-            }
-        }*/
-        setStatus(GameStatus.IN_PROGRESS);
-    }
 }
