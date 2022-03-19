@@ -33,7 +33,7 @@ public class UserController {
     }
 
     @PutMapping("/edit/")
-    public ResponseEntity<User> updateUser(@RequestParam Long id,@Valid @RequestBody User editedUser) {
+    public ResponseEntity<User> updateUser(@RequestParam Long id,@RequestBody User editedUser) {
         try{
             User user = userService.updateById(id,editedUser);
             return new ResponseEntity<>(user, HttpStatus.OK);
