@@ -1,11 +1,13 @@
 package hu.bme.aut.shed.controller;
 
 import hu.bme.aut.shed.component.JwtTokenUtil;
+import hu.bme.aut.shed.exception.UserNotFoundException;
 import hu.bme.aut.shed.model.JWT.JwtRequest;
 import hu.bme.aut.shed.model.JWT.JwtResponse;
 import hu.bme.aut.shed.model.User;
 import hu.bme.aut.shed.repository.UserRepository;
 import hu.bme.aut.shed.service.JwtUserDetailsService;
+import hu.bme.aut.shed.service.UserService;
 import org.apache.juli.logging.LogFactory;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +34,7 @@ public class JwtAuthenticationController {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
@@ -66,13 +68,17 @@ public class JwtAuthenticationController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseEntity<?> saveUser(@Valid @RequestBody User newUser) {
-        User user = userRepository.findByUsername(newUser.getUsername());
-        if (user != null) {
-            LoggerFactory.getLogger(this.getClass()).error("USER ALREADY EXISTS: " + user);
-            return ResponseEntity.badRequest().body("User with this username already exists");
+    public ResponseEntity<?> saveUser(@Valid @RequestBody User newUser) throws UserNotFoundException {
+        try {
+            User user = userService.getByUsername(newUser.getUsername(),true);
+            if (user != null) {
+                LoggerFactory.getLogger(this.getClass()).error("USER ALREADY EXISTS: " + user);
+                return ResponseEntity.badRequest().body("User with this username already exists");
+            }
+            LoggerFactory.getLogger(this.getClass()).info("USER CREATED: " + newUser);
+            return ResponseEntity.ok(userDetailsService.save(newUser));
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.badRequest().body("User not existing");
         }
-        LoggerFactory.getLogger(this.getClass()).info("USER CREATED: " + newUser);
-        return ResponseEntity.ok(userDetailsService.save(newUser));
     }
 }

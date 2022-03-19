@@ -11,7 +11,9 @@ import hu.bme.aut.shed.repository.GameRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,46 +26,31 @@ public class GameService {
     @Autowired
     private GameRepository gameRepository;
 
-    public Game createGame(int numberOfCards, int numberOfDecks) throws UserNotFoundException {
-        //if (userRepository.findUserByUsername(username) == null) throw new UserNotFoundException();
-        return new Game(numberOfCards, numberOfDecks);
-    }
-
-    public Game connectPlayer(Player newPlayer, String gameId) throws GameNotFoundException, UserNotFoundException, LobbyIsFullException {
-        if (newPlayer == null) throw new UserNotFoundException();
-
-        //Game game = GameStorage.getInstance().getGames().get(gameId);
-        Optional<Game> game = gameRepository.findById(gameId);
-
+    public Game getGameById(Long Id) throws GameNotFoundException {
+        Optional<Game> game = gameRepository.findById(Id);
         if (game.isEmpty()) {
             throw new GameNotFoundException();
         }
-
-        //List<Player> players = playerRepository...
-
-        /*if (players.size() >= game.get().getMaxPlayers()) {
-            throw new LobbyIsFullException();
+        return game.get();
+    }
+    public Game getGameByState(GameStatus state) throws GameNotFoundException {
+        Optional<Game> game = gameRepository.findByStatus(state);
+        if (game.isEmpty()) {
+            throw new GameNotFoundException();
         }
-
-        game.get().getPlayers().add(newPlayer);*/
-        gameRepository.save(game.get());
         return game.get();
     }
 
-    public Game connectToRandomGame(Player newPlayer) throws GameNotFoundException, UserNotFoundException, LobbyIsFullException {
-        if (newPlayer == null) throw new UserNotFoundException();
-        /*Game game = GameStorage.getInstance().getGames().values().stream()
-                .filter(it -> it.getStatus().equals(GameStatus.NEW))
-                .findFirst().orElseThrow(GameNotFoundException::new);*/
-        Game game = gameRepository.findAll().stream()
-                .filter(it -> it.getStatus().equals(GameStatus.NEW))
-                .findFirst().orElseThrow(GameNotFoundException::new);
-        game.setStatus(GameStatus.IN_PROGRESS);
-        //GameStorage.getInstance().addGame(game);
-        gameRepository.save(game);
-        return game;
+    public Game createGame(int numberOfCards, int numberOfDecks) throws UserNotFoundException {
+        String url = "http://names.drycodes.com/1?nameOptions=funnyWords";
+        RestTemplate restTemplate = new RestTemplate();
+        Object[] name = restTemplate.getForObject(url,Object[].class);
+
+        Game game = new Game(numberOfCards, numberOfDecks, Arrays.stream(name).findFirst().toString());
+        return gameRepository.save(game);
     }
-    public void initGame(Game game) {
+
+    public Game initGame(Game game) {
         //game.getDeck().createCards();
         //getDeck().shuffleDeck();
         /*for (Player player : getPlayers()) {
@@ -75,16 +62,18 @@ public class GameService {
             }
         }*/
         game.setStatus(GameStatus.IN_PROGRESS);
+        return game;
     }
 
-    public Game startGame(Game game) throws GameNotFoundException, UserNotFoundException {
+    public Game startGame(Long id) throws GameNotFoundException, UserNotFoundException {
         //if (GameStorage.getInstance().getGameByID(game.getId()) == null) throw new GameNotFoundException();
         //if (gameRepository.findById(game.getId()).isEmpty()) throw new GameNotFoundException();
         //if (game.getPlayers().isEmpty() || game.getPlayers().peek() == null) throw new GameNotFoundException();
-        initGame(game);
+        Game gameById = getGameById(id);
+        Game startedGame = initGame(gameById);
         //GameStorage.getInstance().addGame(game);
-        gameRepository.save(game);
-        return game;
+        gameRepository.save(startedGame);
+        return startedGame;
     }
 
     public Game action(ActionRequest action) throws GameNotFoundException {

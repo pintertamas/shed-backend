@@ -1,5 +1,6 @@
 package hu.bme.aut.shed.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity(name = "player")
 @Table(name = "players")
 public class Player implements Comparable {
@@ -23,11 +25,14 @@ public class Player implements Comparable {
     @Column()
     private String username;
 
+    @ManyToOne
+    @JoinColumn(name = "game_id")
+    private Game game;
 
 
-    public Player(String username) {
-        this.username = username;
-
+    public Player(User user) {
+        this.user = user;
+        this.username = user.getUsername();
     }
 
     public void initPlayer(int numberOfCards) {

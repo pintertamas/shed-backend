@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -25,6 +26,9 @@ public class Game {
     @Column()
     private GameStatus status;
 
+    @OneToMany(mappedBy = "game")
+    private Set<Player> players;
+
     @Column()
     private int numberOfCards; // amount of card users have in their hands initially
 
@@ -37,12 +41,14 @@ public class Game {
     @Column()
     private boolean visibility;
 
-    public Game(int numberOfCards, int numberOfDecks) {
+    public Game(int numberOfCards, int numberOfDecks , String name) {
+        this.name = name;
         this.numberOfCards = numberOfCards;
         this.numberOfDecks = numberOfDecks;
         this.maxPlayers = 5 * numberOfDecks;
         this.status = GameStatus.NEW;
         this.deck = new Deck(numberOfDecks);
+        this.visibility = false;
     }
 
 }
