@@ -1,29 +1,29 @@
 package hu.bme.aut.shed.service;
 
-import hu.bme.aut.shed.model.Card;
+import hu.bme.aut.shed.model.CardConfig;
 import hu.bme.aut.shed.model.Shape;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
 @Service
-public class CardService {
+public class CardConfigService {
 
-    public ArrayList<Card> createCards(int numberOfDecks, boolean jokers) {
+    public ArrayList<CardConfig> createCards(int numberOfDecks, boolean jokers) {
         int numberOfCards = numberOfDecks * 13 * Shape.values().length;
         if (jokers) numberOfCards += 3;
 
-        ArrayList<Card> cards = new ArrayList<>(numberOfCards);
+        ArrayList<CardConfig> cards = new ArrayList<>(numberOfCards);
 
         for (int i = 0; i < numberOfDecks; i++) {
             for (Shape shape : Shape.values()) {
                 for (int cardNumber = 2; cardNumber < 14; cardNumber++) {
-                    Card newCard = new Card();
+                    CardConfig newCard = new CardConfig();
                     newCard.setNumber(cardNumber);
                     newCard.setShape(shape);
                     cards.add(newCard);
                 }
-                Card newCard = new Card();
+                CardConfig newCard = new CardConfig();
                 newCard.setNumber(1);
                 newCard.setShape(shape);
                 cards.add(newCard);

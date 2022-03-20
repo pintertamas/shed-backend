@@ -51,7 +51,7 @@ public class GameController {
         GameOptionsRequest request = new GameOptionsRequest(numberOfDecks, numberOfCards);
         log.info("create game request: {}", request);
         try {
-            Game game = gameService.createGame(request.getNumberOfCards(), request.getNumberOfDecks());
+            Game game = gameService.createGame(request.getNumberOfCards(), request.getNumberOfDecks(),true);
             return ResponseEntity.ok(game);
         } catch (UserNotFoundException e) {
             log.error(e.getMessage());

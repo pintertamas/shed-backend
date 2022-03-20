@@ -31,11 +31,10 @@ public class PlayerController {
 
     @RequestMapping(value = "/connect/", method = {RequestMethod.POST}, produces = "application/json")
     public ResponseEntity<Player> connect(@RequestParam Long gameId, @RequestParam String username) {
-        ConnectionRequest request = new ConnectionRequest(gameId, username);
-        log.info("connect request: {}", request);
+        log.info(username, gameId);
         try {
 
-            return ResponseEntity.ok(playerService.connectPlayer(username, request.getGameId()));
+            return ResponseEntity.ok(playerService.connectPlayer(username, gameId));
         } catch (GameNotFoundException | UserNotFoundException | LobbyIsFullException e) {
             log.error(e.getMessage());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

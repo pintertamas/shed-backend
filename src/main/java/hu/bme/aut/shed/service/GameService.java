@@ -1,12 +1,10 @@
 package hu.bme.aut.shed.service;
 
 import hu.bme.aut.shed.exception.GameNotFoundException;
-import hu.bme.aut.shed.exception.LobbyIsFullException;
 import hu.bme.aut.shed.exception.UserNotFoundException;
 import hu.bme.aut.shed.model.*;
 import hu.bme.aut.shed.model.dto.ActionRequest;
-import hu.bme.aut.shed.repository.CardRepository;
-import hu.bme.aut.shed.repository.DeckRepository;
+import hu.bme.aut.shed.repository.CardConfigRepository;
 import hu.bme.aut.shed.repository.GameRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +23,10 @@ public class GameService {
     private GameRepository gameRepository;
 
     @Autowired
-    private DeckRepository deckRepository;
+    private CardConfigRepository cardConfigRepository;
 
     @Autowired
-    private CardRepository cardRepository;
-
-    @Autowired
-    private CardService cardService;
+    private CardConfigService cardService;
 
     public Game getGameById(Long Id) throws GameNotFoundException {
         Optional<Game> game = gameRepository.findById(Id);
@@ -62,17 +57,15 @@ public class GameService {
             game = new Game(numberOfCards, numberOfDecks, new UUID(5, 5).toString(), false);
         }
 
-        deckRepository.save(game.getDeck());
+        ArrayList<CardConfig> cards = cardService.createCards(game.getNumberOfDecks(), jokers);
 
-        ArrayList<Card> cards = cardService.createCards(game.getDeck().getNumberOfDecks(), jokers);
-
-        for (Card card : cards) {
+        /*for (Card card : cards) {
             CRD crd = new CRD();
             crd.setCard(card);
             crd.setDeck(game.getDeck());
             crd.setRule(Rule.BURNER);
 
-        }
+        }*/
 
         return gameRepository.save(game);
     }

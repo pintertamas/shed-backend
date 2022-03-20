@@ -20,9 +20,6 @@ public class Game {
     @Column()
     private String name;
 
-    @OneToOne
-    private Deck deck;
-
     @Column()
     private GameStatus status;
 
@@ -30,20 +27,23 @@ public class Game {
     private Set<Player> players;
 
     @Column()
-    private int numberOfCards; // amount of card users have in their hands initially
+    private int cardsInHand; // amount of card users have in their hands initially
 
     @Column()
     private int maxPlayers;
 
     @Column()
+    private int numberOfDecks;
+
+    @Column()
     private boolean visibility;
 
-    public Game(int numberOfCards, int numberOfDecks, String name, boolean visibility) {
+    public Game(int cardsInHand, int numberOfDecks, String name, boolean visibility) {
         this.name = name;
-        this.numberOfCards = numberOfCards;
+        this.cardsInHand = cardsInHand;
         this.maxPlayers = 5 * numberOfDecks;
         this.status = GameStatus.NEW;
-        this.deck = new Deck(numberOfDecks);
+        this.numberOfDecks = numberOfDecks;
         this.visibility = visibility;
     }
 }

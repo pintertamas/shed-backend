@@ -6,34 +6,29 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
+import java.util.List;
 
-@Entity(name = "card")
-@Table(name = "cards")
+@Entity(name = "CardConfig")
+@Table(name = "cardsconfig")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Card {
-
+public class CardConfig {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
+
+    @Column()
+    private int number;
 
     @Column()
     private Shape shape;
 
     @Column()
-    @Min(1)
-    @Max(14)
-    private int number;
+    private Rule rule;
 
-    @Override
-    public String toString() {
-        return "Card{" +
-                "shape=" + shape +
-                ", number=" + number +
-                '}';
-    }
+    @OneToOne()
+    private Game game;
 }
