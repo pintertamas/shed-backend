@@ -16,7 +16,8 @@ Csináltunk egy SSL Certificatet az alábbi [tutorial](https://www.thomasvitale.
 
 ##4-5. hét
 Az elmúlt két alatt nagyon sok mindent csináltunk.Először is elkészitettünk(rajzoltunk) egy adatbázis sémát paintben, ami alapján már tudtunk normális adatmodelt készíteni.
-Az adatmodelt a két hét alatt nagyon sokat változtattuk, de úgy érzem az aktuális verzió lesz az utolsó módósítás.Ez a sok modositás azért volt fájó mivel backenden mindig át kellett irni a már meglévő modelleket és felsőbb rétegekbe is bele kellett néha nyúlni.
-Backenden elkészítettem a modelleket illetve néhány service-t és controller-t is megírtam már.Problémát jelentett a kapcsolatok jelőlése erre a konzin remelém majd tudok választ kapni hogy ezek megfelelnek e így.
+Az adatmodelt a két hét alatt nagyon sokat változtattuk, de úgy érzem az [aktuális verzió](https://github.com/pintertamas/shed-backend/blob/master/docs/data_model_4.png?raw=true) lesz az utolsó módósítás.Ez a sok modositás azért volt fájó mivel backenden mindig át kellett irni a már meglévő modelleket és felsőbb rétegekbe is bele kellett néha nyúlni.
+Backenden elkészítettem a modelleket illetve néhány service-t és controller-t is megírtam már. Tudunk már regisztrálni és bejelentkezni is már ezekhez jwt tokenes megoldást használunk.
+Problémát jelentett a kapcsolatok jelőlése erre a konzin remelém majd tudok választ kapni hogy ezek megfelelnek-e így.
 Adatbázisnak először mongo-t használtunk de hossza tanakodás után átáltunk sql alapú adatbázisra(postgresql).
-Ezek mellett elkészítettük a projekt mockupját webre és mobilra is.
+Ezek mellett elkészítettük a projekt [mockupját](https://github.com/pintertamas/shed-backend/blob/master/docs/mockup.png?raw=true) webre és mobilra is.
