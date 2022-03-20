@@ -36,6 +36,9 @@ public class Game {
     private int numberOfDecks;
 
     @Column()
+    private boolean jokers;
+
+    @Column()
     private boolean visibility;
 
     public Game(int cardsInHand, int numberOfDecks, String name, boolean visibility) {
