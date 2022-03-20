@@ -4,6 +4,7 @@ import hu.bme.aut.shed.exception.GameNotFoundException;
 import hu.bme.aut.shed.exception.LobbyIsFullException;
 import hu.bme.aut.shed.exception.UserNotFoundException;
 import hu.bme.aut.shed.model.Game;
+import hu.bme.aut.shed.model.GameStatus;
 import hu.bme.aut.shed.model.Player;
 import hu.bme.aut.shed.model.User;
 import hu.bme.aut.shed.model.dto.ActionRequest;
@@ -12,7 +13,7 @@ import hu.bme.aut.shed.model.dto.GameOptionsRequest;
 import hu.bme.aut.shed.repository.GameRepository;
 import hu.bme.aut.shed.repository.UserRepository;
 import hu.bme.aut.shed.service.GameService;
-import hu.bme.aut.shed.storage.GameStorage;
+import hu.bme.aut.shed.service.PlayerService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +31,20 @@ import java.util.Optional;
 public class GameController {
 
     @Autowired
-    private final UserRepository userRepository;
-    private final GameRepository gameRepository;
     private final GameService gameService;
+    @Autowired
     private final SimpMessagingTemplate simpMessagingTemplate;
+
+    @GetMapping("/")
+    public ResponseEntity<Game> getGameByState(@RequestParam GameStatus status) {
+        try {
+            Game game = gameService.getGameByState(status);
+            return new ResponseEntity<>(game, HttpStatus.OK);
+        }
+        catch (GameNotFoundException exception){
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+    }
 
     @RequestMapping(value = "/create", method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json")
     public ResponseEntity<?> create(@RequestParam int numberOfDecks, @RequestParam int numberOfCards) {
@@ -41,8 +52,6 @@ public class GameController {
         log.info("create game request: {}", request);
         try {
             Game game = gameService.createGame(request.getNumberOfCards(), request.getNumberOfDecks());
-            //GameStorage.getInstance().saveGame(game);
-            gameRepository.save(game);
             return ResponseEntity.ok(game);
         } catch (UserNotFoundException e) {
             log.error(e.getMessage());
@@ -54,46 +63,10 @@ public class GameController {
     public ResponseEntity<?> start(@RequestBody ConnectionRequest request) {
         log.info("start game request: {}", request);
         try {
-            //Game game = GameStorage.getInstance().getGameByID(request.getGameId());
-            Optional<Game> game = gameRepository.findById(request.getGameId());
-
-            if (game.isEmpty()) throw new GameNotFoundException();
-
-            return ResponseEntity.ok(gameService.startGame(game.get()));
-
+            return ResponseEntity.ok(gameService.startGame(request.getGameId()));
         } catch (GameNotFoundException | UserNotFoundException e) {
             log.error(e.getMessage());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @RequestMapping(value = "/connect", method = {RequestMethod.POST}, produces = "application/json")
-    public ResponseEntity<Game> connect(@RequestParam String gameId, @RequestParam String username) {
-        ConnectionRequest request = new ConnectionRequest(gameId, username);
-        log.info("connect request: {}", request);
-        try {
-            User user = userRepository.findByUsername(request.getUsername());
-            if (user == null) throw new UserNotFoundException();
-
-            Player player = new Player(user.getUsername());
-            return ResponseEntity.ok(gameService.connectPlayer(player, request.getGameId()));
-        } catch (GameNotFoundException | UserNotFoundException | LobbyIsFullException e) {
-            log.error(e.getMessage());
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @RequestMapping(value = "/connect/random", method = {RequestMethod.POST}, produces = "application/json")
-    public ResponseEntity<Game> connectRandom(@RequestParam String username) {
-        log.info("connect random {}", username);
-        try {
-            User user = userRepository.findByUsername(username);
-            if (user == null) throw new UserNotFoundException();
-            Player player = new Player(user.getUsername());
-            return ResponseEntity.ok(gameService.connectToRandomGame(player));
-        } catch (GameNotFoundException | UserNotFoundException | LobbyIsFullException e) {
-            log.error(e.getMessage());
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

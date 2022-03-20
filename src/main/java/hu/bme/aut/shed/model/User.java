@@ -4,21 +4,25 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+
+import javax.persistence.*;
 
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "users")
+@Entity(name = "User")
+@Table(name = "users")
 public class User implements Comparable {
     @Id
-    String ID;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    String username;
-    String password;
+    @Column
+    private String username;
+    @Column
+    private String password;
 
     public User(String username, String password) {
         this.username = username;
@@ -28,4 +32,5 @@ public class User implements Comparable {
     public int compareTo(Object o) {
         return 0;
     }
+
 }

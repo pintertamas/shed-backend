@@ -15,6 +15,3 @@ Megcsináltunk egy Spring alapú websocketes kommunikációt lehetővé tevő al
 Csináltunk egy SSL Certificatet az alábbi [tutorial](https://www.thomasvitale.com/https-spring-boot-ssl-certificate/) segítségével, így már HTTPS-t használ az alkalmazásunk.
 
 #3. hét
-Ezen a héten a backend részével foglalkoztam a projekteknek.Végül a mongodb mellett döntöttünk mivel ahhoz több ingyenes jól ismert online adatbázis szervert találtunk ahol nem kell megadni bankártyát.
-Springben megirtam a modelleket es egy kezdetleges játék logikát.
-Az adatmodelt fokozatosan kezdtük el javítani.

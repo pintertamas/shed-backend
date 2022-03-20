@@ -1,34 +1,49 @@
 package hu.bme.aut.shed.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity(name = "player")
+@Table(name = "players")
 public class Player implements Comparable {
-    private User user;
-    private String username;
-    private ArrayList<Card> hiddenCards;
-    private ArrayList<Card> visibleCards;
-    private ArrayList<Card> hand;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    public Player(String username) {
-        this.username = username;
-        this.hiddenCards = new ArrayList<>();
-        this.visibleCards = new ArrayList<>();
-        this.hand = new ArrayList<>();
+    @OneToOne
+    private User user;
+
+    @Column()
+    private String username;
+
+    @ManyToOne
+    @JoinColumn(name = "game_id")
+    private Game game;
+
+
+    public Player(User user) {
+        this.user = user;
+        this.username = user.getUsername();
     }
 
     public void initPlayer(int numberOfCards) {
-        setHiddenCards(new ArrayList<>(numberOfCards));
+        /*setHiddenCards(new ArrayList<>(numberOfCards));
         setVisibleCards(new ArrayList<>(numberOfCards));
-        setHand(new ArrayList<>(numberOfCards));
+        setHand(new ArrayList<>(numberOfCards));*/
     }
 
     @Override
     public int compareTo(Object o) {
         return 0;
     }
+
 }

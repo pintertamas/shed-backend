@@ -1,22 +1,31 @@
 package hu.bme.aut.shed.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.*;
+import javax.persistence.*;
+import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@Entity(name = "Deck")
+@Table(name = "decks")
 public class Deck {
-    private Stack<Card> cards;
-    private int deck_count;
+    @Id
+    @GeneratedValue
+    private Long id;
 
-    public Deck(int deck_count) {
-        this.deck_count = deck_count;
-        this.cards = new Stack<>();
+    @Column
+    private int numberOfDecks;
+
+    public Deck(int numberOfDecks) {
+        this.numberOfDecks = numberOfDecks;
     }
 
-    public void createCards() {
+    /*public void createCards() {
         for (int i = 0; i < deck_count; i++){
             for (Shape shape : Shape.values()) {
                 for (int y = 2; y < 14; y++) {
@@ -25,9 +34,9 @@ public class Deck {
                 }
             }
         }
-    }
+    }*/
 
-    public void shuffleDeck() {
+    /*public void shuffleDeck() {
         // copy cards to an ArrayList
         ArrayList<Card> cardsCopy = new ArrayList<>(this.getCards());
 
@@ -48,9 +57,9 @@ public class Deck {
         for (Card card : getCards()) {
             System.out.println(card.toString());
         }
-    }
+    }*/
 
-    private void shuffleArrayList(ArrayList<?> array) {
+    /*private void shuffleArrayList(ArrayList<?> array) {
         Iterator<?> itr = array.iterator();
 
         while (itr.hasNext()) {
@@ -70,5 +79,5 @@ public class Deck {
         while (itr.hasNext()) {
             System.out.print(itr.next() + " ");
         }
-    }
+    }*/
 }

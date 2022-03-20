@@ -1,54 +1,54 @@
 package hu.bme.aut.shed.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.PriorityQueue;
-import java.util.UUID;
+import javax.persistence.*;
+import java.util.Set;
 
 @Getter
 @Setter
-@Document(collection = "games")
+@NoArgsConstructor
+@Entity(name = "Game")
+@Table(name = "games")
 public class Game {
     @Id
-    private String Id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    private PriorityQueue<Player> players;
+    @Column()
+    private String name;
+
+    @OneToOne
     private Deck deck;
+
+    @Column()
     private GameStatus status;
-    private int numberOfCards;
+
+    @OneToMany(mappedBy = "game")
+    private Set<Player> players;
+
+    @Column()
+    private int numberOfCards; // amount of card users have in their hands initially
+
+    @Column()
     private int numberOfDecks;
+
+    @Column()
     private int maxPlayers;
 
-    public Game(int numberOfCards, int numberOfDecks) {
-        //this.gameId = UUID.randomUUID().toString();
-        this.players = new PriorityQueue<>();
+    @Column()
+    private boolean visibility;
+
+    public Game(int numberOfCards, int numberOfDecks , String name) {
+        this.name = name;
         this.numberOfCards = numberOfCards;
         this.numberOfDecks = numberOfDecks;
-        this.deck = new Deck(numberOfDecks);
-        this.status = GameStatus.NEW;
         this.maxPlayers = 5 * numberOfDecks;
+        this.status = GameStatus.NEW;
+        this.deck = new Deck(numberOfDecks);
+        this.visibility = false;
     }
 
-    public void initGame() {
-        getDeck().createCards();
-        getDeck().shuffleDeck();
-        for (Player player : getPlayers()) {
-            player.initPlayer(getNumberOfCards());
-            for (int i = 0; i < numberOfCards; i++) {
-                player.getHiddenCards().add(getDeck().getCards().pop());
-                player.getHiddenCards().add(getDeck().getCards().pop());
-                player.getHiddenCards().add(getDeck().getCards().pop());
-            }
-        }
-
-        setStatus(GameStatus.IN_PROGRESS);
-    }
-
-    public void addPlayer(Player newPlayer) {
-        players.add(newPlayer);
-    }
 }

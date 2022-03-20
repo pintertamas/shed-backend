@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 public class ActionRequest {
-    String gameId;
+    Long gameId;
     Player player;
     Card playedCard;
 }
