@@ -4,8 +4,6 @@ import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -14,10 +12,10 @@ import java.util.Objects;
 @Getter
 @Setter
 @Embeddable
-public class PlayerCardsStateKey implements Serializable {
+public class PlayerCardsKey implements Serializable {
 
-    @Column(name = "cardId")
-    Long cardId;
+    @Column(name = "cardConfigId")
+    Long cardConfigId;
 
     @Column(name = "playerId")
     Long playerId;
@@ -26,12 +24,12 @@ public class PlayerCardsStateKey implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PlayerCardsStateKey that = (PlayerCardsStateKey) o;
-        return Objects.equals(cardId, that.cardId) && Objects.equals(playerId, that.playerId);
+        PlayerCardsKey that = (PlayerCardsKey) o;
+        return Objects.equals(cardConfigId, that.cardConfigId) && Objects.equals(playerId, that.playerId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(cardId, playerId);
+        return Objects.hash(cardConfigId, playerId);
     }
 }

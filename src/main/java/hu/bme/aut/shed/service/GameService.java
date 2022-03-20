@@ -1,25 +1,17 @@
 package hu.bme.aut.shed.service;
 
 import hu.bme.aut.shed.exception.GameNotFoundException;
-import hu.bme.aut.shed.exception.LobbyIsFullException;
 import hu.bme.aut.shed.exception.UserNotFoundException;
-import hu.bme.aut.shed.model.Card;
-import hu.bme.aut.shed.model.Game;
-import hu.bme.aut.shed.model.GameStatus;
-import hu.bme.aut.shed.model.Player;
+import hu.bme.aut.shed.model.*;
 import hu.bme.aut.shed.model.dto.ActionRequest;
-import hu.bme.aut.shed.repository.CardRepository;
-import hu.bme.aut.shed.repository.DeckRepository;
+import hu.bme.aut.shed.repository.CardConfigRepository;
 import hu.bme.aut.shed.repository.GameRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 //TODO //Refactor this
 
@@ -31,10 +23,10 @@ public class GameService {
     private GameRepository gameRepository;
 
     @Autowired
-    private DeckRepository deckRepository;
+    private CardConfigRepository cardConfigRepository;
 
     @Autowired
-    private CardRepository cardRepository;
+    private CardConfigService cardService;
 
     public Game getGameById(Long Id) throws GameNotFoundException {
         Optional<Game> game = gameRepository.findById(Id);
@@ -52,7 +44,7 @@ public class GameService {
         return game.get();
     }
 
-    public Game createGame(int numberOfCards, int numberOfDecks) throws UserNotFoundException {
+    public Game createGame(int numberOfCards, int numberOfDecks, boolean jokers) throws UserNotFoundException {
         String url = "http://names.drycodes.com/1?nameOptions=funnyWords";
         RestTemplate restTemplate = new RestTemplate();
         Object[] response = restTemplate.getForObject(url, Object[].class);
@@ -60,14 +52,21 @@ public class GameService {
         Game game;
 
         if (nameResponse.isPresent()) {
-            game = new Game(numberOfCards, numberOfDecks, nameResponse.get().toString());
+            game = new Game(numberOfCards, numberOfDecks, nameResponse.get().toString(), true);
         } else {
-            game = new Game(numberOfCards, numberOfDecks, new UUID(5, 5).toString());
+            game = new Game(numberOfCards, numberOfDecks, new UUID(5, 5).toString(), false);
         }
 
-        Card card = new Card();
-        cardRepository.save(card);
-        deckRepository.save(game.getDeck());
+        ArrayList<CardConfig> cards = cardService.createCards(game.getNumberOfDecks(), jokers);
+
+        /*for (Card card : cards) {
+            CRD crd = new CRD();
+            crd.setCard(card);
+            crd.setDeck(game.getDeck());
+            crd.setRule(Rule.BURNER);
+
+        }*/
+
         return gameRepository.save(game);
     }
 

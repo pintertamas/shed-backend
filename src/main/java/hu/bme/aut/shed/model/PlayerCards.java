@@ -5,15 +5,15 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "PlayerCardsState")
-public class PlayerCardsState {
+public class PlayerCards {
 
     @EmbeddedId
-    PlayerCardsStateKey Id;
+    PlayerCardsKey Id;
 
     @ManyToOne
-    @MapsId("cardId")
-    @JoinColumn(name = "cardId")
-    Card card;
+    @MapsId("cardConfigId")
+    @JoinColumn(name = "cardconfigId")
+    CardConfig cardConfig;
 
     @ManyToOne
     @MapsId("playerId")
@@ -21,5 +21,5 @@ public class PlayerCardsState {
     Player player;
 
     @Column(name = "state")
-    Card_State state;
+    CardState state;
 }
