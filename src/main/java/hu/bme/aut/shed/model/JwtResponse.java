@@ -1,4 +1,4 @@
-package hu.bme.aut.shed.model.JWT;
+package hu.bme.aut.shed.model;
 
 import hu.bme.aut.shed.model.User;
 import lombok.Getter;
@@ -16,7 +16,5 @@ public class JwtResponse implements Serializable {
     private static final long serialVersionUID = -8091879091924046844L;
 
     private final String jwtToken;
-
-
     private final User user;
 }

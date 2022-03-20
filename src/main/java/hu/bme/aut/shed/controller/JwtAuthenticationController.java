@@ -2,10 +2,8 @@ package hu.bme.aut.shed.controller;
 
 import hu.bme.aut.shed.component.JwtTokenUtil;
 import hu.bme.aut.shed.exception.UserNotFoundException;
-import hu.bme.aut.shed.model.JWT.JwtRequest;
-import hu.bme.aut.shed.model.JWT.JwtResponse;
+import hu.bme.aut.shed.model.JwtResponse;
 import hu.bme.aut.shed.model.User;
-import hu.bme.aut.shed.repository.UserRepository;
 import hu.bme.aut.shed.service.JwtUserDetailsService;
 import hu.bme.aut.shed.service.UserService;
 import org.apache.juli.logging.LogFactory;
@@ -17,11 +15,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 import javax.validation.Valid;
@@ -42,13 +36,13 @@ public class JwtAuthenticationController {
     @Autowired
     private JwtUserDetailsService userDetailsService;
 
-    @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public ResponseEntity<?> createAuthenticationToken(@RequestParam String username, @RequestParam String password) throws Exception {
 
-        authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+        authenticate(username, password);
 
         final UserDetails userDetails = userDetailsService
-                .loadUserByUsername(authenticationRequest.getUsername());
+                .loadUserByUsername(username);
 
         final String token = jwtTokenUtil.generateToken(userDetails);
         User user = jwtTokenUtil.getUserFromToken(token);
@@ -68,17 +62,19 @@ public class JwtAuthenticationController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseEntity<?> saveUser(@Valid @RequestBody User newUser) throws UserNotFoundException {
+    public ResponseEntity<?> saveUser(@Valid @RequestParam String username, @Valid @RequestParam String password) {
         try {
-            User user = userService.getByUsername(newUser.getUsername(),true);
+            User user = userService.getByUsername(username,true);
             if (user != null) {
                 LoggerFactory.getLogger(this.getClass()).error("USER ALREADY EXISTS: " + user);
                 return ResponseEntity.badRequest().body("User with this username already exists");
             }
+            User newUser = new User(username, password);
+
             LoggerFactory.getLogger(this.getClass()).info("USER CREATED: " + newUser);
             return ResponseEntity.ok(userDetailsService.save(newUser));
         } catch (UserNotFoundException e) {
-            return ResponseEntity.badRequest().body("User not existing");
+            return ResponseEntity.badRequest().body("User does not exist");
         }
     }
 }
