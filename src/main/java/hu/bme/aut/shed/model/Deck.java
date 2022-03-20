@@ -18,12 +18,6 @@ public class Deck {
     @GeneratedValue
     private Long id;
 
-    @OneToMany(mappedBy = "card")
-    private Set<CRD> cardId;
-
-    @OneToMany(mappedBy = "rule")
-    private Set<CRD> ruleId;
-
     @Column
     private int numberOfDecks;
 

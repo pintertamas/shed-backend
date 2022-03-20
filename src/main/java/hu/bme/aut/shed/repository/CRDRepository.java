@@ -7,5 +7,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CRDRepository extends JpaRepository<CRD, CRD_Key> {
-
 }
