@@ -24,9 +24,9 @@ public class Deck {
     public Deck(int numberOfDecks) {
         this.numberOfDecks = numberOfDecks;
     }
-
-    /*public void createCards() {
-        for (int i = 0; i < deck_count; i++){
+/*
+    public void createCards() {
+        for (int i = 0; i < numberOfDecks; i++){
             for (Shape shape : Shape.values()) {
                 for (int y = 2; y < 14; y++) {
                     Card newCard = new Card(shape, y);
@@ -34,9 +34,9 @@ public class Deck {
                 }
             }
         }
-    }*/
+    }
 
-    /*public void shuffleDeck() {
+    public void shuffleDeck() {
         // copy cards to an ArrayList
         ArrayList<Card> cardsCopy = new ArrayList<>(this.getCards());
 
@@ -57,9 +57,9 @@ public class Deck {
         for (Card card : getCards()) {
             System.out.println(card.toString());
         }
-    }*/
+    }
 
-    /*private void shuffleArrayList(ArrayList<?> array) {
+    private void shuffleArrayList(ArrayList<?> array) {
         Iterator<?> itr = array.iterator();
 
         while (itr.hasNext()) {

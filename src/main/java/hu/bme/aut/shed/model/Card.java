@@ -8,34 +8,26 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import java.util.List;
-import java.util.Set;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity(name = "card")
 @Table(name = "cards")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Card {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @OneToMany(mappedBy = "deck")
-    private Set<CRD> deckId;
-
-    @OneToMany(mappedBy = "rule")
-    private Set<CRD> ruleId;
 
     @Column()
     private Shape shape;
 
     @Column()
-    @Min(2)
+    @Min(1)
     @Max(14)
     private int number;
-
 
     @Override
     public String toString() {

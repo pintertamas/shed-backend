@@ -33,22 +33,17 @@ public class Game {
     private int numberOfCards; // amount of card users have in their hands initially
 
     @Column()
-    private int numberOfDecks;
-
-    @Column()
     private int maxPlayers;
 
     @Column()
     private boolean visibility;
 
-    public Game(int numberOfCards, int numberOfDecks , String name) {
+    public Game(int numberOfCards, int numberOfDecks, String name, boolean visibility) {
         this.name = name;
         this.numberOfCards = numberOfCards;
-        this.numberOfDecks = numberOfDecks;
         this.maxPlayers = 5 * numberOfDecks;
         this.status = GameStatus.NEW;
         this.deck = new Deck(numberOfDecks);
-        this.visibility = false;
+        this.visibility = visibility;
     }
-
 }

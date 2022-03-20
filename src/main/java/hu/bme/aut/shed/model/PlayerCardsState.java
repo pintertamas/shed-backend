@@ -21,5 +21,5 @@ public class PlayerCardsState {
     Player player;
 
     @Column(name = "state")
-    Card_State state;
+    CardState state;
 }

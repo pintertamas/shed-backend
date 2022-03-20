@@ -16,8 +16,6 @@ import java.util.Objects;
 public class CRD_Key implements Serializable {
     @Column(name = "cardId")
     Long cardId;
-    @Column(name = "ruleId")
-    Long ruleId;
     @Column(name = "deckId")
     Long deckId;
 
@@ -26,11 +24,11 @@ public class CRD_Key implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CRD_Key crd_key = (CRD_Key) o;
-        return Objects.equals(cardId, crd_key.cardId) && Objects.equals(ruleId, crd_key.ruleId) && Objects.equals(deckId, crd_key.deckId);
+        return Objects.equals(cardId, crd_key.cardId) && Objects.equals(deckId, crd_key.deckId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(cardId, ruleId, deckId);
+        return Objects.hash(cardId, deckId);
     }
 }

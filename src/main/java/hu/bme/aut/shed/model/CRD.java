@@ -1,9 +1,14 @@
 package hu.bme.aut.shed.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "CRD")
+@Setter
+@Getter
 public class CRD {
 
     @EmbeddedId
@@ -19,8 +24,6 @@ public class CRD {
     @JoinColumn(name = "deckId")
     Deck deck;
 
-    @ManyToOne
-    @MapsId("ruleId")
-    @JoinColumn(name = "ruleId")
+    @Column(name = "rule")
     Rule rule;
 }
