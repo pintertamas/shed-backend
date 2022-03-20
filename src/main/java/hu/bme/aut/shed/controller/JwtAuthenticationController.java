@@ -46,7 +46,7 @@ public class JwtAuthenticationController {
 
         final String token = jwtTokenUtil.generateToken(userDetails);
         User user = jwtTokenUtil.getUserFromToken(token);
-        LogFactory.getLog(this.getClass()).info("NEW LOGIN: " + user.toString());
+        LogFactory.getLog(this.getClass()).info("NEW LOGIN: " + user.getUsername());
 
         return ResponseEntity.ok(new JwtResponse(token, user));
     }

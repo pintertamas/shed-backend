@@ -3,10 +3,12 @@ package hu.bme.aut.shed.service;
 import hu.bme.aut.shed.exception.GameNotFoundException;
 import hu.bme.aut.shed.exception.LobbyIsFullException;
 import hu.bme.aut.shed.exception.UserNotFoundException;
+import hu.bme.aut.shed.model.Card;
 import hu.bme.aut.shed.model.Game;
 import hu.bme.aut.shed.model.GameStatus;
 import hu.bme.aut.shed.model.Player;
 import hu.bme.aut.shed.model.dto.ActionRequest;
+import hu.bme.aut.shed.repository.CardRepository;
 import hu.bme.aut.shed.repository.DeckRepository;
 import hu.bme.aut.shed.repository.GameRepository;
 import lombok.AllArgsConstructor;
@@ -30,6 +32,9 @@ public class GameService {
 
     @Autowired
     private DeckRepository deckRepository;
+
+    @Autowired
+    private CardRepository cardRepository;
 
     public Game getGameById(Long Id) throws GameNotFoundException {
         Optional<Game> game = gameRepository.findById(Id);
@@ -60,6 +65,8 @@ public class GameService {
             game = new Game(numberOfCards, numberOfDecks, new UUID(5, 5).toString());
         }
 
+        Card card = new Card();
+        cardRepository.save(card);
         deckRepository.save(game.getDeck());
         return gameRepository.save(game);
     }

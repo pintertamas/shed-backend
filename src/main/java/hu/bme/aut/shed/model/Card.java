@@ -32,8 +32,8 @@ public class Card {
     private Shape shape;
 
     @Column()
-    @Min(2)
-    @Max(14)
+    /*@Min(2)
+    @Max(14)*/
     private int number;
 
 
