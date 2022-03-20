@@ -38,6 +38,7 @@ public class GameService {
         }
         return game.get();
     }
+
     public Game getGameByState(GameStatus state) throws GameNotFoundException {
         Optional<Game> game = gameRepository.findByStatus(state);
         if (game.isEmpty()) {
@@ -49,14 +50,15 @@ public class GameService {
     public Game createGame(int numberOfCards, int numberOfDecks) throws UserNotFoundException {
         String url = "http://names.drycodes.com/1?nameOptions=funnyWords";
         RestTemplate restTemplate = new RestTemplate();
-        Object[] response = restTemplate.getForObject(url,Object[].class);
+        Object[] response = restTemplate.getForObject(url, Object[].class);
         Optional<Object> nameResponse = Arrays.stream(response).findFirst();
         Game game;
 
         if (nameResponse.isPresent()) {
             game = new Game(numberOfCards, numberOfDecks, nameResponse.get().toString());
+        } else {
+            game = new Game(numberOfCards, numberOfDecks, new UUID(5, 5).toString());
         }
-        game = new Game(numberOfCards, numberOfDecks, new UUID(5, 5).toString());
 
         deckRepository.save(game.getDeck());
         return gameRepository.save(game);
@@ -76,7 +78,7 @@ public class GameService {
 
     public Game action(ActionRequest action) throws GameNotFoundException {
         Optional<Game> game = gameRepository.findById(action.getGameId());
-        if(game.isEmpty()) throw new GameNotFoundException();
+        if (game.isEmpty()) throw new GameNotFoundException();
         return game.get();
     }
 
