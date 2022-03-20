@@ -2,8 +2,10 @@ package hu.bme.aut.shed.controller;
 
 import hu.bme.aut.shed.component.JwtTokenUtil;
 import hu.bme.aut.shed.exception.UserNotFoundException;
+import hu.bme.aut.shed.model.JwtRequest;
 import hu.bme.aut.shed.model.JwtResponse;
 import hu.bme.aut.shed.model.User;
+import hu.bme.aut.shed.repository.UserRepository;
 import hu.bme.aut.shed.service.JwtUserDetailsService;
 import hu.bme.aut.shed.service.UserService;
 import org.apache.juli.logging.LogFactory;
@@ -37,12 +39,12 @@ public class JwtAuthenticationController {
     private JwtUserDetailsService userDetailsService;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity<?> createAuthenticationToken(@RequestParam String username, @RequestParam String password) throws Exception {
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
 
-        authenticate(username, password);
+        authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
         final UserDetails userDetails = userDetailsService
-                .loadUserByUsername(username);
+                .loadUserByUsername(authenticationRequest.getUsername());
 
         final String token = jwtTokenUtil.generateToken(userDetails);
         User user = jwtTokenUtil.getUserFromToken(token);
@@ -62,15 +64,13 @@ public class JwtAuthenticationController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseEntity<?> saveUser(@Valid @RequestParam String username, @Valid @RequestParam String password) {
+    public ResponseEntity<?> saveUser(@Valid @RequestBody User newUser) {
         try {
-            User user = userService.getByUsername(username,true);
+            User user = userService.getByUsername(newUser.getUsername(),true);
             if (user != null) {
                 LoggerFactory.getLogger(this.getClass()).error("USER ALREADY EXISTS: " + user);
                 return ResponseEntity.badRequest().body("User with this username already exists");
             }
-            User newUser = new User(username, password);
-
             LoggerFactory.getLogger(this.getClass()).info("USER CREATED: " + newUser);
             return ResponseEntity.ok(userDetailsService.save(newUser));
         } catch (UserNotFoundException e) {
