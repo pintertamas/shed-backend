@@ -41,12 +41,12 @@ public class GameController {
             Game game = gameService.getGameByState(status);
             return new ResponseEntity<>(game, HttpStatus.OK);
         }
-        catch (GameNotFoundException exeption){
+        catch (GameNotFoundException exception){
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }
 
-    @RequestMapping(value = "/create/", method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json")
+    @RequestMapping(value = "/create", method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json")
     public ResponseEntity<?> create(@RequestParam int numberOfDecks, @RequestParam int numberOfCards) {
         GameOptionsRequest request = new GameOptionsRequest(numberOfDecks, numberOfCards);
         log.info("create game request: {}", request);
