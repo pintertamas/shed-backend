@@ -24,3 +24,39 @@ A levelezős konzultáció után megpróbáltunk egy rendes [ER diagramot](https
 Kicsit jobban utánanéztünk hogy hogyan tudnánk a gyakorlatban használni a RabbitMQ-t és arra a döntésre jutottunk hogy a websocketes megközelítés valószínűleg találóbb lesz a kétirányú kommunikáció miatt.
 Megcsináltunk egy Spring alapú websocketes kommunikációt lehetővé tevő alkalmazást és Flutterben is csináltunk hozzá egy demo alkalmazást amivel websocketen lehet küldeni és fogadni üzeneteket.
 Csináltunk egy SSL Certificatet az alábbi [tutorial](https://www.thomasvitale.com/https-spring-boot-ssl-certificate/) segítségével, így már HTTPS-t használ az alkalmazásunk.
+
+## 3. & 4. hét
+A 3. hét elején újra terveztük az adatmodellünket, viszont a két hét alatt nagyon sokat változott.
+Először erre változtattuk:
+
+![](https://github.com/pintertamas/shed-backend/blob/master/docs/data_model_3.png?raw=true)
+
+Ezzel meg is voltunk elégedve, de miután nekiálltunk megvalósítani, azt beszéltük meg hogy frissítjük, úgy, hogy az adatbázis táblák így nézzenek ki:
+
+![](https://github.com/pintertamas/shed-backend/blob/master/docs/db_plan.png?raw=true)
+
+A tervünk az, hogy a felső 3 táblát Redis-t használja cache memóriában tároljuk mivel ezeket folyamatosan olvasni és írni kell,
+az alsó 3-at pedig PostgreSQL adatbázisban (mivel ezeket az adatokat ritkán változtatjuk, de hosszú távon kell tárolni), amit azóta már setupoltunk is.
+
+####RedisDB:
+- A CardConfig tábla azt fogja tárolni, hogy adott kártya szám - szín kombinációhoz melyik szabályt rendeltük adott játékban.
+- A PlayerCards arra lesz jó, hogy a játékosok kezeiben lévő kártyákat számon tudjuk tartani olyan módon, hogy a játékos id-ja alapján lekérdezhetjük a kártyái beállításait (CardConfig) és a kártya állapotát (asztalon lefordítva/felfordítva, vagy a kezében)
+- A Table cards ugyan erre van, csak az asztalon lévő kártyákat tárolja és azt, hogy húzó vagy rakó pakli rész-e
+
+####PostgreSQL:
+- A User tábla egy felhasználó adatait tárolja (felhasználónév, jelszó, valamint a felhasználó id-ját)
+- A Game táblába a játékok elején írunk, mikor létrehozunk egy játékot és a státuszának változtatásakor szerkesztjük
+- A Player tábla a játékosokat reprezentálja, segítségével le lehet kérdezni adott játékban lévő felhasználók neveit, ami jól fog jönni az asztalnál ülő játékosok neveinek kiírásához.
+
+Hogy jobban elképzelhető legyen a játék, csináltam egy layout tervet draw.io-val, amit itt lehet megnézni:
+
+![](https://github.com/pintertamas/shed-backend/blob/master/docs/mockup.png?raw=true)
+
+A backenden elkezdtük megírni az alapokat, már tudunk regisztálni, bejelentkezni, meg a játék létrehozás is működik valamilyen szinten.
+Hostoltuk Herokura is, amin hiba nélkül futott, lehetett becsatlakozni játék lobbykba és üzeneteket küldeni egymásnak.
+A Flutteres részen létrehoztam egy skálázható mappa architektúrát [ennek](https://medium.com/flutter-community/scalable-folder-structure-for-flutter-applications-183746bdc320) a cikknek alapján.
+Mobilon pedig be lehet járni az alkalmazás nagy részét, bescannelni qr kódokat és a bennük tárolt játék nevek alapján játékokba becsatlakozni.
+Weben még nincs sok minden meg, de lehet generálni QR kódot ami kódol egy szöveget, ezt a kódot pedig megjeleníti a képernyőn, amit be lehet scannelni mobillal.
+A login tesztelésekor belefutottam egy hibába, mindig timeoutolt a post kérésem. Azt a feltételezhető okot találtam erre, hogy a gépem egyik portjára küldöm a hívást és ez okozza a bajt.
+Ekkor kiraktam Herokura remélve hogy így már jól fog működni, viszont sajnos teljesen eltörtem az appot és most azt az üzenetet kapom a mobilon hogy ```WebSocketException: Connection to 'https://shed-backend.herokuapp.com:0/shed/018/1wnesojm/websocket#' was not upgraded to websocket```
+Ennek a kijavítását a jövő hétre hagyom, remélhetőleg könnyen megjavul, mivel már futottam bele ebbe a hibába korábban és valahogy megoldottam.
