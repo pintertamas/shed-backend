@@ -32,33 +32,18 @@ public class CardConfigService {
                 cards.add(newCard);
             }
         }
-        return cards;
+        return shuffleDeck(cards);
     }
-
-    /*public void shuffleDeck(ArrayList<CardConfigService> cards) {
+    public ArrayList<CardConfig>  shuffleDeck(ArrayList<CardConfig> cards) {
         // copy cards to an ArrayList
-        ArrayList<CardConfigService> cardsCopy = new ArrayList<>(cards);
+        ArrayList<CardConfig> cardsCopy = new ArrayList<>(cards);
 
         shuffleArrayList(cardsCopy);
 
-        for (CardConfigService card : ) {
-            System.out.println(card.toString());
-        }
+        return cardsCopy;
+    }
 
-        System.out.println("Shuffled");
-
-        // reset deck
-        this.setCards(new Stack<>());
-
-        // add shuffled cards back
-        this.getCards().addAll(cardsCopy);
-
-        for (Card card : getCards()) {
-            System.out.println(card.toString());
-        }
-    }*/
-
-    /*private void shuffleArrayList(ArrayList<?> array) {
+    private void shuffleArrayList(ArrayList<?> array) {
         Iterator<?> itr = array.iterator();
 
         while (itr.hasNext()) {
@@ -78,5 +63,5 @@ public class CardConfigService {
         while (itr.hasNext()) {
             System.out.print(itr.next() + " ");
         }
-    }*/
+    }
 }

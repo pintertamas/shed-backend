@@ -56,15 +56,6 @@ public class GameService {
 
         ArrayList<CardConfig> cards = cardService.createCards(game.getNumberOfDecks(), jokers);
         game.setDeck(cards);
-        /*for (Card card : cards) {
-            CRD crd = new CRD();
-            crd.setCard(card);
-            crd.setDeck(game.getDeck());
-            crd.setRule(Rule.BURNER);
-
-        }*/
-
-
         return gameRepository.save(game);
     }
 
