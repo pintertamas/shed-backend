@@ -23,5 +23,8 @@ Adatbázisnak először mongodb-t használtunk mert témalabról ezzel már van 
 Ezek mellett elkészítettük a projekt [mockupját](https://github.com/pintertamas/shed-backend/blob/master/docs/mockup.png?raw=true) webre és mobilra is.
 
 ## 6 hét
-Ezen a héten a websocketes problémával ment el a legtöbb idő.Elöször egy backend problémának hittük azon belül is a jwt tokenes authentikációnak sajátiottuk de miután átirtuk kiderült hogy rossz helyen keressük a megoldást a problémára mivel a frontenden volt a probléma.
-A backenden ezen kivül egy két dolgot refactoráltam,hibákat javítottam(modeleknél controllereknél,serviceknél is) és elkezdtem írni egy kezdetleges játék logikát amivel létre tudunk hozni egy játékot azokhoz tudunk játékosokat csataloztatni. A cache-es megoldástól még kicsit tartozkodtam mert még nem teljesen értem a műkődését.
+Ezen a héten a websocketes problémával ment el a legtöbb idő.
+Egy backend probléma volt első sorban azon belül is a jwt tokenes authentikációnak sajátitottuk de miután átirtuk kiderült hogy nemcsak itt rontottuk el hanem a frontenden is volt baj.
+A backenden ezen kivül egy-két dolgot refactoráltam,hibákat javítottam(modeleknél controllereknél,serviceknél is) és elkezdtem írni egy kezdetleges játék logikát amivel létre tudunk hozni egy játékot azokhoz tudunk játékosokat csataloztatni.
+Ezt viszont én sajnálatos módon nem tudtam tesztelni mert a postman hibát dobott Connect Econrefused néven amire nem tudtam megoldást találni.
+A cache-es megoldástól még kicsit tartozkodtam mert még nem teljesen értem a műkődését.
