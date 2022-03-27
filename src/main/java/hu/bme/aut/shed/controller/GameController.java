@@ -40,11 +40,10 @@ public class GameController {
     }
 
     @RequestMapping(value = "/create", method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json")
-    public ResponseEntity<?> create(@RequestParam int numberOfDecks, @RequestParam int numberOfCards) {
-        GameOptionsRequest request = new GameOptionsRequest(numberOfDecks, numberOfCards);
+    public ResponseEntity<?> create(@RequestBody GameOptionsRequest request) {
         log.info("create game request: {}", request);
         try {
-            Game game = gameService.createGame(request.getNumberOfCards(), request.getNumberOfDecks(),true);
+            Game game = gameService.createGame(request.getNumberOfCardsInHand(), request.getNumberOfDecks(),true);
             return ResponseEntity.ok(game);
         } catch (UserNotFoundException e) {
             log.error(e.getMessage());

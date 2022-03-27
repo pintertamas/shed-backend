@@ -7,5 +7,7 @@ import lombok.Data;
 @Data
 public class GameOptionsRequest {
     int numberOfDecks;
-    int numberOfCards;
+    int numberOfCardsInHand;
+    int numberOfPlayers;
+    boolean joker;
 }
