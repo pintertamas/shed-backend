@@ -49,9 +49,9 @@ public class GameService {
         Game game;
 
         if (nameResponse.isPresent()) {
-            game = new Game(numberOfCards, numberOfDecks, nameResponse.get().toString(), true);
+            game = new Game(numberOfCards, numberOfDecks, nameResponse.get().toString(), true ,jokers);
         } else {
-            game = new Game(numberOfCards, numberOfDecks, new UUID(5, 5).toString(), false);
+            game = new Game(numberOfCards, numberOfDecks, new UUID(5, 5).toString(), false , jokers);
         }
 
         ArrayList<CardConfig> cards = cardService.createCards(game.getNumberOfDecks(), jokers);

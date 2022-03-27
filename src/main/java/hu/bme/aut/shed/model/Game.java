@@ -44,11 +44,12 @@ public class Game {
     @Column()
     private boolean visibility;
 
-    public Game(int cardsInHand, int numberOfDecks, String name, boolean visibility) {
+    public Game(int cardsInHand, int numberOfDecks, String name, boolean visibility,boolean jokers) {
         this.name = name;
         this.cardsInHand = cardsInHand;
         this.maxPlayers = 5 * numberOfDecks;
         this.status = GameStatus.NEW;
+        this.jokers = jokers;
         this.numberOfDecks = numberOfDecks;
         this.visibility = visibility;
     }
