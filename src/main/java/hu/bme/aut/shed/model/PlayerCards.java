@@ -12,7 +12,7 @@ public class PlayerCards {
 
     @ManyToOne
     @MapsId("cardConfigId")
-    @JoinColumn(name = "cardconfigId")
+    @JoinColumn(name = "cardConfigId")
     CardConfig cardConfig;
 
     @ManyToOne
