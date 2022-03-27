@@ -60,3 +60,9 @@ Weben még nincs sok minden meg, de lehet generálni QR kódot ami kódol egy sz
 A login tesztelésekor belefutottam egy hibába, mindig timeoutolt a post kérésem. Azt a feltételezhető okot találtam erre, hogy a gépem egyik portjára küldöm a hívást és ez okozza a bajt.
 Ekkor kiraktam Herokura remélve hogy így már jól fog működni, viszont sajnos teljesen eltörtem az appot és most azt az üzenetet kapom a mobilon hogy ```WebSocketException: Connection to 'https://shed-backend.herokuapp.com:0/shed/018/1wnesojm/websocket#' was not upgraded to websocket```
 Ennek a kijavítását a jövő hétre hagyom, remélhetőleg könnyen megjavul, mivel már futottam bele ebbe a hibába korábban és valahogy megoldottam.
+
+## 5. hét
+Ezen a héten megfejtettük, hogy a websocket eltörését mi okozza.
+Ebben nagy segítséget nyújtott az, hogy Herokun megtaláltuk a logok helyét, ahol azt láttuk, hogy a "/login" endpoint elérésekor a JWT tokenre panaszkodik a szerver, aminek annál a fázisnál még nem kellene szóba jönnie.
+Rájöttünk hogy a regisztráció rosszul lett megírva, úgyhogy azt átírtuk és így már működött a login. Ekkor visszakaptuk a megfelelő Bearer tokent, amit így már be tudtunk adni a websocket fejlécébe, aminek hatására újra rendeltetésszerűen működött a szerver.
+Elkészítettem a mobil appon egy töltő képernyőt, ami megkérdezi a szervertől, hogy a bejelentkezéskor shared_preferences-be lementett token érvényes-e még és ettől függően tovább irányít 1) egy login/register opciók közül választást kínáló oldalra, 2) az "üdvözlő" képernyőre, ahol választhatunk hogy mit akarunk a továbbiakban csinálni bejelentkezett felhasználóként.
