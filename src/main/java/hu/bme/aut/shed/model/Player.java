@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -29,6 +30,8 @@ public class Player implements Comparable {
     @JoinColumn(name = "game_id")
     private Game game;
 
+    @OneToMany(mappedBy = "player")
+    List<PlayerCards> cards;
 
     public Player(User user) {
         this.user = user;

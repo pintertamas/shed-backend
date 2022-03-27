@@ -14,10 +14,10 @@ import java.util.Objects;
 @Embeddable
 public class PlayerCardsKey implements Serializable {
 
-    @Column(name = "cardConfigId")
+    @Column(name = "cardConfig_id")
     Long cardConfigId;
 
-    @Column(name = "playerId")
+    @Column(name = "player_id")
     Long playerId;
 
     @Override
