@@ -53,12 +53,19 @@ public class JwtAuthenticationController {
     }
 
     @PostMapping("/check-token-validity")
-    public ResponseEntity<?> isTokenExpired(@RequestBody String token) {
+    public ResponseEntity<?> isTokenExpired() {
+        String token = JwtTokenUtil.getToken();
+
         try {
             boolean isExpired = jwtTokenUtil.isTokenExpired(token);
             LoggerFactory.getLogger(this.getClass()).info("TOKEN IS " + (isExpired ? "EXPIRED" : "NOT EXPIRED"));
-            return ResponseEntity.ok(!isExpired);
+            if (isExpired) {
+                return new ResponseEntity<>("Token is not valid", HttpStatus.BAD_REQUEST);
+            } else {
+                return new ResponseEntity<>("Token is valid", HttpStatus.OK);
+            }
         } catch (Exception e) {
+            LoggerFactory.getLogger(this.getClass()).error(e.getMessage());
             LoggerFactory.getLogger(this.getClass()).error("ERROR CHECKING TOKEN EXPIRY");
             return ResponseEntity.internalServerError().body("Error checking token expiry");
         }

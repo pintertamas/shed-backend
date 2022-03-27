@@ -9,6 +9,7 @@ import hu.bme.aut.shed.model.User;
 import hu.bme.aut.shed.repository.UserRepository;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -59,6 +60,7 @@ public class JwtTokenUtil implements Serializable {
 
     public Boolean isTokenExpired(String token) {
         final Date expiration = getExpirationDateFromToken(token);
+        LoggerFactory.getLogger(this.getClass()).info("expiration: " + expiration);
         return expiration.before(new Date());
     }
 
@@ -67,7 +69,7 @@ public class JwtTokenUtil implements Serializable {
 
         Collection<? extends GrantedAuthority> roles = userDetails.getAuthorities();
 
-        claims.put("isUser" , true);
+        claims.put("isUser", true);
 
         return doGenerateToken(claims, userDetails.getUsername());
     }
