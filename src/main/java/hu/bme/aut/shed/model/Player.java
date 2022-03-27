@@ -31,7 +31,7 @@ public class Player implements Comparable {
     private Game game;
 
     @OneToMany(mappedBy = "player")
-    List<PlayerCards> cards;
+    List<PlayerCards> cards = new ArrayList<PlayerCards>();
 
     public Player(User user) {
         this.user = user;
