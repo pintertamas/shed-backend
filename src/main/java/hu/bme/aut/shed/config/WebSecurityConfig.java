@@ -50,13 +50,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf().disable()
-                .requiresChannel()
-                .anyRequest().requiresSecure()
-                .and()
                 .authorizeRequests()
                 .antMatchers("/login", "/register")
                 .permitAll()
                 .and()
+                .requiresChannel(channel -> channel.anyRequest().requiresSecure())
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
