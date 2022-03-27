@@ -5,6 +5,9 @@ import hu.bme.aut.shed.model.Shape;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.Random;
 
 @Service
 public class CardConfigService {
@@ -32,13 +35,13 @@ public class CardConfigService {
         return cards;
     }
 
-    /*public void shuffleDeck(ArrayList<Card> cards) {
+    /*public void shuffleDeck(ArrayList<CardConfigService> cards) {
         // copy cards to an ArrayList
-        ArrayList<Card> cardsCopy = new ArrayList<>(cards);
+        ArrayList<CardConfigService> cardsCopy = new ArrayList<>(cards);
 
         shuffleArrayList(cardsCopy);
 
-        for (Card card : getCards()) {
+        for (CardConfigService card : ) {
             System.out.println(card.toString());
         }
 
@@ -74,5 +77,6 @@ public class CardConfigService {
 
         while (itr.hasNext()) {
             System.out.print(itr.next() + " ");
-        }*/
-    }
+        }
+    }*/
+}

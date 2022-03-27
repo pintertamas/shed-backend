@@ -1,19 +1,13 @@
 package hu.bme.aut.shed.controller;
 
 import hu.bme.aut.shed.exception.GameNotFoundException;
-import hu.bme.aut.shed.exception.LobbyIsFullException;
 import hu.bme.aut.shed.exception.UserNotFoundException;
 import hu.bme.aut.shed.model.Game;
 import hu.bme.aut.shed.model.GameStatus;
-import hu.bme.aut.shed.model.Player;
-import hu.bme.aut.shed.model.User;
 import hu.bme.aut.shed.model.dto.ActionRequest;
 import hu.bme.aut.shed.model.dto.ConnectionRequest;
 import hu.bme.aut.shed.model.dto.GameOptionsRequest;
-import hu.bme.aut.shed.repository.GameRepository;
-import hu.bme.aut.shed.repository.UserRepository;
 import hu.bme.aut.shed.service.GameService;
-import hu.bme.aut.shed.service.PlayerService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
 
 @RestController
 @Slf4j

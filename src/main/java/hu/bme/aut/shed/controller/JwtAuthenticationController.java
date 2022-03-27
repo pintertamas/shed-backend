@@ -1,18 +1,15 @@
 package hu.bme.aut.shed.controller;
 
 import hu.bme.aut.shed.exception.UserAlreadyExistsException;
-import hu.bme.aut.shed.exception.UserNotFoundException;
 import hu.bme.aut.shed.model.JwtRequest;
 import hu.bme.aut.shed.model.JwtResponse;
 import hu.bme.aut.shed.model.User;
-import hu.bme.aut.shed.service.JwtUserDetailsService;
 import hu.bme.aut.shed.service.UserService;
 import org.apache.juli.logging.LogFactory;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -25,9 +22,6 @@ public class JwtAuthenticationController {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private JwtUserDetailsService userDetailsService;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {

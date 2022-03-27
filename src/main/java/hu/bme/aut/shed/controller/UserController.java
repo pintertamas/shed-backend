@@ -2,17 +2,11 @@ package hu.bme.aut.shed.controller;
 
 import hu.bme.aut.shed.exception.UserNotFoundException;
 import hu.bme.aut.shed.model.User;
-import hu.bme.aut.shed.repository.UserRepository;
 import hu.bme.aut.shed.service.UserService;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.util.Objects;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
@@ -27,7 +21,7 @@ public class UserController {
             User user = userService.getById(id);
             return new ResponseEntity<>(user, HttpStatus.OK);
         }
-        catch (UserNotFoundException exeption){
+        catch (UserNotFoundException exception){
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }
