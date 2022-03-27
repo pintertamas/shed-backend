@@ -29,6 +29,7 @@ public class CardConfig {
     @Column()
     private Rule rule;
 
-    @OneToOne()
+    @ManyToOne()
+    @JoinColumn(name="game_id", nullable=false)
     private Game game;
 }

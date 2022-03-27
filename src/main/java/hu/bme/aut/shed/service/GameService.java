@@ -23,9 +23,6 @@ public class GameService {
     private GameRepository gameRepository;
 
     @Autowired
-    private CardConfigRepository cardConfigRepository;
-
-    @Autowired
     private CardConfigService cardService;
 
     public Game getGameById(Long Id) throws GameNotFoundException {
@@ -58,7 +55,7 @@ public class GameService {
         }
 
         ArrayList<CardConfig> cards = cardService.createCards(game.getNumberOfDecks(), jokers);
-
+        game.setDeck(cards);
         /*for (Card card : cards) {
             CRD crd = new CRD();
             crd.setCard(card);
@@ -66,6 +63,7 @@ public class GameService {
             crd.setRule(Rule.BURNER);
 
         }*/
+
 
         return gameRepository.save(game);
     }

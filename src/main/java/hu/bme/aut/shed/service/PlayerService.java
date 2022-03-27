@@ -44,6 +44,7 @@ public class PlayerService {
         }
         Player connectedPlayer = new Player(searchedUser);
         connectedPlayer.setGame(game);
+        game.getPlayers().add(connectedPlayer);
         playerRepository.save(connectedPlayer);
         return connectedPlayer;
     }

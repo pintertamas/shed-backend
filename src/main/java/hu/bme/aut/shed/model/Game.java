@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @Setter
@@ -24,7 +24,10 @@ public class Game {
     private GameStatus status;
 
     @OneToMany(mappedBy = "game")
-    private Set<Player> players;
+    private Set<Player> players = new HashSet<Player>();
+
+    @OneToMany(mappedBy = "game")
+    private List<CardConfig> deck = new ArrayList<CardConfig>();
 
     @Column()
     private int cardsInHand; // amount of card users have in their hands initially
