@@ -48,9 +48,9 @@ public class JwtAuthenticationController {
             User user = userService.register(newUser);
             LoggerFactory.getLogger(this.getClass()).info("USER CREATED: " + newUser);
             return ResponseEntity.ok(user);
-        } catch (UserAlreadyExistsException uaee) {
-            LoggerFactory.getLogger(this.getClass()).error("USER ALREADY EXISTS: " + uaee.getExistingUser());
-            return ResponseEntity.badRequest().body(uaee.getMessage());
+        } catch (UserAlreadyExistsException exception) {
+            LoggerFactory.getLogger(this.getClass()).error("USER ALREADY EXISTS: " + exception.getExistingUser());
+            return ResponseEntity.badRequest().body(exception.getMessage());
         }
     }
 }
