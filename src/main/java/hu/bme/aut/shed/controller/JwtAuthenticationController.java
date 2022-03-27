@@ -52,7 +52,7 @@ public class JwtAuthenticationController {
         }
     }
 
-    @PostMapping("/check-token-validity")
+    @GetMapping("/check-token-validity")
     public ResponseEntity<?> isTokenExpired() {
         String token = JwtTokenUtil.getToken();
 
