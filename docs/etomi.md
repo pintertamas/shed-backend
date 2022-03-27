@@ -21,3 +21,7 @@ A backenden elkészítettem a modelleket illetve néhány service-t és controll
 Problémát jelentett a kapcsolatok jelőlése erre a konzin remelém majd tudok választ kapni hogy ezek megfelelnek-e így.
 Adatbázisnak először mongodb-t használtunk mert témalabról ezzel már van tapasztalatunk de hosszas tanakodás után átáltunk sql alapú adatbázisra(postgresql) mivel szerétnek ezzel is megismerkedni.
 Ezek mellett elkészítettük a projekt [mockupját](https://github.com/pintertamas/shed-backend/blob/master/docs/mockup.png?raw=true) webre és mobilra is.
+
+## 6 hét
+Ezen a héten a websocketes problémával ment el a legtöbb idő.Elöször egy backend problémának hittük azon belül is a jwt tokenes authentikációnak sajátiottuk de miután átirtuk kiderült hogy rossz helyen keressük a megoldást a problémára mivel a frontenden volt a probléma.
+A backenden ezen kivül egy két dolgot refactoráltam,hibákat javítottam(modeleknél controllereknél,serviceknél is) és elkezdtem írni egy kezdetleges játék logikát amivel létre tudunk hozni egy játékot azokhoz tudunk játékosokat csataloztatni. A cache-es megoldástól még kicsit tartozkodtam mert még nem teljesen értem a műkődését.
