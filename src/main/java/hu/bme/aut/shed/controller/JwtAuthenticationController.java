@@ -1,5 +1,6 @@
 package hu.bme.aut.shed.controller;
 
+import hu.bme.aut.shed.component.JwtTokenUtil;
 import hu.bme.aut.shed.exception.UserAlreadyExistsException;
 import hu.bme.aut.shed.model.JwtRequest;
 import hu.bme.aut.shed.model.JwtResponse;
@@ -23,6 +24,9 @@ public class JwtAuthenticationController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    JwtTokenUtil jwtTokenUtil;
+
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
         String token;
@@ -45,6 +49,18 @@ public class JwtAuthenticationController {
         } catch (UserAlreadyExistsException exception) {
             LoggerFactory.getLogger(this.getClass()).error("USER ALREADY EXISTS: " + exception.getExistingUser());
             return ResponseEntity.badRequest().body(exception.getMessage());
+        }
+    }
+
+    @GetMapping("/check-token-validity")
+    public ResponseEntity<?> isTokenExpired(@RequestBody String token) {
+        try {
+            boolean isExpired = jwtTokenUtil.isTokenExpired(token);
+            LoggerFactory.getLogger(this.getClass()).info("TOKEN IS " + (isExpired ? "EXPIRED" : "NOT EXPIRED"));
+            return ResponseEntity.ok(!isExpired);
+        } catch (Exception e) {
+            LoggerFactory.getLogger(this.getClass()).error("ERROR CHECKING TOKEN EXPIRY");
+            return ResponseEntity.internalServerError().body("Error checking token expiry");
         }
     }
 }
