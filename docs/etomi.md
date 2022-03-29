@@ -28,3 +28,6 @@ Egy backend probléma volt első sorban azon belül is a jwt tokenes authentiká
 A backenden ezen kivül egy-két dolgot refactoráltam,hibákat javítottam(modeleknél controllereknél,serviceknél is) és elkezdtem írni egy kezdetleges játék logikát amivel létre tudunk hozni egy játékot azokhoz tudunk játékosokat csataloztatni.
 Ezt viszont én sajnálatos módon nem tudtam tesztelni mert a postman hibát dobott Connect Econrefused néven amire nem tudtam megoldást találni.
 A cache-es megoldástól még kicsit tartozkodtam mert még nem teljesen értem a műkődését.
+
+## 7 hét
+Ezen a héten a munka CORS konfigurációval kezdődött , mivel Tominak a frontenden(weben) nem mükődött az egyik endpoint(Corsos hibát kapott) ,így ezt a problémát gyorsan orvosoltuk.

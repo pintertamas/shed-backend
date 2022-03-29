@@ -20,13 +20,13 @@ public class CardConfigService {
 
     public ArrayList<CardConfig> createCards(Game game) {
         int numberOfCards = game.getNumberOfDecks() * 13 * Shape.values().length;
-        if (game.isJokers()) numberOfCards += 3;
+        if (game.isJokers()) numberOfCards += 2;
 
         ArrayList<CardConfig> cards = new ArrayList<>(numberOfCards);
 
         for (int i = 0; i < game.getNumberOfDecks(); i++) {
             for (Shape shape : Shape.values()) {
-                for (int cardNumber = 2; cardNumber < 14; cardNumber++) {
+                for (int cardNumber = 2; cardNumber < 15; cardNumber++) {
                     CardConfig newCard = new CardConfig();
                     newCard.setNumber(cardNumber);
                     newCard.setShape(shape);
