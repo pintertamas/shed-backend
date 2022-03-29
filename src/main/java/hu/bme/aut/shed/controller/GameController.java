@@ -29,8 +29,8 @@ public class GameController {
     @Autowired
     private final SimpMessagingTemplate simpMessagingTemplate;
 
-    @GetMapping("/")
-    public ResponseEntity<?> getGameByState(@RequestParam GameStatus status) {
+    @GetMapping("/list")
+    public ResponseEntity<?> getGameByState(@RequestBody GameStatus status) {
         try {
             Game game = gameService.getGameByState(status);
             GameResponse gameResponse = new GameResponse(game.getId(),game.getName());

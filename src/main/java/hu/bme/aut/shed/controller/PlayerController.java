@@ -38,7 +38,7 @@ public class PlayerController {
         }
     }
 
-    @RequestMapping(value = "/", method = {RequestMethod.GET}, produces = "application/json")
+    @RequestMapping(value = "/list/", method = {RequestMethod.GET}, produces = "application/json")
     public ResponseEntity<List<Player>> listPlayersByGameId(@RequestParam Long gameId) {
         try {
             return ResponseEntity.ok(playerService.getPlayersByGameId(gameId));
