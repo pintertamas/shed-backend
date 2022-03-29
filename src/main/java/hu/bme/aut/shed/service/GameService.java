@@ -32,12 +32,12 @@ public class GameService {
         return game.get();
     }
 
-    public Game getGameByState(GameStatus state) throws GameNotFoundException {
-        Optional<Game> game = gameRepository.findByStatus(state);
-        if (game.isEmpty()) {
+    public List<Game> getGamesByState(GameStatus state) throws GameNotFoundException {
+        Optional<List<Game>> games = gameRepository.findAllByStatus(state);
+        if (games.isEmpty()) {
             throw new GameNotFoundException();
         }
-        return game.get();
+        return games.get();
     }
 
     public Game createGame(int numberOfCards, int numberOfDecks, boolean jokers) throws UserNotFoundException {

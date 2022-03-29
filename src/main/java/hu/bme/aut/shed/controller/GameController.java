@@ -17,6 +17,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @RestController
 @Slf4j
@@ -29,14 +32,16 @@ public class GameController {
     @Autowired
     private final SimpMessagingTemplate simpMessagingTemplate;
 
-    @GetMapping("/list")
-    public ResponseEntity<?> getGameByState(@RequestBody GameStatus status) {
+    @GetMapping("/list-new")
+    public ResponseEntity<?> getNewGames() {
         try {
-            Game game = gameService.getGameByState(status);
-            GameResponse gameResponse = new GameResponse(game.getId(),game.getName());
-            return new ResponseEntity<>(gameResponse, HttpStatus.OK);
-        }
-        catch (GameNotFoundException exception){
+            List<Game> games = gameService.getGamesByState(GameStatus.NEW);
+            List<GameResponse> gameResponses = new ArrayList<>();
+            for (Game game : games) {
+                gameResponses.add(new GameResponse(game.getId(), game.getName()));
+            }
+            return new ResponseEntity<>(gameResponses, HttpStatus.OK);
+        } catch (GameNotFoundException exception) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }
@@ -45,8 +50,8 @@ public class GameController {
     public ResponseEntity<?> create(@RequestBody GameOptionsRequest request) {
         log.info("create game request: {}", request);
         try {
-            Game game = gameService.createGame(request.getNumberOfCardsInHand(), request.getNumberOfDecks(),true);
-            GameResponse gameResponse = new GameResponse(game.getId(),game.getName());
+            Game game = gameService.createGame(request.getNumberOfCardsInHand(), request.getNumberOfDecks(), true);
+            GameResponse gameResponse = new GameResponse(game.getId(), game.getName());
             return ResponseEntity.ok(gameResponse);
         } catch (UserNotFoundException e) {
             log.error(e.getMessage());
