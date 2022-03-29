@@ -42,7 +42,7 @@ public class GameController {
             }
             return new ResponseEntity<>(gameResponses, HttpStatus.OK);
         } catch (GameNotFoundException exception) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
@@ -53,9 +53,9 @@ public class GameController {
             Game game = gameService.createGame(request.getNumberOfCardsInHand(), request.getNumberOfDecks(), true);
             GameResponse gameResponse = new GameResponse(game.getId(), game.getName());
             return ResponseEntity.ok(gameResponse);
-        } catch (UserNotFoundException e) {
-            log.error(e.getMessage());
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception exception) {
+            log.error(exception.getMessage());
+            return new ResponseEntity<>(exception.getMessage(),HttpStatus.NOT_FOUND);
         }
     }
 
@@ -64,21 +64,21 @@ public class GameController {
         log.info("start game request: {}", request);
         try {
             return ResponseEntity.ok(gameService.startGame(request.getGameId()));
-        } catch (GameNotFoundException | UserNotFoundException e) {
-            log.error(e.getMessage());
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (GameNotFoundException | UserNotFoundException exception) {
+            log.error(exception.getMessage());
+            return new ResponseEntity<>(exception.getMessage(),HttpStatus.NOT_FOUND);
         }
     }
 
     @RequestMapping(value = "/action", method = {RequestMethod.POST}, produces = "application/json")
-    public ResponseEntity<Game> gamePlay(@RequestBody ActionRequest request) {
+    public ResponseEntity<?> gamePlay(@RequestBody ActionRequest request) {
         log.info("action: {}", request);
         try {
             Game game = gameService.action(request);
             simpMessagingTemplate.convertAndSend("/topic/action/" + game.getId(), game);
             return ResponseEntity.ok(game);
-        } catch (GameNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (GameNotFoundException exception) {
+            return new ResponseEntity<>(exception.getMessage(),HttpStatus.NOT_FOUND);
         }
     }
 }
