@@ -66,3 +66,11 @@ Ezen a héten megfejtettük, hogy a websocket eltörését mi okozza.
 Ebben nagy segítséget nyújtott az, hogy Herokun megtaláltuk a logok helyét, ahol azt láttuk, hogy a "/login" endpoint elérésekor a JWT tokenre panaszkodik a szerver, aminek annál a fázisnál még nem kellene szóba jönnie.
 Rájöttünk hogy a regisztráció rosszul lett megírva, úgyhogy azt átírtuk és így már működött a login. Ekkor visszakaptuk a megfelelő Bearer tokent, amit így már be tudtunk adni a websocket fejlécébe, aminek hatására újra rendeltetésszerűen működött a szerver.
 Elkészítettem a mobil appon egy töltő képernyőt, ami megkérdezi a szervertől, hogy a bejelentkezéskor shared_preferences-be lementett token érvényes-e még és ettől függően tovább irányít 1) egy login/register opciók közül választást kínáló oldalra, 2) az "üdvözlő" képernyőre, ahol választhatunk hogy mit akarunk a továbbiakban csinálni bejelentkezett felhasználóként.
+
+## 6. hét
+Elkezdtem haladni a webes résszel is, aminél egy problémába akardam már az elején. Nem volt konfigurálva a CORS a backenden, ezért webről nem tudtam hívásokat küldeni a backend felé.
+Ahhoz, hogy ez megoldódjon, követtem a leírást a következő oldalon:
+```https://spring.io/guides/gs/rest-service-cors/```
+A globális beállítást választottam és így már működött az API hívás, meg tudtam jeleníteni egy új játék nevét és az ahhoz tartozó QR kódot a képernyőn.
+
+
