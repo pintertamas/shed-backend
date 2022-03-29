@@ -45,20 +45,20 @@ public class GameService {
         RestTemplate restTemplate = new RestTemplate();
         Object[] response = restTemplate.getForObject(url, Object[].class);
         Optional<Object> nameResponse;
-        Game game;
+
+        Game game = new Game(numberOfCards, numberOfDecks, new UUID(5, 5).toString(), false, jokers);
+        gameRepository.save(game);
+        ArrayList<CardConfig> cards = cardService.createCards(game);
+        game.setDeck(cards);
+
 
         if (response != null) {
             nameResponse = Arrays.stream(response).findFirst();
             if (nameResponse.isPresent()) {
-                game = new Game(numberOfCards, numberOfDecks, nameResponse.get().toString(), true, jokers);
-                ArrayList<CardConfig> cards = cardService.createCards(game);
-                game.setDeck(cards);
+                game.setName(nameResponse.get().toString());
                 return gameRepository.save(game);
             }
         }
-        game = new Game(numberOfCards, numberOfDecks, new UUID(5, 5).toString(), false, jokers);
-        ArrayList<CardConfig> cards = cardService.createCards(game);
-        game.setDeck(cards);
         return gameRepository.save(game);
     }
 

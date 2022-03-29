@@ -32,14 +32,14 @@ public class CardConfigService {
                     newCard.setShape(shape);
                     newCard.setGame(game);
                     cards.add(newCard);
-                    //cardConfigRepository.save(newCard); // TODO!!!
+                    cardConfigRepository.save(newCard);
                 }
                 CardConfig newCard = new CardConfig();
                 newCard.setNumber(1);
                 newCard.setShape(shape);
                 newCard.setGame(game);
                 cards.add(newCard);
-                //cardConfigRepository.save(newCard); // TODO!!!
+                cardConfigRepository.save(newCard);
             }
         }
         return shuffleDeck(cards);
