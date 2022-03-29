@@ -51,13 +51,13 @@ public class GameService {
             nameResponse = Arrays.stream(response).findFirst();
             if (nameResponse.isPresent()) {
                 game = new Game(numberOfCards, numberOfDecks, nameResponse.get().toString(), true, jokers);
-                ArrayList<CardConfig> cards = cardService.createCards(game.getNumberOfDecks(), jokers);
+                ArrayList<CardConfig> cards = cardService.createCards(game);
                 game.setDeck(cards);
                 return gameRepository.save(game);
             }
         }
         game = new Game(numberOfCards, numberOfDecks, new UUID(5, 5).toString(), false, jokers);
-        ArrayList<CardConfig> cards = cardService.createCards(game.getNumberOfDecks(), jokers);
+        ArrayList<CardConfig> cards = cardService.createCards(game);
         game.setDeck(cards);
         return gameRepository.save(game);
     }

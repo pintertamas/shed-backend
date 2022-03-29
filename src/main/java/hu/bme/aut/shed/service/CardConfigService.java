@@ -1,7 +1,9 @@
 package hu.bme.aut.shed.service;
 
 import hu.bme.aut.shed.model.CardConfig;
+import hu.bme.aut.shed.model.Game;
 import hu.bme.aut.shed.model.Shape;
+import hu.bme.aut.shed.repository.CardConfigRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -12,24 +14,30 @@ import java.util.Random;
 @Service
 public class CardConfigService {
 
-    public ArrayList<CardConfig> createCards(int numberOfDecks, boolean jokers) {
-        int numberOfCards = numberOfDecks * 13 * Shape.values().length;
-        if (jokers) numberOfCards += 3;
+    CardConfigRepository cardConfigRepository;
+
+    public ArrayList<CardConfig> createCards(Game game) {
+        int numberOfCards = game.getNumberOfDecks() * 13 * Shape.values().length;
+        if (game.isJokers()) numberOfCards += 3;
 
         ArrayList<CardConfig> cards = new ArrayList<>(numberOfCards);
 
-        for (int i = 0; i < numberOfDecks; i++) {
+        for (int i = 0; i < game.getNumberOfDecks(); i++) {
             for (Shape shape : Shape.values()) {
                 for (int cardNumber = 2; cardNumber < 14; cardNumber++) {
                     CardConfig newCard = new CardConfig();
                     newCard.setNumber(cardNumber);
                     newCard.setShape(shape);
+                    newCard.setGame(game);
                     cards.add(newCard);
+                    cardConfigRepository.save(newCard);
                 }
                 CardConfig newCard = new CardConfig();
                 newCard.setNumber(1);
                 newCard.setShape(shape);
+                newCard.setGame(game);
                 cards.add(newCard);
+                cardConfigRepository.save(newCard);
             }
         }
         return shuffleDeck(cards);
