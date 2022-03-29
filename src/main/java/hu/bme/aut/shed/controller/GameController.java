@@ -1,12 +1,13 @@
 package hu.bme.aut.shed.controller;
 
+import hu.bme.aut.shed.dto.Response.GameResponse;
 import hu.bme.aut.shed.exception.GameNotFoundException;
 import hu.bme.aut.shed.exception.UserNotFoundException;
 import hu.bme.aut.shed.model.Game;
 import hu.bme.aut.shed.model.GameStatus;
-import hu.bme.aut.shed.model.dto.ActionRequest;
-import hu.bme.aut.shed.model.dto.ConnectionRequest;
-import hu.bme.aut.shed.model.dto.GameOptionsRequest;
+import hu.bme.aut.shed.dto.Request.ActionRequest;
+import hu.bme.aut.shed.dto.Request.ConnectionRequest;
+import hu.bme.aut.shed.dto.Request.GameOptionsRequest;
 import hu.bme.aut.shed.service.GameService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,10 +30,11 @@ public class GameController {
     private final SimpMessagingTemplate simpMessagingTemplate;
 
     @GetMapping("/")
-    public ResponseEntity<Game> getGameByState(@RequestParam GameStatus status) {
+    public ResponseEntity<?> getGameByState(@RequestParam GameStatus status) {
         try {
             Game game = gameService.getGameByState(status);
-            return new ResponseEntity<>(game, HttpStatus.OK);
+            GameResponse gameResponse = new GameResponse(game.getId(),game.getName());
+            return new ResponseEntity<>(gameResponse, HttpStatus.OK);
         }
         catch (GameNotFoundException exception){
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -44,7 +46,8 @@ public class GameController {
         log.info("create game request: {}", request);
         try {
             Game game = gameService.createGame(request.getNumberOfCardsInHand(), request.getNumberOfDecks(),true);
-            return ResponseEntity.ok(game);
+            GameResponse gameResponse = new GameResponse(game.getId(),game.getName());
+            return ResponseEntity.ok(gameResponse);
         } catch (UserNotFoundException e) {
             log.error(e.getMessage());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

@@ -1,4 +1,4 @@
-package hu.bme.aut.shed.model.dto;
+package hu.bme.aut.shed.dto.Request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
