@@ -4,6 +4,7 @@ import hu.bme.aut.shed.model.CardConfig;
 import hu.bme.aut.shed.model.Game;
 import hu.bme.aut.shed.model.Shape;
 import hu.bme.aut.shed.repository.CardConfigRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.Random;
 @Service
 public class CardConfigService {
 
+    @Autowired
     CardConfigRepository cardConfigRepository;
 
     public ArrayList<CardConfig> createCards(Game game) {
@@ -30,19 +32,20 @@ public class CardConfigService {
                     newCard.setShape(shape);
                     newCard.setGame(game);
                     cards.add(newCard);
-                    cardConfigRepository.save(newCard);
+                    //cardConfigRepository.save(newCard); // TODO!!!
                 }
                 CardConfig newCard = new CardConfig();
                 newCard.setNumber(1);
                 newCard.setShape(shape);
                 newCard.setGame(game);
                 cards.add(newCard);
-                cardConfigRepository.save(newCard);
+                //cardConfigRepository.save(newCard); // TODO!!!
             }
         }
         return shuffleDeck(cards);
     }
-    public ArrayList<CardConfig>  shuffleDeck(ArrayList<CardConfig> cards) {
+
+    public ArrayList<CardConfig> shuffleDeck(ArrayList<CardConfig> cards) {
         // copy cards to an ArrayList
         ArrayList<CardConfig> cardsCopy = new ArrayList<>(cards);
 
