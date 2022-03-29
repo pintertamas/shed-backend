@@ -45,15 +45,19 @@ public class GameService {
         String url = "http://names.drycodes.com/1?nameOptions=funnyWords";
         RestTemplate restTemplate = new RestTemplate();
         Object[] response = restTemplate.getForObject(url, Object[].class);
-        Optional<Object> nameResponse = Arrays.stream(response).findFirst();
+        Optional<Object> nameResponse;
         Game game;
 
-        if (nameResponse.isPresent()) {
-            game = new Game(numberOfCards, numberOfDecks, nameResponse.get().toString(), true ,jokers);
-        } else {
-            game = new Game(numberOfCards, numberOfDecks, new UUID(5, 5).toString(), false , jokers);
+        if (response != null) {
+            nameResponse = Arrays.stream(response).findFirst();
+            if (nameResponse.isPresent()) {
+                game = new Game(numberOfCards, numberOfDecks, nameResponse.get().toString(), true, jokers);
+                ArrayList<CardConfig> cards = cardService.createCards(game.getNumberOfDecks(), jokers);
+                game.setDeck(cards);
+                return gameRepository.save(game);
+            }
         }
-
+        game = new Game(numberOfCards, numberOfDecks, new UUID(5, 5).toString(), false, jokers);
         ArrayList<CardConfig> cards = cardService.createCards(game.getNumberOfDecks(), jokers);
         game.setDeck(cards);
         return gameRepository.save(game);
