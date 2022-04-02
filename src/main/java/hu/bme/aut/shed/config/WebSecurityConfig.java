@@ -57,7 +57,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login", "/register", "/check-token-validity", "/game/create" , "game/start")
                 .permitAll()
                 .and()
-                .requiresChannel(channel -> channel.anyRequest().requiresSecure())
+                //.requiresChannel(channel -> channel.anyRequest().requiresSecure())
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
