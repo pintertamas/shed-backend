@@ -1,9 +1,9 @@
 package hu.bme.aut.shed.model;
 
 public enum GameStatus {
-    NEW("N"),
-    IN_PROGRESS("P"),
-    FINISHED("F");
+    NEW("New"),
+    IN_PROGRESS("In_Progress"),
+    FINISHED("Finished");
 
     private String shortName;
 
@@ -17,13 +17,13 @@ public enum GameStatus {
 
     public static GameStatus fromShortName(String shortName) {
         switch (shortName) {
-            case "N":
+            case "New":
                 return GameStatus.NEW;
 
-            case "P":
+            case "In_Progress":
                 return GameStatus.IN_PROGRESS;
 
-            case "F":
+            case "Finished":
                 return GameStatus.FINISHED;
             default:
                 throw new IllegalArgumentException("ShortName [" + shortName
