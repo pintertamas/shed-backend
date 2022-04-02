@@ -12,8 +12,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 
-//TODO //Refactor this
-
 @Service
 @AllArgsConstructor
 public class GameService {
@@ -50,7 +48,6 @@ public class GameService {
         gameRepository.save(game);
         ArrayList<CardConfig> cards = cardService.createCards(game);
         game.setDeck(cards);
-
 
         if (response != null) {
             nameResponse = Arrays.stream(response).findFirst();

@@ -4,14 +4,11 @@ import hu.bme.aut.shed.component.JwtTokenUtil;
 import hu.bme.aut.shed.exception.NotValidUpdateException;
 import hu.bme.aut.shed.exception.UserAlreadyExistsException;
 import hu.bme.aut.shed.exception.UserNotFoundException;
-import hu.bme.aut.shed.model.JwtRequest;
+import hu.bme.aut.shed.dto.Request.JwtRequest;
 import hu.bme.aut.shed.model.User;
 import hu.bme.aut.shed.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -20,8 +17,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
-import java.sql.Date;
 import java.util.Objects;
 import java.util.Optional;
 

@@ -1,4 +1,4 @@
-package hu.bme.aut.shed.model;
+package hu.bme.aut.shed.dto.Response;
 
 import hu.bme.aut.shed.model.User;
 import lombok.Getter;

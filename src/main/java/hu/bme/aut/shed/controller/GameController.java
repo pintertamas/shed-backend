@@ -32,10 +32,10 @@ public class GameController {
     @Autowired
     private final SimpMessagingTemplate simpMessagingTemplate;
 
-    @GetMapping("/list-new")
-    public ResponseEntity<?> getNewGames() {
+    @GetMapping("/list/")
+    public ResponseEntity<?> getGamesByStatus(@RequestParam String statusValue) {
         try {
-            List<Game> games = gameService.getGamesByState(GameStatus.NEW);
+            List<Game> games = gameService.getGamesByState(GameStatus.fromShortName(statusValue));
             List<GameResponse> gameResponses = new ArrayList<>();
             for (Game game : games) {
                 gameResponses.add(new GameResponse(game.getId(), game.getName()));
@@ -63,7 +63,9 @@ public class GameController {
     public ResponseEntity<?> start(@RequestBody ConnectionRequest request) {
         log.info("start game request: {}", request);
         try {
-            return ResponseEntity.ok(gameService.startGame(request.getGameId()));
+            Game game = gameService.startGame(request.getGameId());
+            GameResponse gameResponse = new GameResponse(game.getId(), game.getName());
+            return ResponseEntity.ok(gameResponse);
         } catch (GameNotFoundException | UserNotFoundException exception) {
             log.error(exception.getMessage());
             return new ResponseEntity<>(exception.getMessage(),HttpStatus.NOT_FOUND);

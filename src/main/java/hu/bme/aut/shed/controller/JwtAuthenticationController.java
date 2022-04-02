@@ -2,8 +2,8 @@ package hu.bme.aut.shed.controller;
 
 import hu.bme.aut.shed.component.JwtTokenUtil;
 import hu.bme.aut.shed.exception.UserAlreadyExistsException;
-import hu.bme.aut.shed.model.JwtRequest;
-import hu.bme.aut.shed.model.JwtResponse;
+import hu.bme.aut.shed.dto.Request.JwtRequest;
+import hu.bme.aut.shed.dto.Response.JwtResponse;
 import hu.bme.aut.shed.model.User;
 import hu.bme.aut.shed.service.UserService;
 import org.apache.juli.logging.LogFactory;
