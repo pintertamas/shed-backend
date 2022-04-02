@@ -17,7 +17,7 @@ public class LobbyWSController {
         return "server one-time message via the application";
     }
 
-    @MessageMapping("topic/start-game/{gameId}")
+    @MessageMapping("/topic/start-game/{gameId}")
     public void handleMessageWithoutResponse(@DestinationVariable String gameId, String message) {
         LoggerFactory.getLogger(this.getClass()).info("GameStarted : {}" + message, gameId);
     }
