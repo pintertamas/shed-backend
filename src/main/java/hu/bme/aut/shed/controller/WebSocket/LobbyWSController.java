@@ -32,7 +32,7 @@ public class LobbyWSController {
 
     @MessageMapping("/join-game/{gameName}/{username}")
     @SendTo("/topic/{gameName}")
-    public JoinGameMessage joinGame(@DestinationVariable String gameName, String username) {
+    public JoinGameMessage joinGame(@DestinationVariable String gameName, @DestinationVariable String username) {
         LoggerFactory.getLogger(this.getClass()).info("User (" + username + ") joined to game: " + gameName);
         return new JoinGameMessage("join", username);
     }
