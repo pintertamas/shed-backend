@@ -30,4 +30,8 @@ Ezt viszont én sajnálatos módon nem tudtam tesztelni mert a postman hibát do
 A cache-es megoldástól még kicsit tartozkodtam mert még nem teljesen értem a műkődését.
 
 ## 7 hét
-Ezen a héten a munka CORS konfigurációval kezdődött , mivel Tominak a frontenden(weben) nem mükődött az egyik endpoint(Corsos hibát kapott) ,így ezt a problémát gyorsan orvosoltuk.
+Ezen a héten a munka CORS konfigurációval kezdődött , mivel Tominak a frontenden(weben) nem mükődött az egyik endpoint(Corsos hibát kapott) ,így ezt a problémát gyorsan orvosoltuk WebSecurityConfigban.
+Refaktoráltam egy két response üzenetet és így már nem 10000 soros JSON - ket adok vissza egy-egy endpointon.
+Backenden megtanultam hogy kell rendesen Enumokkal dologozni ebben ez a [tutoriál](https://thorben-janssen.com/jpa-21-type-converter-better-way-to/) segített
+A Websocketet elkezdtük csinálni de rájöttünk hogy még nem igazán értjük hogy is műkődik igazán de egy [tutoriál](https://medium.com/swlh/websockets-with-spring-part-3-stomp-over-websocket-3dab4a21f397) alapján megértettük és élkezdtük a mi use case-ünkre megvalósítani.
+Mostmár tudunk rajta keresztül játékot létrehozni
