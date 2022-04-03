@@ -7,7 +7,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Setter
 @Getter
-public class StartGameMessage {
+public class JoinGameMessage {
     String type;
-    String gameName;
+    String username;
 }
