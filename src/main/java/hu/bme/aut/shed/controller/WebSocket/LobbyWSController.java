@@ -1,6 +1,6 @@
 package hu.bme.aut.shed.controller.WebSocket;
 
-import hu.bme.aut.shed.dto.Response.JoinGameMessage;
+import hu.bme.aut.shed.dto.Response.LobbyMessage;
 import hu.bme.aut.shed.dto.Response.StartGameMessage;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +32,15 @@ public class LobbyWSController {
 
     @MessageMapping("/join-game/{gameName}/{username}")
     @SendTo("/topic/{gameName}")
-    public JoinGameMessage joinGame(@DestinationVariable String gameName, @DestinationVariable String username) {
+    public LobbyMessage joinGame(@DestinationVariable String gameName, @DestinationVariable String username) {
         LoggerFactory.getLogger(this.getClass()).info("User (" + username + ") joined to game: " + gameName);
-        return new JoinGameMessage("join", username);
+        return new LobbyMessage("join", username);
+    }
+
+    @MessageMapping("/leave-game/{gameName}/{username}")
+    @SendTo("/topic/{gameName}")
+    public LobbyMessage leaveGame(@DestinationVariable String gameName, @DestinationVariable String username) {
+        LoggerFactory.getLogger(this.getClass()).info("User (" + username + ") left the game: " + gameName);
+        return new LobbyMessage("leave", username);
     }
 }
