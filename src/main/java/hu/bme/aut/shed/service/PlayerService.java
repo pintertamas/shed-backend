@@ -70,7 +70,8 @@ public class PlayerService {
     @Transactional
     public void disconnectPlayer(String username) {
         LoggerFactory.getLogger(this.getClass()).info(String.valueOf(playerRepository.findAll().size()));
-        playerRepository.deletePlayerByUsername(username);
+        Player player = playerRepository.findPlayerByUsername(username);
+        playerRepository.deleteById(player.getId());
         LoggerFactory.getLogger(this.getClass()).info(String.valueOf(playerRepository.findAll().size()));
     }
 }
