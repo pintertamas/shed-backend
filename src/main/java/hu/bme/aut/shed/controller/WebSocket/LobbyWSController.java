@@ -3,6 +3,8 @@ package hu.bme.aut.shed.controller.WebSocket;
 import hu.bme.aut.shed.dto.Response.LobbyMessage;
 import hu.bme.aut.shed.dto.Response.StartGameMessage;
 import hu.bme.aut.shed.exception.GameNotFoundException;
+import hu.bme.aut.shed.exception.LobbyIsFullException;
+import hu.bme.aut.shed.exception.UserNotFoundException;
 import hu.bme.aut.shed.model.Game;
 import hu.bme.aut.shed.repository.GameRepository;
 import hu.bme.aut.shed.service.GameService;
@@ -46,12 +48,19 @@ public class LobbyWSController {
     public LobbyMessage joinGame(@DestinationVariable String gameName, @DestinationVariable String username) {
         try {
             Game game = gameService.getGameByName(gameName);
+            LoggerFactory.getLogger(this.getClass()).info("Connecting (" + username + ") to game: " + gameName);
             playerService.connectPlayer(username, game.getId());
             LoggerFactory.getLogger(this.getClass()).info("User (" + username + ") joined to game: " + gameName);
             return new LobbyMessage("join", username);
-        } catch (Exception e) {
+        } catch (GameNotFoundException e) {
             LoggerFactory.getLogger(this.getClass()).info("Game with name (" + gameName + ") not found!");
             return new LobbyMessage("error", "game not found");
+        }catch (UserNotFoundException e) {
+            LoggerFactory.getLogger(this.getClass()).info("User with name (" + username + ") not found!");
+            return new LobbyMessage("error", "user not found");
+        }catch (LobbyIsFullException e) {
+            LoggerFactory.getLogger(this.getClass()).info("Lobby of game (" + gameName + ") is full!");
+            return new LobbyMessage("error", "lobby is full");
         }
     }
 
