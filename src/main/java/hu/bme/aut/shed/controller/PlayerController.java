@@ -1,5 +1,6 @@
 package hu.bme.aut.shed.controller;
 
+import hu.bme.aut.shed.dto.Response.PlayerResponse;
 import hu.bme.aut.shed.exception.GameNotFoundException;
 import hu.bme.aut.shed.exception.LobbyIsFullException;
 import hu.bme.aut.shed.exception.UserNotFoundException;
@@ -39,7 +40,7 @@ public class PlayerController {
     }
 
     @RequestMapping(value = "/list/", method = {RequestMethod.GET}, produces = "application/json")
-    public ResponseEntity<List<Player>> listPlayersByGameId(@RequestParam String gameName) {
+    public ResponseEntity<List<PlayerResponse>> listPlayersByGameId(@RequestParam String gameName) {
         try {
             return ResponseEntity.ok(playerService.getPlayersByGameName(gameName));
         } catch (GameNotFoundException e) {

@@ -1,5 +1,6 @@
 package hu.bme.aut.shed.service;
 
+import hu.bme.aut.shed.dto.Response.PlayerResponse;
 import hu.bme.aut.shed.exception.GameNotFoundException;
 import hu.bme.aut.shed.exception.LobbyIsFullException;
 import hu.bme.aut.shed.exception.UserNotFoundException;
@@ -12,6 +13,7 @@ import hu.bme.aut.shed.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,9 +34,14 @@ public class PlayerService {
         return playerRepository.findByGame(game);
     }
 
-    public List<Player> getPlayersByGameName(String gameName) throws GameNotFoundException {
+    public List<PlayerResponse> getPlayersByGameName(String gameName) throws GameNotFoundException {
         Game game = gameService.getGameByName(gameName);
-        return playerRepository.findByGame(game);
+        List<Player> players = playerRepository.findByGame(game);
+        List<PlayerResponse> playerResponses = new ArrayList<>();
+        for (Player player : players) {
+            playerResponses.add(new PlayerResponse(player.getUsername()));
+        }
+        return playerResponses;
     }
 
     public Player connectPlayer(String username, Long gameId) throws GameNotFoundException, UserNotFoundException, LobbyIsFullException {
@@ -43,7 +50,7 @@ public class PlayerService {
         if (searchedUser == null) throw new UserNotFoundException();
 
         List<Player> players = playerRepository.findByGame(game);
-        if(players.size() >= game.getMaxPlayers()) {
+        if (players.size() >= game.getMaxPlayers()) {
             throw new LobbyIsFullException();
         }
         Player connectedPlayer = new Player(searchedUser);
