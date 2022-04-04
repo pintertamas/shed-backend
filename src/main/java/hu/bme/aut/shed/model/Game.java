@@ -23,8 +23,8 @@ public class Game {
     @Column()
     private GameStatus status;
 
-    @OneToMany(mappedBy = "game")
-    private List<Player> players = new ArrayList<>();
+    @OneToMany(mappedBy = "game", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<Player> players = new HashSet<>();
 
     @OneToMany(mappedBy = "game")
     private List<CardConfig> deck = new ArrayList<>();
