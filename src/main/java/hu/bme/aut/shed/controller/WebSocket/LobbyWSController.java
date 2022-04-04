@@ -55,10 +55,10 @@ public class LobbyWSController {
         } catch (GameNotFoundException e) {
             LoggerFactory.getLogger(this.getClass()).info("Game with name (" + gameName + ") not found!");
             return new LobbyMessage("error", "game not found");
-        }catch (UserNotFoundException e) {
+        } catch (UserNotFoundException e) {
             LoggerFactory.getLogger(this.getClass()).info("User with name (" + username + ") not found!");
             return new LobbyMessage("error", "user not found");
-        }catch (LobbyIsFullException e) {
+        } catch (LobbyIsFullException e) {
             LoggerFactory.getLogger(this.getClass()).info("Lobby of game (" + gameName + ") is full!");
             return new LobbyMessage("error", "lobby is full");
         }
@@ -66,7 +66,7 @@ public class LobbyWSController {
 
     @MessageMapping("/leave-game/{username}")
     @SendTo("/topic/{gameName}")
-    public LobbyMessage leaveGame(@DestinationVariable String username) {
+    public LobbyMessage leaveGame(@DestinationVariable String username, @DestinationVariable String gameName) {
         try {
             playerService.disconnectPlayer(username);
             LoggerFactory.getLogger(this.getClass()).info("User (" + username + ") left the game");
