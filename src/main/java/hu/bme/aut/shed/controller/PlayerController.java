@@ -42,7 +42,7 @@ public class PlayerController {
     public ResponseEntity<?> disconnect(@RequestParam Long gameId, @RequestParam String username) {
         log.info("User (" + username + ") disconnected from game: " + gameId);
         try {
-            playerService.disconnectPlayer(username, gameId);
+            playerService.disconnectPlayer(username);
             return ResponseEntity.ok("Player " + username + "disconnected from game: " + gameId);
         } catch (GameNotFoundException | UserNotFoundException | LobbyIsFullException e) {
             log.error(e.getMessage());
