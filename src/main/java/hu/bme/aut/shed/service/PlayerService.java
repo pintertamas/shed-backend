@@ -71,7 +71,7 @@ public class PlayerService {
     public void disconnectPlayer(String username) {
         LoggerFactory.getLogger(this.getClass()).info(String.valueOf(playerRepository.findAll().size()));
         Player player = playerRepository.findPlayerByUsername(username);
-        playerRepository.deleteById(player.getId());
+        playerRepository.deleteById(player.getId()); // TODO: this does not work for some fucked up reason
         LoggerFactory.getLogger(this.getClass()).info(String.valueOf(playerRepository.findAll().size()));
     }
 }
