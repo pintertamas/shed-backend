@@ -24,10 +24,10 @@ public class Game {
     private GameStatus status;
 
     @OneToMany(mappedBy = "game")
-    private Set<Player> players = new HashSet<Player>();
+    private List<Player> players = new ArrayList<>();
 
     @OneToMany(mappedBy = "game")
-    private List<CardConfig> deck = new ArrayList<CardConfig>();
+    private List<CardConfig> deck = new ArrayList<>();
 
     @Column()
     private int cardsInHand; // amount of card users have in their hands initially
@@ -44,7 +44,7 @@ public class Game {
     @Column()
     private boolean visibility;
 
-    public Game(int cardsInHand, int numberOfDecks, String name, boolean visibility,boolean jokers) {
+    public Game(int cardsInHand, int numberOfDecks, String name, boolean visibility, boolean jokers) {
         this.name = name;
         this.cardsInHand = cardsInHand;
         this.maxPlayers = 5 * numberOfDecks;
