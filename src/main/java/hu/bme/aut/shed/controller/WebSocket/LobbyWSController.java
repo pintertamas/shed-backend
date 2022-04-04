@@ -22,9 +22,6 @@ import org.springframework.stereotype.Controller;
 public class LobbyWSController {
 
     @Autowired
-    private SimpMessagingTemplate template;
-
-    @Autowired
     private PlayerService playerService;
 
     @Autowired

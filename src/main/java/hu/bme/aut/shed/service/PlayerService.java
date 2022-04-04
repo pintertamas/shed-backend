@@ -66,7 +66,7 @@ public class PlayerService {
         return connectedPlayer;
     }
 
-    public void disconnectPlayer(String username) throws GameNotFoundException, UserNotFoundException, LobbyIsFullException {
+    public void disconnectPlayer(String username) {
         LoggerFactory.getLogger(this.getClass()).info(String.valueOf(playerRepository.findAll().size()));
         playerRepository.deletePlayerByUsername(username);
         LoggerFactory.getLogger(this.getClass()).info(String.valueOf(playerRepository.findAll().size()));
