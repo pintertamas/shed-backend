@@ -39,9 +39,9 @@ public class PlayerController {
     }
 
     @RequestMapping(value = "/list/", method = {RequestMethod.GET}, produces = "application/json")
-    public ResponseEntity<List<Player>> listPlayersByGameId(@RequestParam Long gameId) {
+    public ResponseEntity<List<Player>> listPlayersByGameId(@RequestParam String gameName) {
         try {
-            return ResponseEntity.ok(playerService.getPlayersByGameId(gameId));
+            return ResponseEntity.ok(playerService.getPlayersByGameName(gameName));
         } catch (GameNotFoundException e) {
             log.error(e.getMessage());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

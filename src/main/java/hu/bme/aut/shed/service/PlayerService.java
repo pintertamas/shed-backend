@@ -29,8 +29,12 @@ public class PlayerService {
 
     public List<Player> getPlayersByGameId(Long gameId) throws GameNotFoundException {
         Game game = gameService.getGameById(gameId);
-        List<Player> players = playerRepository.findByGame(game);
-        return players;
+        return playerRepository.findByGame(game);
+    }
+
+    public List<Player> getPlayersByGameName(String gameName) throws GameNotFoundException {
+        Game game = gameService.getGameByName(gameName);
+        return playerRepository.findByGame(game);
     }
 
     public Player connectPlayer(String username, Long gameId) throws GameNotFoundException, UserNotFoundException, LobbyIsFullException {
