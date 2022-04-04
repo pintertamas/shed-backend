@@ -48,11 +48,16 @@ public class PlayerService {
         Game game = gameService.getGameById(gameId);
         User searchedUser = userRepository.findByUsername(username);
         if (searchedUser == null) throw new UserNotFoundException();
+        Player alreadyConnectedPlayer = playerRepository.findPlayerByUserAndGameId(searchedUser, gameId);
+        if (alreadyConnectedPlayer != null) {
+            return alreadyConnectedPlayer;
+        }
 
         List<Player> players = playerRepository.findByGame(game);
         if (players.size() >= game.getMaxPlayers()) {
             throw new LobbyIsFullException();
         }
+
         Player connectedPlayer = new Player(searchedUser);
         connectedPlayer.setGame(game);
         game.getPlayers().add(connectedPlayer);

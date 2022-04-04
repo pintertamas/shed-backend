@@ -31,7 +31,6 @@ public class PlayerController {
     public ResponseEntity<Player> connect(@RequestParam Long gameId, @RequestParam String username) {
         log.info(username, gameId);
         try {
-
             return ResponseEntity.ok(playerService.connectPlayer(username, gameId));
         } catch (GameNotFoundException | UserNotFoundException | LobbyIsFullException e) {
             log.error(e.getMessage());
