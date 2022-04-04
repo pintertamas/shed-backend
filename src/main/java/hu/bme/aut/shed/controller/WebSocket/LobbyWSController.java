@@ -2,6 +2,11 @@ package hu.bme.aut.shed.controller.WebSocket;
 
 import hu.bme.aut.shed.dto.Response.LobbyMessage;
 import hu.bme.aut.shed.dto.Response.StartGameMessage;
+import hu.bme.aut.shed.exception.GameNotFoundException;
+import hu.bme.aut.shed.model.Game;
+import hu.bme.aut.shed.repository.GameRepository;
+import hu.bme.aut.shed.service.GameService;
+import hu.bme.aut.shed.service.PlayerService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -16,6 +21,12 @@ public class LobbyWSController {
 
     @Autowired
     private SimpMessagingTemplate template;
+
+    @Autowired
+    private PlayerService playerService;
+
+    @Autowired
+    private GameService gameService;
 
     @SubscribeMapping("/subscribe")
     public String sendOneTimeMessage() {
@@ -33,8 +44,15 @@ public class LobbyWSController {
     @MessageMapping("/join-game/{gameName}/{username}")
     @SendTo("/topic/{gameName}")
     public LobbyMessage joinGame(@DestinationVariable String gameName, @DestinationVariable String username) {
-        LoggerFactory.getLogger(this.getClass()).info("User (" + username + ") joined to game: " + gameName);
-        return new LobbyMessage("join", username);
+        try {
+            Game game = gameService.getGameByName(gameName);
+            playerService.connectPlayer(username, game.getId());
+            LoggerFactory.getLogger(this.getClass()).info("User (" + username + ") joined to game: " + gameName);
+            return new LobbyMessage("join", username);
+        } catch (Exception e) {
+            LoggerFactory.getLogger(this.getClass()).info("Game with name (" + gameName + ") not found!");
+            return new LobbyMessage("error", "game not found");
+        }
     }
 
     @MessageMapping("/leave-game/{gameName}/{username}")
