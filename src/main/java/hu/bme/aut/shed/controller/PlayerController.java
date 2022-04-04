@@ -39,7 +39,7 @@ public class PlayerController {
         }
     }
 
-    @RequestMapping(value = "/disconnect/", method = {RequestMethod.POST}, produces = "application/json")
+    @RequestMapping(value = "/disconnect/", method = {RequestMethod.DELETE}, produces = "application/json")
     public ResponseEntity<String> disconnect(@RequestParam String username) {
         try {
             playerService.disconnectPlayer(username);

@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -66,6 +67,7 @@ public class PlayerService {
         return connectedPlayer;
     }
 
+    @Transactional
     public void disconnectPlayer(String username) {
         LoggerFactory.getLogger(this.getClass()).info(String.valueOf(playerRepository.findAll().size()));
         playerRepository.deletePlayerByUsername(username);
