@@ -44,7 +44,7 @@ public class PlayerController {
         try {
             playerService.disconnectPlayer(username);
             return ResponseEntity.ok("Player " + username + "disconnected from the game!");
-        } catch (GameNotFoundException | UserNotFoundException | LobbyIsFullException e) {
+        } catch (Exception e) {
             log.error(e.getMessage());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
