@@ -10,6 +10,7 @@ import hu.bme.aut.shed.model.User;
 import hu.bme.aut.shed.repository.GameRepository;
 import hu.bme.aut.shed.repository.PlayerRepository;
 import hu.bme.aut.shed.repository.UserRepository;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -68,6 +69,7 @@ public class PlayerService {
     public void disconnectPlayer(String username) throws GameNotFoundException, UserNotFoundException, LobbyIsFullException {
         Player alreadyConnectedPlayer = playerRepository.findPlayerByUsername(username);
         if (alreadyConnectedPlayer == null) throw new UserNotFoundException();
+        LoggerFactory.getLogger(this.getClass()).info(new PlayerResponse(alreadyConnectedPlayer.getUsername()).toString());
         playerRepository.delete(alreadyConnectedPlayer);
     }
 }

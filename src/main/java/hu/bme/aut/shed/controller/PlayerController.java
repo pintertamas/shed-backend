@@ -39,11 +39,11 @@ public class PlayerController {
     }
 
     @RequestMapping(value = "/disconnect/", method = {RequestMethod.POST}, produces = "application/json")
-    public ResponseEntity<?> disconnect(@RequestParam Long gameId, @RequestParam String username) {
-        log.info("User (" + username + ") disconnected from game: " + gameId);
+    public ResponseEntity<?> disconnect(@RequestParam String username) {
+        log.info("User (" + username + ") disconnected from the game");
         try {
             playerService.disconnectPlayer(username);
-            return ResponseEntity.ok("Player " + username + "disconnected from game: " + gameId);
+            return ResponseEntity.ok("Player " + username + "disconnected from the game!");
         } catch (GameNotFoundException | UserNotFoundException | LobbyIsFullException e) {
             log.error(e.getMessage());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
