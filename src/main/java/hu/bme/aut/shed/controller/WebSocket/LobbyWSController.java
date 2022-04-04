@@ -64,10 +64,16 @@ public class LobbyWSController {
         }
     }
 
-    @MessageMapping("/leave-game/{gameName}/{username}")
+    @MessageMapping("/leave-game/{username}")
     @SendTo("/topic/{gameName}")
-    public LobbyMessage leaveGame(@DestinationVariable String gameName, @DestinationVariable String username) {
-        LoggerFactory.getLogger(this.getClass()).info("User (" + username + ") left the game: " + gameName);
-        return new LobbyMessage("leave", username);
+    public LobbyMessage leaveGame(@DestinationVariable String username) {
+        try {
+            playerService.disconnectPlayer(username);
+            LoggerFactory.getLogger(this.getClass()).info("User (" + username + ") left the game");
+            return new LobbyMessage("leave", username);
+        } catch (Exception e) {
+            LoggerFactory.getLogger(this.getClass()).info("User (" + username + ") could not leave the game");
+            return new LobbyMessage("error", "user could not be disconnected");
+        }
     }
 }

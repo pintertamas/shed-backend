@@ -64,4 +64,10 @@ public class PlayerService {
         playerRepository.save(connectedPlayer);
         return connectedPlayer;
     }
+
+    public void disconnectPlayer(String username) throws GameNotFoundException, UserNotFoundException, LobbyIsFullException {
+        Player alreadyConnectedPlayer = playerRepository.findPlayerByUsername(username);
+        if (alreadyConnectedPlayer == null) throw new UserNotFoundException();
+        playerRepository.delete(alreadyConnectedPlayer);
+    }
 }

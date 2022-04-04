@@ -23,7 +23,7 @@ public class Player implements Comparable {
     @OneToOne
     private User user;
 
-    @Column()
+    @Column(name = "username")
     private String username;
 
     @ManyToOne
