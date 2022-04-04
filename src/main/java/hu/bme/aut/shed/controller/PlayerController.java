@@ -28,10 +28,11 @@ public class PlayerController {
     private PlayerService playerService;
 
     @RequestMapping(value = "/connect/", method = {RequestMethod.POST}, produces = "application/json")
-    public ResponseEntity<Player> connect(@RequestParam Long gameId, @RequestParam String username) {
-        log.info("User (" + username + ") connected to game: " + gameId);
+    public ResponseEntity<PlayerResponse> connect(@RequestParam Long gameId, @RequestParam String username) {
         try {
-            return ResponseEntity.ok(playerService.connectPlayer(username, gameId));
+            Player player = playerService.connectPlayer(username, gameId);
+            log.info("User (" + player.getUsername() + ") connected to game: " + gameId);
+            return ResponseEntity.ok(new PlayerResponse(player.getUsername()));
         } catch (GameNotFoundException | UserNotFoundException | LobbyIsFullException e) {
             log.error(e.getMessage());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -39,10 +40,10 @@ public class PlayerController {
     }
 
     @RequestMapping(value = "/disconnect/", method = {RequestMethod.POST}, produces = "application/json")
-    public ResponseEntity<?> disconnect(@RequestParam String username) {
-        log.info("User (" + username + ") disconnected from the game");
+    public ResponseEntity<String> disconnect(@RequestParam String username) {
         try {
             playerService.disconnectPlayer(username);
+            log.info("User (" + username + ") disconnected from the game");
             return ResponseEntity.ok("Player " + username + "disconnected from the game!");
         } catch (Exception e) {
             log.error(e.getMessage());
