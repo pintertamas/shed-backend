@@ -46,15 +46,19 @@ public class LobbyWSController {
         try {
             Game game = gameService.getGameByName(gameName);
             LoggerFactory.getLogger(this.getClass()).info("Connecting (" + username + ") to game: " + gameName);
+
             playerService.connectPlayer(username, game.getId());
             LoggerFactory.getLogger(this.getClass()).info("User (" + username + ") joined to game: " + gameName);
+
             return new LobbyMessage("join", username);
         } catch (GameNotFoundException e) {
             LoggerFactory.getLogger(this.getClass()).info("Game with name (" + gameName + ") not found!");
             return new LobbyMessage("error", "game not found");
+
         } catch (UserNotFoundException e) {
             LoggerFactory.getLogger(this.getClass()).info("User with name (" + username + ") not found!");
             return new LobbyMessage("error", "user not found");
+
         } catch (LobbyIsFullException e) {
             LoggerFactory.getLogger(this.getClass()).info("Lobby of game (" + gameName + ") is full!");
             return new LobbyMessage("error", "lobby is full");
@@ -67,6 +71,7 @@ public class LobbyWSController {
         try {
             playerService.disconnectPlayer(username);
             LoggerFactory.getLogger(this.getClass()).info("User (" + username + ") left the game: " + gameName);
+
             return new LobbyMessage("leave", username);
         } catch (Exception e) {
             LoggerFactory.getLogger(this.getClass()).info("User (" + username + ") could not leave the game: " + gameName);
