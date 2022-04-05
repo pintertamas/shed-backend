@@ -9,5 +9,5 @@ import lombok.Setter;
 @Getter
 public class LobbyMessage {
     String type;
-    String username;
+    String message;
 }

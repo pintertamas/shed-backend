@@ -9,5 +9,5 @@ import lombok.Setter;
 @Getter
 public class StartGameMessage {
     String type;
-    String gameName;
+    String message;
 }
