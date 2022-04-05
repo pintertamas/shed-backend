@@ -8,6 +8,7 @@ import hu.bme.aut.shed.repository.GameRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
@@ -47,6 +48,7 @@ public class GameService {
     }
 
 
+    @Transactional
     public void removePlayerFromList(Game game,Player player) {
         game.getPlayers().remove(player);
         gameRepository.save(game);
@@ -73,16 +75,15 @@ public class GameService {
         return gameRepository.save(game);
     }
 
+    @Transactional
     public Game initGame(Game game) {
         game.setStatus(GameStatus.IN_PROGRESS);
-        return game;
+        return gameRepository.save(game);
     }
 
     public Game startGame(Long id) throws GameNotFoundException, UserNotFoundException {
         Game gameById = getGameById(id);
-        Game startedGame = initGame(gameById);
-        gameRepository.save(startedGame);
-        return startedGame;
+        return initGame(gameById);
     }
 
     public Game action(ActionRequest action) throws GameNotFoundException {

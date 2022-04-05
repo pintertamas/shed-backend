@@ -11,8 +11,8 @@ import hu.bme.aut.shed.repository.UserRepository;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -37,6 +37,7 @@ public class PlayerService {
         return playerRepository.findByGame(game);
     }
 
+    @Transactional
     public Player connectPlayer(String username, Long gameId) throws GameNotFoundException, UserNotFoundException, LobbyIsFullException {
         Game game = gameService.getGameById(gameId);
         User searchedUser = userRepository.findByUsername(username);
