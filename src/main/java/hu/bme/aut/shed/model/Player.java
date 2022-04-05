@@ -38,12 +38,6 @@ public class Player implements Comparable {
         this.username = user.getUsername();
     }
 
-    public void initPlayer(int numberOfCards) {
-        /*setHiddenCards(new ArrayList<>(numberOfCards));
-        setVisibleCards(new ArrayList<>(numberOfCards));
-        setHand(new ArrayList<>(numberOfCards));*/
-    }
-
     @Override
     public int compareTo(Object o) {
         return 0;

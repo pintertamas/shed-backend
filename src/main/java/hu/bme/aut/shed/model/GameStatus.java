@@ -5,9 +5,9 @@ public enum GameStatus {
     IN_PROGRESS("In_Progress"),
     FINISHED("Finished");
 
-    private String shortName;
+    private final String shortName;
 
-    private GameStatus(String shortName) {
+    GameStatus(String shortName) {
         this.shortName = shortName;
     }
 

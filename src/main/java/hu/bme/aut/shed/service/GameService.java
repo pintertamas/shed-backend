@@ -8,6 +8,7 @@ import hu.bme.aut.shed.repository.GameRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
@@ -46,6 +47,13 @@ public class GameService {
         return games.get();
     }
 
+
+    @Transactional
+    public void removePlayerFromList(Game game,Player player) {
+        game.getPlayers().remove(player);
+        gameRepository.save(game);
+    }
+
     public Game createGame(int numberOfCards, int numberOfDecks, boolean jokers) {
         String url = "http://names.drycodes.com/1?nameOptions=funnyWords";
         RestTemplate restTemplate = new RestTemplate();
@@ -60,23 +68,24 @@ public class GameService {
         if (response != null) {
             nameResponse = Arrays.stream(response).findFirst();
             if (nameResponse.isPresent()) {
-                game.setName(nameResponse.get().toString());
-                return gameRepository.save(game);
+                if(gameRepository.findByName(nameResponse.get().toString()).isEmpty()){
+                    game.setName(nameResponse.get().toString());
+                    return gameRepository.save(game);
+                }
             }
         }
         return gameRepository.save(game);
     }
 
+    @Transactional
     public Game initGame(Game game) {
         game.setStatus(GameStatus.IN_PROGRESS);
-        return game;
+        return gameRepository.save(game);
     }
 
     public Game startGame(Long id) throws GameNotFoundException, UserNotFoundException {
         Game gameById = getGameById(id);
-        Game startedGame = initGame(gameById);
-        gameRepository.save(startedGame);
-        return startedGame;
+        return initGame(gameById);
     }
 
     public Game action(ActionRequest action) throws GameNotFoundException {

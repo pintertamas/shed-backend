@@ -8,5 +8,6 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 public class PlayerResponse {
+    Long Id;
     String username;
 }

@@ -1,23 +1,19 @@
 package hu.bme.aut.shed.service;
 
-import hu.bme.aut.shed.dto.Response.PlayerResponse;
 import hu.bme.aut.shed.exception.GameNotFoundException;
 import hu.bme.aut.shed.exception.LobbyIsFullException;
 import hu.bme.aut.shed.exception.UserNotFoundException;
 import hu.bme.aut.shed.model.Game;
 import hu.bme.aut.shed.model.Player;
 import hu.bme.aut.shed.model.User;
-import hu.bme.aut.shed.repository.GameRepository;
 import hu.bme.aut.shed.repository.PlayerRepository;
 import hu.bme.aut.shed.repository.UserRepository;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PlayerService {
@@ -29,9 +25,6 @@ public class PlayerService {
     UserRepository userRepository;
 
     @Autowired
-    GameRepository gameRepository;
-
-    @Autowired
     GameService gameService;
 
     public List<Player> getPlayersByGameId(Long gameId) throws GameNotFoundException {
@@ -39,21 +32,17 @@ public class PlayerService {
         return playerRepository.findByGame(game);
     }
 
-    public List<PlayerResponse> getPlayersByGameName(String gameName) throws GameNotFoundException {
+    public List<Player> getPlayersByGameName(String gameName) throws GameNotFoundException {
         Game game = gameService.getGameByName(gameName);
-        List<Player> players = playerRepository.findByGame(game);
-        List<PlayerResponse> playerResponses = new ArrayList<>();
-        for (Player player : players) {
-            playerResponses.add(new PlayerResponse(player.getUsername()));
-        }
-        return playerResponses;
+        return playerRepository.findByGame(game);
     }
 
+    @Transactional
     public Player connectPlayer(String username, Long gameId) throws GameNotFoundException, UserNotFoundException, LobbyIsFullException {
         Game game = gameService.getGameById(gameId);
         User searchedUser = userRepository.findByUsername(username);
         if (searchedUser == null) throw new UserNotFoundException();
-        Player alreadyConnectedPlayer = playerRepository.findPlayerByUserAndGameId(searchedUser, gameId);
+        Player alreadyConnectedPlayer = playerRepository.findByUserAndGameId(searchedUser, gameId);
         if (alreadyConnectedPlayer != null) {
             return alreadyConnectedPlayer;
         }
@@ -73,10 +62,8 @@ public class PlayerService {
     @Transactional
     public void disconnectPlayer(String username) {
         LoggerFactory.getLogger(this.getClass()).info(String.valueOf(playerRepository.findAll().size()));
-        Player player = playerRepository.findPlayerByUsername(username);
-        Game game = player.getGame();
-        game.removePlayer(player);
-        gameRepository.save(game);
+        Player player = playerRepository.findByUsername(username);
+        gameService.removePlayerFromList(player.getGame(),player);
         playerRepository.deleteById(player.getId());
         LoggerFactory.getLogger(this.getClass()).info(String.valueOf(playerRepository.findAll().size()));
     }

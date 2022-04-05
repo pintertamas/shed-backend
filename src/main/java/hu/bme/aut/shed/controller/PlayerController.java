@@ -11,11 +11,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -28,36 +27,56 @@ public class PlayerController {
     private PlayerService playerService;
 
     @RequestMapping(value = "/connect/", method = {RequestMethod.POST}, produces = "application/json")
-    public ResponseEntity<PlayerResponse> connect(@RequestParam Long gameId, @RequestParam String username) {
+    public ResponseEntity<?> connect(@RequestParam Long gameId, @RequestParam String username) {
         try {
             Player player = playerService.connectPlayer(username, gameId);
             log.info("User (" + player.getUsername() + ") connected to game: " + gameId);
-            return ResponseEntity.ok(new PlayerResponse(player.getUsername()));
+            return ResponseEntity.ok(new PlayerResponse(player.getId(), player.getUsername()));
         } catch (GameNotFoundException | UserNotFoundException | LobbyIsFullException e) {
             log.error(e.getMessage());
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
         }
     }
 
     @RequestMapping(value = "/disconnect/", method = {RequestMethod.DELETE}, produces = "application/json")
-    public ResponseEntity<String> disconnect(@RequestParam String username) {
+    public ResponseEntity<?> disconnect(@RequestParam String username) {
         try {
             playerService.disconnectPlayer(username);
             log.info("User (" + username + ") disconnected from the game");
             return ResponseEntity.ok("Player " + username + "disconnected from the game!");
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @RequestMapping(value = "/list/{gameId}", method = {RequestMethod.GET}, produces = "application/json")
+    public ResponseEntity<?> listPlayersByGameId(@PathVariable Long gameId) {
+        try {
+            List<Player> players = playerService.getPlayersByGameId(gameId);
+            List<PlayerResponse> playerResponses = new ArrayList<PlayerResponse>();
+            for (Player player : players) {
+                playerResponses.add(new PlayerResponse(player.getId(), player.getUsername()));
+            }
+            return ResponseEntity.ok(playerResponses);
+        } catch (GameNotFoundException e) {
+            log.error(e.getMessage());
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
         }
     }
 
     @RequestMapping(value = "/list/", method = {RequestMethod.GET}, produces = "application/json")
-    public ResponseEntity<List<PlayerResponse>> listPlayersByGameId(@RequestParam String gameName) {
+    public ResponseEntity<?> listPlayersByGameName(@RequestParam String gameName) {
         try {
-            return ResponseEntity.ok(playerService.getPlayersByGameName(gameName));
+            List<Player> players = playerService.getPlayersByGameName(gameName);
+            List<PlayerResponse> playerResponses = new ArrayList<PlayerResponse>();
+            for (Player player : players) {
+                playerResponses.add(new PlayerResponse(player.getId(), player.getUsername()));
+            }
+            return ResponseEntity.ok(playerResponses);
         } catch (GameNotFoundException e) {
             log.error(e.getMessage());
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
         }
     }
 }

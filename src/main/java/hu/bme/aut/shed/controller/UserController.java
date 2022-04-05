@@ -15,7 +15,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/")
+    @RequestMapping(value = "/", method = {RequestMethod.GET}, produces = "application/json")
     public ResponseEntity<User> getUserById(@RequestParam Long id) {
         try {
             User user = userService.getById(id);
@@ -26,7 +26,7 @@ public class UserController {
         }
     }
 
-    @PutMapping("/edit/")
+    @RequestMapping(value = "/edit/", method = {RequestMethod.PUT}, produces = "application/json")
     public ResponseEntity<User> updateUser(@RequestParam Long id,@RequestBody User editedUser) {
         try{
             User user = userService.updateById(id,editedUser);
@@ -36,7 +36,7 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/delete/")
+    @RequestMapping(value = "/delete/", method = {RequestMethod.DELETE}, produces = "application/json")
     public ResponseEntity<HttpStatus> deleteUser(@RequestParam Long id) {
         try {
             userService.deleteById(id);

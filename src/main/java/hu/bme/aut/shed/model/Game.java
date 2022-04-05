@@ -54,7 +54,4 @@ public class Game {
         this.visibility = visibility;
     }
 
-    public void removePlayer(Player player) {
-        this.players.remove(player);
-    }
 }
