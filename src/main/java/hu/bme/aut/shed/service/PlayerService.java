@@ -29,6 +29,9 @@ public class PlayerService {
     UserRepository userRepository;
 
     @Autowired
+    GameRepository gameRepository;
+
+    @Autowired
     GameService gameService;
 
     public List<Player> getPlayersByGameId(Long gameId) throws GameNotFoundException {
@@ -71,7 +74,10 @@ public class PlayerService {
     public void disconnectPlayer(String username) {
         LoggerFactory.getLogger(this.getClass()).info(String.valueOf(playerRepository.findAll().size()));
         Player player = playerRepository.findPlayerByUsername(username);
-        playerRepository.deleteById(player.getId()); // TODO: this does not work for some fucked up reason
+        Game game = player.getGame();
+        game.removePlayer(player);
+        gameRepository.save(game);
+        playerRepository.deleteById(player.getId());
         LoggerFactory.getLogger(this.getClass()).info(String.valueOf(playerRepository.findAll().size()));
     }
 }
