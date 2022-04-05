@@ -68,8 +68,10 @@ public class GameService {
         if (response != null) {
             nameResponse = Arrays.stream(response).findFirst();
             if (nameResponse.isPresent()) {
-                game.setName(nameResponse.get().toString());
-                return gameRepository.save(game);
+                if(gameRepository.findByName(nameResponse.get().toString()).isEmpty()){
+                    game.setName(nameResponse.get().toString());
+                    return gameRepository.save(game);
+                }
             }
         }
         return gameRepository.save(game);
