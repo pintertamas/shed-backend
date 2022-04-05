@@ -22,16 +22,23 @@ Problémát jelentett a kapcsolatok jelőlése erre a konzin remelém majd tudok
 Adatbázisnak először mongodb-t használtunk mert témalabról ezzel már van tapasztalatunk de hosszas tanakodás után átáltunk sql alapú adatbázisra(postgresql) mivel szerétnek ezzel is megismerkedni.
 Ezek mellett elkészítettük a projekt [mockupját](https://github.com/pintertamas/shed-backend/blob/master/docs/mockup.png?raw=true) webre és mobilra is.
 
-## 6 hét
+## 6. hét
 Ezen a héten a websocketes problémával ment el a legtöbb idő.
 Egy backend probléma volt első sorban azon belül is a jwt tokenes authentikációnak sajátitottuk de miután átirtuk kiderült hogy nemcsak itt rontottuk el hanem a frontenden is volt baj.
 A backenden ezen kivül egy-két dolgot refactoráltam,hibákat javítottam(modeleknél controllereknél,serviceknél is) és elkezdtem írni egy kezdetleges játék logikát amivel létre tudunk hozni egy játékot azokhoz tudunk játékosokat csataloztatni.
 Ezt viszont én sajnálatos módon nem tudtam tesztelni mert a postman hibát dobott Connect Econrefused néven amire nem tudtam megoldást találni.
 A cache-es megoldástól még kicsit tartozkodtam mert még nem teljesen értem a műkődését.
 
-## 7 hét
+## 7. hét
 Ezen a héten a munka CORS konfigurációval kezdődött , mivel Tominak a frontenden(weben) nem mükődött az egyik endpoint(Corsos hibát kapott) ,így ezt a problémát gyorsan orvosoltuk WebSecurityConfigban.
 Refaktoráltam egy két response üzenetet és így már nem 10000 soros JSON - ket adok vissza egy-egy endpointon.
 Backenden megtanultam hogy kell rendesen Enumokkal dologozni ebben ez a [tutoriál](https://thorben-janssen.com/jpa-21-type-converter-better-way-to/) segített
 A Websocketet elkezdtük csinálni de rájöttünk hogy még nem igazán értjük hogy is műkődik igazán de egy [tutoriál](https://medium.com/swlh/websockets-with-spring-part-3-stomp-over-websocket-3dab4a21f397) alapján megértettük és élkezdtük a mi use case-ünkre megvalósítani.
 Mostmár tudunk rajta keresztül üzenetet küldeni a backendre amire reagál is backend.
+
+## 8.hét
+Ez a hét refaktorálással kezdödőtt minden szinten.
+A modelekből kiszedtem a függvényeket és áthelyeztem őket a service rétegbe.
+A service rétegben a dto-kat kiszedtem és függvényeket áthelyeztem amik nem ahhoz az osztályhoz tartoztak
+Controller szinten egységesítetem a kivételkezelést és mostmár csak az ő felelősége a dto-k kezelése.
+Transactional annotáciokat elkezdtem használni a service rétegben.
