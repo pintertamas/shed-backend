@@ -11,10 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,8 +50,8 @@ public class PlayerController {
         }
     }
 
-    @RequestMapping(value = "/list/id/", method = {RequestMethod.GET}, produces = "application/json")
-    public ResponseEntity<?> listPlayersByGameId(@RequestParam Long gameId) {
+    @RequestMapping(value = "/list/{gameId}", method = {RequestMethod.GET}, produces = "application/json")
+    public ResponseEntity<?> listPlayersByGameId(@PathVariable Long gameId) {
         try {
             List<Player> players = playerService.getPlayersByGameId(gameId);
             List<PlayerResponse> playerResponses = new ArrayList<PlayerResponse>();
