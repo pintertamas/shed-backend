@@ -46,6 +46,12 @@ public class GameService {
         return games.get();
     }
 
+
+    public void removePlayerFromList(Game game,Player player) {
+        game.getPlayers().remove(player);
+        gameRepository.save(game);
+    }
+
     public Game createGame(int numberOfCards, int numberOfDecks, boolean jokers) {
         String url = "http://names.drycodes.com/1?nameOptions=funnyWords";
         RestTemplate restTemplate = new RestTemplate();
