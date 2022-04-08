@@ -40,6 +40,9 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    EmailService emailService;
+
     private void authenticate(String username, String password) throws Exception {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
@@ -59,11 +62,12 @@ public class UserService {
     }
 
     public User register(User newUser) throws UserAlreadyExistsException {
-        if (userRepository.findByUsername(newUser.getUsername()) != null) {
+        if (userRepository.findByUsername(newUser.getUsername()) != null || userRepository.findByEmail(newUser.getEmail()) != null ) {
             throw new UserAlreadyExistsException(newUser);
         }
         newUser.setPassword(bcryptEncoder.encode(newUser.getPassword()));
         userRepository.save(newUser);
+        emailService.sendRegistrationMessage(newUser.getEmail());
         return newUser;
     }
 
