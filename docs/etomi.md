@@ -42,3 +42,4 @@ A modelekből kiszedtem a függvényeket és áthelyeztem őket a service réteg
 A service rétegben a dto-kat kiszedtem és függvényeket áthelyeztem amik nem ahhoz az osztályhoz tartoztak
 Controller szinten egységesítetem a kivételkezelést és mostmár csak az ő felelősége a dto-k kezelése.
 Transactional annotáciokat elkezdtem használni a service rétegben.
+Mostantól email cím is kell a regisztráciohoz és ha valaki regisztrált akkor kap egy emailt,hogy sikeres volt.
