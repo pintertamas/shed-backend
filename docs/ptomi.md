@@ -73,4 +73,7 @@ Ahhoz, hogy ez megoldódjon, követtem a leírást a következő oldalon:
 ```https://spring.io/guides/gs/rest-service-cors/```
 A globális beállítást választottam és így már működött az API hívás, meg tudtam jeleníteni egy új játék nevét és az ahhoz tartozó QR kódot a képernyőn.
 
+## 7. hét
+Megcsináltam, hogy a becsatlakozott játékosok lekérik az addig belépett playerek listáját, onnantól kezdve meg websocketen keresztül érkező join illetve leave üzenetek hatására frissítik a lobby megjelenését.
+game-start üzenet hatására átnavigálnak a játék képernyőjére.
 
