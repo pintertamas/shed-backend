@@ -5,6 +5,8 @@ import hu.bme.aut.shed.exception.UserAlreadyExistsException;
 import hu.bme.aut.shed.dto.Request.JwtRequest;
 import hu.bme.aut.shed.dto.Response.JwtResponse;
 import hu.bme.aut.shed.model.User;
+import hu.bme.aut.shed.service.EmailService;
+import hu.bme.aut.shed.service.OtpService;
 import hu.bme.aut.shed.service.UserService;
 import org.apache.juli.logging.LogFactory;
 import org.slf4j.LoggerFactory;
@@ -25,6 +27,12 @@ public class JwtAuthenticationController {
     private UserService userService;
 
     @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private OtpService otpService;
+
+    @Autowired
     JwtTokenUtil jwtTokenUtil;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -40,14 +48,33 @@ public class JwtAuthenticationController {
         return ResponseEntity.ok(new JwtResponse(token, userService.getByUsername(authenticationRequest.getUsername())));
     }
 
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseEntity<?> register(@Valid @RequestBody User newUser) {
+    @RequestMapping(value = "/generate-otp", method = RequestMethod.POST)
+    public ResponseEntity<?> generateOtp(@RequestBody String email) {
         try {
+            int otp = otpService.generateOTP(email);
+            if (!emailService.sendRegistrationMessage(email, otp))
+                throw new Exception("Could not send one time password to: " + email);
+            LoggerFactory.getLogger(this.getClass()).info("EMAIL WITH ONE TIME PASSWORD SUCCESSFULLY SENT TO: " + email);
+            return ResponseEntity.ok("one time password sent to " + email);
+        } catch (Exception exception) {
+            LoggerFactory.getLogger(this.getClass()).error("COULD NOT SEND ONE TIME PASSWORD TO: " + email);
+            return ResponseEntity.badRequest().body(exception.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public ResponseEntity<?> register(@Valid @RequestBody User newUser, @RequestParam int otp) {
+        try {
+            if (!otpService.validateOtp(newUser.getEmail(), otp))
+                throw new Exception("wrong one time password");
             User user = userService.register(newUser);
             LoggerFactory.getLogger(this.getClass()).info("USER CREATED: " + newUser);
             return ResponseEntity.ok(user);
         } catch (UserAlreadyExistsException exception) {
             LoggerFactory.getLogger(this.getClass()).error("USER ALREADY EXISTS: " + exception.getExistingUser());
+            return ResponseEntity.badRequest().body(exception.getMessage());
+        } catch (Exception exception) {
+            LoggerFactory.getLogger(this.getClass()).error("WRONG ONE TIME PASSWORD!");
             return ResponseEntity.badRequest().body(exception.getMessage());
         }
     }
