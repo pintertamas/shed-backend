@@ -98,7 +98,7 @@ public class GameService {
         return game.get();
     }
 
-    @Scheduled(fixedRate = 200000)
+    @Scheduled(fixedRate = 900000)
     public void deleteGamesScheduler(){
         List<Game> deletedGames = new ArrayList<>();
         Optional<List<Game>> finishedGames = gameRepository.findAllByStatus(GameStatus.FINISHED);
