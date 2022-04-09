@@ -5,13 +5,17 @@ import hu.bme.aut.shed.exception.UserNotFoundException;
 import hu.bme.aut.shed.model.*;
 import hu.bme.aut.shed.dto.Request.ActionRequest;
 import hu.bme.aut.shed.repository.GameRepository;
+
 import lombok.AllArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
+
 
 @Service
 @AllArgsConstructor
@@ -92,6 +96,25 @@ public class GameService {
         Optional<Game> game = gameRepository.findById(action.getGameId());
         if (game.isEmpty()) throw new GameNotFoundException();
         return game.get();
+    }
+
+    @Scheduled(fixedRate = 200000)
+    public void deleteGamesScheduler(){
+        List<Game> deletedGames = new ArrayList<>();
+        Optional<List<Game>> finishedGames = gameRepository.findAllByStatus(GameStatus.FINISHED);
+        Optional<List<Game>> inProgressGames = gameRepository.findAllByStatus(GameStatus.IN_PROGRESS);
+        if(inProgressGames.isPresent()){
+            for(Game game: inProgressGames.get()){
+                if(game.getPlayers().isEmpty()){
+                    deletedGames.add(game);
+                }
+            }
+        }
+        finishedGames.ifPresent(deletedGames::addAll);
+        for(Game game : deletedGames){
+            cardService.deleteCardConfigs(game.getId());
+            gameRepository.deleteById(game.getId());
+        }
     }
 
 }
