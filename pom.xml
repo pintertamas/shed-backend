@@ -122,6 +122,12 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.google.guava/guava (it is used for the one time password) -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>23.0</version>
+        </dependency>
     </dependencies>
 
     <build>

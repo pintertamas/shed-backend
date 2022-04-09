@@ -67,7 +67,6 @@ public class UserService {
         }
         newUser.setPassword(bcryptEncoder.encode(newUser.getPassword()));
         userRepository.save(newUser);
-        emailService.sendRegistrationMessage(newUser.getEmail());
         return newUser;
     }
 
