@@ -49,7 +49,7 @@ public class JwtAuthenticationController {
     }
 
     @RequestMapping(value = "/check-availability", method = RequestMethod.POST)
-    public ResponseEntity<?> checkAvailability(@RequestBody String username, @RequestBody String email) {
+    public ResponseEntity<?> checkAvailability(@RequestParam String username, @RequestParam String email) {
         try {
             userService.checkAvailability(username, email);
             LoggerFactory.getLogger(this.getClass()).info("USERNAME AND EMAIL ARE AVAILABLE");
