@@ -8,6 +8,7 @@ import hu.bme.aut.shed.repository.GameRepository;
 
 import lombok.AllArgsConstructor;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -110,6 +111,7 @@ public class GameService {
                 }
             }
         }
+        LoggerFactory.getLogger(this.getClass()).info("DeleteGamesSchedulerRun");
         finishedGames.ifPresent(deletedGames::addAll);
         for(Game game : deletedGames){
             cardService.deleteCardConfigs(game.getId());
