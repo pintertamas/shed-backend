@@ -53,15 +53,15 @@ public class LobbyWSController {
             return new LobbyMessage("join", username);
         } catch (GameNotFoundException e) {
             LoggerFactory.getLogger(this.getClass()).info("Game with name (" + gameName + ") not found!");
-            return new LobbyMessage("error", "game not found");
+            return new LobbyMessage("error", e.getMessage());
 
         } catch (UserNotFoundException e) {
             LoggerFactory.getLogger(this.getClass()).info("User with name (" + username + ") not found!");
-            return new LobbyMessage("error", "user not found");
+            return new LobbyMessage("error", e.getMessage());
 
         } catch (LobbyIsFullException e) {
             LoggerFactory.getLogger(this.getClass()).info("Lobby of game (" + gameName + ") is full!");
-            return new LobbyMessage("error", "lobby is full");
+            return new LobbyMessage("error", e.getMessage());
         }
     }
 
