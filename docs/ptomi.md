@@ -77,3 +77,9 @@ A globális beállítást választottam és így már működött az API hívás
 Megcsináltam, hogy a becsatlakozott játékosok lekérik az addig belépett playerek listáját, onnantól kezdve meg websocketen keresztül érkező join illetve leave üzenetek hatására frissítik a lobby megjelenését.
 game-start üzenet hatására átnavigálnak a játék képernyőjére.
 
+## 8. hét
+Ezen a héten megcsináltam egy one time password rendszert az alkalmazáshoz, ami azt teszi lehetővé, hogy a regisztráló játékosok csak az emailben megkapott kód beírása után lesznek csak ténylegesen elmentve.
+Ezek a jelszók a szerveren vannak egy cache tárolóban, ami úgy működik, hogy általam megadott ideig (5 perc) vannak tárolva, aztán kitörlődnek automatikusan, így a felhasználónak ennyi ideig van lehetősége felhasználni azt saját maga azonosításához.
+Ehhez még szépítettem is az email küldő funkcióban lévő email templatet, hogy barátságosabban nézzenek ki az emailek.
+Mobilon megcsináltam a bekért inputok validációját, ehhez létrehoztam egy külön service-t, valamint a hibaüzeneteket mutató popupot is elkészítettemm így lesz visszajelzés a usereknek arról, hogy miért akadnak el pl. a regisztrációban.
+
