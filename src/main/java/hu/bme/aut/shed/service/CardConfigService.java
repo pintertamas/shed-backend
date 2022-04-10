@@ -6,11 +6,9 @@ import hu.bme.aut.shed.model.Shape;
 import hu.bme.aut.shed.repository.CardConfigRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class CardConfigService {
@@ -43,6 +41,14 @@ public class CardConfigService {
             }
         }
         return shuffleDeck(cards);
+    }
+
+    @Transactional
+    public void deleteCardConfigs(Long gameId){
+        List<CardConfig> deletedCards = cardConfigRepository.findAllByGameId(gameId);
+        for (CardConfig cardConfig : deletedCards){
+            cardConfigRepository.deleteById(cardConfig.getId());
+        }
     }
 
     public ArrayList<CardConfig> shuffleDeck(ArrayList<CardConfig> cards) {

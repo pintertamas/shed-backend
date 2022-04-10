@@ -40,6 +40,9 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    EmailService emailService;
+
     private void authenticate(String username, String password) throws Exception {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
@@ -59,7 +62,7 @@ public class UserService {
     }
 
     public User register(User newUser) throws UserAlreadyExistsException {
-        if (userRepository.findByUsername(newUser.getUsername()) != null) {
+        if (userRepository.findByUsername(newUser.getUsername()) != null || userRepository.findByEmail(newUser.getEmail()) != null) {
             throw new UserAlreadyExistsException(newUser);
         }
         newUser.setPassword(bcryptEncoder.encode(newUser.getPassword()));
@@ -106,5 +109,12 @@ public class UserService {
             throw new UserNotFoundException();
         else
             userRepository.deleteById(id);
+    }
+
+    public void checkAvailability(String username, String email) throws UserAlreadyExistsException {
+        User user = userRepository.findByUsername(username);
+        if (user != null) throw new UserAlreadyExistsException(user);
+        user = userRepository.findByEmail(email);
+        if (user != null) throw new UserAlreadyExistsException(user);
     }
 }

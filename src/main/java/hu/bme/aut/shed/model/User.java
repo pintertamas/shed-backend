@@ -23,10 +23,13 @@ public class User implements Comparable {
     private String username;
     @Column
     private String password;
+    @Column
+    private String email;
 
-    public User(String username, String password) {
+    public User(String username, String password, String email) {
         this.username = username;
         this.password = password;
+        this.email = email;
     }
     @Override
     public int compareTo(Object o) {

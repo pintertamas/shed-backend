@@ -26,7 +26,7 @@ public class Game {
     @OneToMany(mappedBy = "game", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Player> players = new HashSet<>();
 
-    @OneToMany(mappedBy = "game")
+    @OneToMany(mappedBy = "game", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<CardConfig> deck = new ArrayList<>();
 
     @Column()
