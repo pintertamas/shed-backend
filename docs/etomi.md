@@ -43,4 +43,5 @@ A service rétegben a dto-kat kiszedtem és függvényeket áthelyeztem amik nem
 Controller szinten egységesítetem a kivételkezelést és mostmár csak az ő felelősége a dto-k kezelése.
 Transactional annotáciokat elkezdtem használni a service rétegben.
 Mostantól email cím is kell a regisztráciohoz és ha valaki regisztrált akkor kap egy emailt,hogy sikeres volt.
-A nem használt játékokat és hozzá tartozó rekordokat egy ütemező kitörli majd az adatbázisból
+Tomi ezt tovább fejlesztette és mostmár kapnak egy OneTimePasswordot emailben a felhasználók amit be kell majd irniuk frontenden hogy sikeres legyen a regisztráció.
+A nem használt játékokat és hozzá tartozó rekordokat egy ütemező kitörli majd az adatbázisból így helyet spórolva és pénzt mivel nem kell nagyobb adatbázist vennünk.
