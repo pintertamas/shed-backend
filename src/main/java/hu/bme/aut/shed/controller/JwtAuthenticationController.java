@@ -48,7 +48,7 @@ public class JwtAuthenticationController {
         return ResponseEntity.ok(new JwtResponse(token, userService.getByUsername(authenticationRequest.getUsername())));
     }
 
-    @RequestMapping(value = "/check-availability", method = RequestMethod.POST)
+    @RequestMapping(value = "/check-availability", method = RequestMethod.GET)
     public ResponseEntity<?> checkAvailability(@RequestParam String username, @RequestParam String email) {
         try {
             userService.checkAvailability(username, email);
@@ -81,6 +81,16 @@ public class JwtAuthenticationController {
                 throw new Exception("wrong one time password");
             User user = userService.register(newUser);
             LoggerFactory.getLogger(this.getClass()).info("USER CREATED: " + newUser);
+            emailService.sendMessage(newUser.getEmail(),"Registration successful",
+                    "Welcome to Shed " + newUser.getUsername() + "!"
+                            + "\n"
+                            +"Good Luck Have Fun"
+                            + "\n"
+                            + "\n"
+                            + "Greetings"
+                            + "\n"
+                            + "Shed team"
+                    );
             return ResponseEntity.ok(user);
         } catch (UserAlreadyExistsException exception) {
             LoggerFactory.getLogger(this.getClass()).error("USER ALREADY EXISTS: " + exception.getExistingUser());
@@ -91,7 +101,7 @@ public class JwtAuthenticationController {
         }
     }
 
-    @GetMapping("/check-token-validity")
+    @RequestMapping(value = "/check-token-validity", method = RequestMethod.GET)
     public ResponseEntity<?> isTokenExpired() {
         String token = JwtTokenUtil.getToken();
 
