@@ -48,6 +48,18 @@ public class JwtAuthenticationController {
         return ResponseEntity.ok(new JwtResponse(token, userService.getByUsername(authenticationRequest.getUsername())));
     }
 
+    @RequestMapping(value = "/check-availability", method = RequestMethod.POST)
+    public ResponseEntity<?> checkAvailability(@RequestBody String username, @RequestBody String email) {
+        try {
+            userService.checkAvailability(username, email);
+            LoggerFactory.getLogger(this.getClass()).info("USERNAME AND EMAIL ARE AVAILABLE");
+            return ResponseEntity.ok("username and email is available");
+        } catch (Exception exception) {
+            LoggerFactory.getLogger(this.getClass()).error("USER ALREADY EXISTS");
+            return ResponseEntity.badRequest().body(exception.getMessage());
+        }
+    }
+
     @RequestMapping(value = "/generate-otp", method = RequestMethod.POST)
     public ResponseEntity<?> generateOtp(@RequestBody String email) {
         try {
