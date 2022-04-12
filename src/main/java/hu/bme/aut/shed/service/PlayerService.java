@@ -41,6 +41,13 @@ public class PlayerService {
     }
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
+    public boolean getPlayerGame(String username) throws UserNotFoundException{
+        Player player = playerRepository.findByUsername(username);
+        Game game = player.getGame();
+        return game != null;
+    }
+
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public Player connectPlayer(String username, Long gameId) throws GameNotFoundException, UserNotFoundException, LobbyIsFullException {
         Game game = gameService.getGameById(gameId);
         User searchedUser = userRepository.findByUsername(username);
