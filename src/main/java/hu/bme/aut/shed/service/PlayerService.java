@@ -11,6 +11,7 @@ import hu.bme.aut.shed.repository.UserRepository;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -27,17 +28,19 @@ public class PlayerService {
     @Autowired
     GameService gameService;
 
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public List<Player> getPlayersByGameId(Long gameId) throws GameNotFoundException {
         Game game = gameService.getGameById(gameId);
         return playerRepository.findByGame(game);
     }
 
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public List<Player> getPlayersByGameName(String gameName) throws GameNotFoundException {
         Game game = gameService.getGameByName(gameName);
         return playerRepository.findByGame(game);
     }
 
-    @Transactional
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public Player connectPlayer(String username, Long gameId) throws GameNotFoundException, UserNotFoundException, LobbyIsFullException {
         Game game = gameService.getGameById(gameId);
         User searchedUser = userRepository.findByUsername(username);
@@ -59,7 +62,7 @@ public class PlayerService {
         return connectedPlayer;
     }
 
-    @Transactional
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public void disconnectPlayer(String username) {
         LoggerFactory.getLogger(this.getClass()).info(String.valueOf(playerRepository.findAll().size()));
         Player player = playerRepository.findByUsername(username);
