@@ -71,7 +71,7 @@ public class GameService {
         game.setDeck(cards);
 
         boolean nameIsUniq = false;
-        int step = 20;
+        int step = 0;
         while(!nameIsUniq && step <= 20){
             response = restTemplate.getForObject(url, Object[].class);
             if (response != null) {
