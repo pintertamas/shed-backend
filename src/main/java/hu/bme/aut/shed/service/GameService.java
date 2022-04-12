@@ -72,7 +72,7 @@ public class GameService {
 
         boolean nameIsUniq = false;
         int step = 20;
-        while(!nameIsUniq || step != 20){
+        while(!nameIsUniq && step <= 20){
             response = restTemplate.getForObject(url, Object[].class);
             if (response != null) {
                 nameResponse = Arrays.stream(response).findFirst();
