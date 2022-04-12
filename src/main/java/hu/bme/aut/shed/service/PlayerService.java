@@ -41,10 +41,10 @@ public class PlayerService {
     }
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    public boolean getPlayerGame(String username) throws UserNotFoundException{
+    public String getPlayerGameName(String username) throws UserNotFoundException{
         Player player = playerRepository.findByUsername(username);
         Game game = player.getGame();
-        return game != null;
+        return game.getName();
     }
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)

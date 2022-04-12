@@ -30,10 +30,10 @@ public class PlayerController {
     @RequestMapping(value = "/check-already-in-game/{username}", method = {RequestMethod.GET}, produces = "application/json")
     public ResponseEntity<?> getPlayerGame(@PathVariable String username) {
         try {
-            return ResponseEntity.ok(playerService.getPlayerGame(username));
+            return ResponseEntity.ok(playerService.getPlayerGameName(username));
         } catch (UserNotFoundException e) {
             log.error(e.getMessage());
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+            return ResponseEntity.ok("");
         }
     }
 
