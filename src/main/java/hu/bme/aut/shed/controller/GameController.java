@@ -32,6 +32,17 @@ public class GameController {
     @Autowired
     private final SimpMessagingTemplate simpMessagingTemplate;
 
+    @GetMapping("/")
+    public ResponseEntity<?> getGameByName(@RequestParam String gameName) {
+        try {
+            Game game = gameService.getGameByName(gameName);
+            GameResponse gameResponses = new GameResponse(game.getId(),game.getName());
+            return new ResponseEntity<>(gameResponses, HttpStatus.OK);
+        } catch (GameNotFoundException exception) {
+            return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
     @GetMapping("/list/")
     public ResponseEntity<?> getGamesByStatus(@RequestParam String statusValue) {
         try {
