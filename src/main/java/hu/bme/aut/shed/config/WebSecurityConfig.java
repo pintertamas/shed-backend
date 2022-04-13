@@ -54,7 +54,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.cors().and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/login", "/check-availability", "/generate-otp", "/register", "/check-token-validity", "/game/create", "game/start")
+                .antMatchers("/login", "/check-availability","/change-password", "/generate-otp", "/register", "/check-token-validity", "/game/create", "game/start")
                 .permitAll()
                 .and()
                 .requiresChannel(channel -> channel.anyRequest().requiresSecure())
