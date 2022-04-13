@@ -5,6 +5,7 @@ import hu.bme.aut.shed.exception.UserNotFoundException;
 import hu.bme.aut.shed.model.User;
 import hu.bme.aut.shed.service.OtpService;
 import hu.bme.aut.shed.service.UserService;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,6 +48,7 @@ public class UserController {
             if (!otpService.validateOtp(otpRequest.getEmail(), otpRequest.getOtp()))
                 throw new Exception("wrong one time password");
             User user = userService.getByEmail(otpRequest.getEmail());
+            LoggerFactory.getLogger(this.getClass()).info("USERNAME" + user.getUsername());
             userService.updateById(user.getId(), user);
             return new ResponseEntity<>("Successful password changing", HttpStatus.OK);
         } catch (Exception e) {
