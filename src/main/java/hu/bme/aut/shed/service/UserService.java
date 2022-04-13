@@ -112,6 +112,7 @@ public class UserService {
             }
         }
     }
+    @Transactional
     public User changePassword(String email,String password) throws UserNotFoundException {
         User user = getByEmail(email);
         user.setPassword(bcryptEncoder.encode(password));
