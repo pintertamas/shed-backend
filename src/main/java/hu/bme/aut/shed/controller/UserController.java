@@ -1,7 +1,9 @@
 package hu.bme.aut.shed.controller;
 
+import hu.bme.aut.shed.dto.Request.OtpRequest;
 import hu.bme.aut.shed.exception.UserNotFoundException;
 import hu.bme.aut.shed.model.User;
+import hu.bme.aut.shed.service.OtpService;
 import hu.bme.aut.shed.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +16,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private OtpService otpService;
 
     @RequestMapping(value = "/", method = {RequestMethod.GET}, produces = "application/json")
     public ResponseEntity<User> getUserById(@RequestParam Long id) {
@@ -33,6 +38,19 @@ public class UserController {
             return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/change-password", method = {RequestMethod.PUT}, produces = "application/json")
+    public ResponseEntity<?> changePassword(@RequestBody OtpRequest otpRequest) {
+        try{
+            if (!otpService.validateOtp(otpRequest.getEmail(), otpRequest.getOtp()))
+                throw new Exception("wrong one time password");
+            User user = userService.getByEmail(otpRequest.getEmail());
+            userService.updateById(user.getId(), user);
+            return new ResponseEntity<>("Successful password changing", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
 
