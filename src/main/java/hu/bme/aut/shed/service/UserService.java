@@ -112,6 +112,11 @@ public class UserService {
             }
         }
     }
+    public User changePassword(String email,String password) throws UserNotFoundException {
+        User user = getByEmail(email);
+        user.setPassword(bcryptEncoder.encode(password));
+        return userRepository.save(user);
+    }
 
     @Transactional
     public void deleteById(Long id) throws Exception {

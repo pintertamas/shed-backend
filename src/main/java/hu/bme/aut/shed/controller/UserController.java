@@ -47,9 +47,8 @@ public class UserController {
         try{
             if (!otpService.validateOtp(otpRequest.getEmail(), otpRequest.getOtp()))
                 throw new Exception("wrong one time password");
-            User user = userService.getByEmail(otpRequest.getEmail());
-            LoggerFactory.getLogger(this.getClass()).info("USERNAME" + user.getUsername());
-            userService.updateById(user.getId(), user);
+            User user = userService.changePassword(otpRequest.getEmail(),otpRequest.getPassword());
+            LoggerFactory.getLogger(this.getClass()).info("Password changed for: " + user.getUsername());
             return new ResponseEntity<>("Successful password changing", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
