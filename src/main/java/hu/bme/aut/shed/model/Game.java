@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Getter
@@ -30,6 +31,9 @@ public class Game {
     private List<CardConfig> deck = new ArrayList<>();
 
     @Column()
+    private LocalDateTime creationTime;
+
+    @Column()
     private int cardsInHand; // amount of card users have in their hands initially
 
     @Column()
@@ -52,6 +56,7 @@ public class Game {
         this.jokers = jokers;
         this.numberOfDecks = numberOfDecks;
         this.visibility = visibility;
+        this.creationTime = LocalDateTime.now();
     }
 
 }
