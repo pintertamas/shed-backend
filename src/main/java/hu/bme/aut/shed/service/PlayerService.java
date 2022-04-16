@@ -3,11 +3,9 @@ package hu.bme.aut.shed.service;
 import hu.bme.aut.shed.exception.GameNotFoundException;
 import hu.bme.aut.shed.exception.LobbyIsFullException;
 import hu.bme.aut.shed.exception.UserNotFoundException;
-import hu.bme.aut.shed.model.Game;
-import hu.bme.aut.shed.model.Player;
-import hu.bme.aut.shed.model.User;
+import hu.bme.aut.shed.model.*;
+import hu.bme.aut.shed.repository.GameRepository;
 import hu.bme.aut.shed.repository.PlayerRepository;
-import hu.bme.aut.shed.repository.UserRepository;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,27 +19,21 @@ public class PlayerService {
 
     @Autowired
     PlayerRepository playerRepository;
+    @Autowired
+    GameRepository gameRepository;
 
     @Autowired
-    UserRepository userRepository;
-
+    PlayerCardService playerCardService;
     @Autowired
-    GameService gameService;
+    UserService userService;
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    public List<Player> getPlayersByGameId(Long gameId) throws GameNotFoundException {
-        Game game = gameService.getGameById(gameId);
+    public List<Player> getPlayersByGame(Game game){
         return playerRepository.findByGame(game);
     }
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    public List<Player> getPlayersByGameName(String gameName) throws GameNotFoundException {
-        Game game = gameService.getGameByName(gameName);
-        return playerRepository.findByGame(game);
-    }
-
-    @Transactional(isolation = Isolation.REPEATABLE_READ)
-    public String getPlayerGameName(String username) throws UserNotFoundException{
+    public String getGameNameByPlayerUsername(String username) throws UserNotFoundException{
         Player player = playerRepository.findByUsername(username);
         if(player == null){
             throw new UserNotFoundException();
@@ -51,13 +43,10 @@ public class PlayerService {
     }
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    public Player connectPlayer(String username, Long gameId) throws GameNotFoundException, UserNotFoundException, LobbyIsFullException {
-        Game game = gameService.getGameById(gameId);
-        User searchedUser = userRepository.findByUsername(username);
-        if (searchedUser == null) {
-            throw new UserNotFoundException();
-        }
-        Player alreadyConnectedPlayer = playerRepository.findByUserAndGameId(searchedUser, gameId);
+    public Player connectPlayer(String username, Game game) throws GameNotFoundException, UserNotFoundException, LobbyIsFullException {
+        User searchedUser = userService.getByUsername(username);
+
+        Player alreadyConnectedPlayer = playerRepository.findByUserAndGameId(searchedUser, game.getId());
         if (alreadyConnectedPlayer != null) {
             return alreadyConnectedPlayer;
         }
@@ -78,8 +67,26 @@ public class PlayerService {
     public void disconnectPlayer(String username) {
         LoggerFactory.getLogger(this.getClass()).info(String.valueOf(playerRepository.findAll().size()));
         Player player = playerRepository.findByUsername(username);
-        gameService.removePlayerFromList(player.getGame(),player);
+        Game game = player.getGame();
+
+        game.getPlayers().remove(player);
+        gameRepository.save(game);
+
         playerRepository.deleteById(player.getId());
         LoggerFactory.getLogger(this.getClass()).info(String.valueOf(playerRepository.findAll().size()));
+    }
+
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    public void initPlayer(Player player, Game game, int OrderId){
+        for (int i = 0 ; i < game.getCardsInHand(); i++){
+            PlayerCard playerCardInHand =  playerCardService.createPlayerCards(game.getDeck().get(OrderId++ + i), player, PlayerCardState.HAND);
+            PlayerCard playerCardVisible =  playerCardService.createPlayerCards(game.getDeck().get(OrderId++ + i), player, PlayerCardState.VISIBLE);
+            PlayerCard playerCardInvisible =  playerCardService.createPlayerCards(game.getDeck().get(OrderId++ + i), player, PlayerCardState.INVISIBLE);
+            player.getCards().add(playerCardInHand);
+            player.getCards().add(playerCardVisible);
+            player.getCards().add(playerCardInvisible);
+            playerRepository.save(player);
+        }
+
     }
 }

@@ -30,6 +30,9 @@ public class GameService {
     @Autowired
     private CardConfigService cardService;
 
+    @Autowired
+    private PlayerService playerService;
+
     public Game getGameById(Long Id) throws GameNotFoundException {
         Optional<Game> game = gameRepository.findById(Id);
         if (game.isEmpty()) {
@@ -52,13 +55,6 @@ public class GameService {
             throw new GameNotFoundException();
         }
         return games.get();
-    }
-
-
-    @Transactional
-    public void removePlayerFromList(Game game,Player player) {
-        game.getPlayers().remove(player);
-        gameRepository.save(game);
     }
 
     public Game createGame(int numberOfCards, int numberOfDecks, boolean jokers) {
@@ -93,6 +89,10 @@ public class GameService {
     @Transactional
     public Game initGame(Game game) {
         game.setStatus(GameStatus.IN_PROGRESS);
+        for (Player player : game.getPlayers()){
+            int CardCounter = 0;
+            playerService.initPlayer(player , game , CardCounter);
+        }
         return gameRepository.save(game);
     }
 

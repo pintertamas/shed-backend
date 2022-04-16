@@ -15,7 +15,7 @@ import javax.persistence.*;
 public class PlayerCard {
 
     @EmbeddedId
-    PlayerCardKey id;
+    PlayerCardKey id = new PlayerCardKey();
 
     @ManyToOne
     @MapsId("cardConfigId")

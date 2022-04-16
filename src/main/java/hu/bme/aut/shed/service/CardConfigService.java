@@ -2,6 +2,7 @@ package hu.bme.aut.shed.service;
 
 import hu.bme.aut.shed.model.CardConfig;
 import hu.bme.aut.shed.model.Game;
+import hu.bme.aut.shed.model.PlayerCard;
 import hu.bme.aut.shed.model.Shape;
 import hu.bme.aut.shed.repository.CardConfigRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,9 @@ public class CardConfigService {
 
     @Autowired
     CardConfigRepository cardConfigRepository;
+
+    @Autowired
+    PlayerCardService playerCardService;
 
     public ArrayList<CardConfig> createCards(Game game) {
         int numberOfCards = game.getNumberOfDecks() * 13 * Shape.values().length;
@@ -47,6 +51,7 @@ public class CardConfigService {
     public void deleteCardConfigs(Long gameId){
         List<CardConfig> deletedCards = cardConfigRepository.findAllByGameId(gameId);
         for (CardConfig cardConfig : deletedCards){
+            playerCardService.removeByGameId(cardConfig);
             cardConfigRepository.deleteById(cardConfig.getId());
         }
     }

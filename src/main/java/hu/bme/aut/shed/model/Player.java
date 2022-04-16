@@ -30,7 +30,7 @@ public class Player implements Comparable {
     @JoinColumn(name = "game_id")
     private Game game;
 
-    @OneToMany(mappedBy = "player")
+    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
     List<PlayerCard> cards = new ArrayList<PlayerCard>();
 
     public Player(User user) {

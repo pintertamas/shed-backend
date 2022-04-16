@@ -6,13 +6,13 @@ import hu.bme.aut.shed.exception.LobbyIsFullException;
 import hu.bme.aut.shed.exception.UserNotFoundException;
 import hu.bme.aut.shed.model.Game;
 import hu.bme.aut.shed.model.Player;
+import hu.bme.aut.shed.service.GameService;
 import hu.bme.aut.shed.service.PlayerService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -27,10 +27,13 @@ public class PlayerController {
     @Autowired
     private PlayerService playerService;
 
+    @Autowired
+    private GameService gameService;
+
     @RequestMapping(value = "/check-already-in-game/{username}", method = {RequestMethod.GET}, produces = "application/json")
     public ResponseEntity<?> getPlayerGame(@PathVariable String username) {
         try {
-            return ResponseEntity.ok(playerService.getPlayerGameName(username));
+            return ResponseEntity.ok(playerService.getGameNameByPlayerUsername(username));
         } catch (UserNotFoundException e) {
             log.error(e.getMessage());
             return ResponseEntity.ok("");
@@ -40,7 +43,8 @@ public class PlayerController {
     @RequestMapping(value = "/connect/", method = {RequestMethod.POST}, produces = "application/json")
     public ResponseEntity<?> connect(@RequestParam Long gameId, @RequestParam String username) {
         try {
-            Player player = playerService.connectPlayer(username, gameId);
+            Game game = gameService.getGameById(gameId);
+            Player player = playerService.connectPlayer(username, game);
             log.info("User (" + player.getUsername() + ") connected to game: " + gameId);
             return ResponseEntity.ok(new PlayerResponse(player.getId(), player.getUsername()));
         } catch (GameNotFoundException | UserNotFoundException | LobbyIsFullException e) {
@@ -64,7 +68,8 @@ public class PlayerController {
     @RequestMapping(value = "/list/{gameId}", method = {RequestMethod.GET}, produces = "application/json")
     public ResponseEntity<?> listPlayersByGameId(@PathVariable Long gameId) {
         try {
-            List<Player> players = playerService.getPlayersByGameId(gameId);
+            Game game = gameService.getGameById(gameId);
+            List<Player> players = playerService.getPlayersByGame(game);
             List<PlayerResponse> playerResponses = new ArrayList<PlayerResponse>();
             for (Player player : players) {
                 playerResponses.add(new PlayerResponse(player.getId(), player.getUsername()));
@@ -79,7 +84,8 @@ public class PlayerController {
     @RequestMapping(value = "/list/", method = {RequestMethod.GET}, produces = "application/json")
     public ResponseEntity<?> listPlayersByGameName(@RequestParam String gameName) {
         try {
-            List<Player> players = playerService.getPlayersByGameName(gameName);
+            Game game = gameService.getGameByName(gameName);
+            List<Player> players = playerService.getPlayersByGame(game);
             List<PlayerResponse> playerResponses = new ArrayList<PlayerResponse>();
             for (Player player : players) {
                 playerResponses.add(new PlayerResponse(player.getId(), player.getUsername()));

@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface CardConfigRepository extends JpaRepository<CardConfig, Long> {
     List<CardConfig> findAllByGameId(Long game_id);
+
 }

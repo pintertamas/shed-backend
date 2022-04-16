@@ -47,7 +47,7 @@ public class LobbyWSController {
             Game game = gameService.getGameByName(gameName);
             LoggerFactory.getLogger(this.getClass()).info("Connecting (" + username + ") to game: " + gameName);
 
-            playerService.connectPlayer(username, game.getId());
+            playerService.connectPlayer(username, game);
             LoggerFactory.getLogger(this.getClass()).info("User (" + username + ") joined to game: " + gameName);
 
             return new LobbyMessage("join", username);
