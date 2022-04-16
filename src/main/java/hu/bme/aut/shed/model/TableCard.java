@@ -18,9 +18,9 @@ public class TableCard {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @OneToOne()
     private CardConfig cardConfig;
 
     @Column()
-    private CardState state;
+    private PlayerCardState state;
 }

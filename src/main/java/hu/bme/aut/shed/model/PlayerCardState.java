@@ -1,5 +1,5 @@
 package hu.bme.aut.shed.model;
 
-public enum CardState {
+public enum PlayerCardState {
     HAND, VISIBLE, INVISIBLE,
 }

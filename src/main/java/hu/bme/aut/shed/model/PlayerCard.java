@@ -12,10 +12,10 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @Table(name = "PlayerCardsState")
-public class PlayerCards {
+public class PlayerCard {
 
     @EmbeddedId
-    PlayerCardsKey id;
+    PlayerCardKey id;
 
     @ManyToOne
     @MapsId("cardConfigId")
@@ -27,5 +27,5 @@ public class PlayerCards {
     @JoinColumn(name = "player_id")
     Player player;
 
-    CardState state;
+    PlayerCardState state;
 }

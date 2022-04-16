@@ -12,7 +12,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @Embeddable
-public class PlayerCardsKey implements Serializable {
+public class PlayerCardKey implements Serializable {
 
     @Column(name = "cardConfig_id")
     Long cardConfigId;
@@ -24,7 +24,7 @@ public class PlayerCardsKey implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PlayerCardsKey that = (PlayerCardsKey) o;
+        PlayerCardKey that = (PlayerCardKey) o;
         return Objects.equals(cardConfigId, that.cardConfigId) && Objects.equals(playerId, that.playerId);
     }
 
