@@ -45,8 +45,9 @@ public class UserController {
     @RequestMapping(value = "/change-password", method = {RequestMethod.PUT}, produces = "application/json")
     public ResponseEntity<?> changePassword(@RequestBody OtpRequest otpRequest) {
         try{
-            if (!otpService.validateOtp(otpRequest.getEmail(), otpRequest.getOtp()))
+            if (!otpService.validateOtp(otpRequest.getEmail(), otpRequest.getOtp())){
                 throw new Exception("wrong one time password");
+            }
             User user = userService.changePassword(otpRequest.getEmail(),otpRequest.getPassword());
             LoggerFactory.getLogger(this.getClass()).info("Password changed for: " + user.getUsername());
             return new ResponseEntity<>("Successful password changing", HttpStatus.OK);

@@ -54,7 +54,9 @@ public class PlayerService {
     public Player connectPlayer(String username, Long gameId) throws GameNotFoundException, UserNotFoundException, LobbyIsFullException {
         Game game = gameService.getGameById(gameId);
         User searchedUser = userRepository.findByUsername(username);
-        if (searchedUser == null) throw new UserNotFoundException();
+        if (searchedUser == null) {
+            throw new UserNotFoundException();
+        }
         Player alreadyConnectedPlayer = playerRepository.findByUserAndGameId(searchedUser, gameId);
         if (alreadyConnectedPlayer != null) {
             return alreadyConnectedPlayer;

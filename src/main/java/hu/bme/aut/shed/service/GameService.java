@@ -103,7 +103,9 @@ public class GameService {
 
     public Game action(ActionRequest action) throws GameNotFoundException {
         Optional<Game> game = gameRepository.findById(action.getGameId());
-        if (game.isEmpty()) throw new GameNotFoundException();
+        if (game.isEmpty()) {
+            throw new GameNotFoundException();
+        }
         return game.get();
     }
 

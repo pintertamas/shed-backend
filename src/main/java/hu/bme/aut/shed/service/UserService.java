@@ -55,7 +55,9 @@ public class UserService {
 
     public String login(JwtRequest authenticationRequest) throws Exception {
         User existingUser = userRepository.findByUsername(authenticationRequest.getUsername());
-        if (existingUser == null) throw new BadCredentialsException("Could not find a user with this username");
+        if (existingUser == null) {
+            throw new BadCredentialsException("Could not find a user with this username");
+        }
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
         return jwtTokenUtil.generateToken(userDetails);
@@ -129,8 +131,12 @@ public class UserService {
 
     public void checkAvailability(String username, String email) throws UserAlreadyExistsException {
         User user = userRepository.findByUsername(username);
-        if (user != null) throw new UserAlreadyExistsException(user);
+        if (user != null){
+            throw new UserAlreadyExistsException(user);
+        }
         user = userRepository.findByEmail(email);
-        if (user != null) throw new UserAlreadyExistsException(user);
+        if (user != null){
+            throw new UserAlreadyExistsException(user);
+        }
     }
 }
