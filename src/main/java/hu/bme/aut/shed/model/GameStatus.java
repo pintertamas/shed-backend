@@ -15,7 +15,7 @@ public enum GameStatus {
         return shortName;
     }
 
-    public static GameStatus fromShortName(String shortName) {
+    public static GameStatus fromShortName(String shortName) throws IllegalArgumentException {
         switch (shortName) {
             case "New":
                 return GameStatus.NEW;

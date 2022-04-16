@@ -52,7 +52,7 @@ public class GameController {
                 gameResponses.add(new GameResponse(game.getId(), game.getName()));
             }
             return new ResponseEntity<>(gameResponses, HttpStatus.OK);
-        } catch (GameNotFoundException exception) {
+        } catch (GameNotFoundException | IllegalArgumentException exception) {
             return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
