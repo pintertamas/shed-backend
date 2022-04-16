@@ -46,7 +46,9 @@ Mostantól email cím is kell a regisztráciohoz és ha valaki regisztrált akko
 Tomi ezt tovább fejlesztette és mostmár kapnak egy OneTimePasswordot emailben a felhasználók amit be kell majd irniuk frontenden hogy sikeres legyen a regisztráció.
 A nem használt játékokat és hozzá tartozó rekordokat egy ütemező kitörli majd az adatbázisból így helyet spórolva és pénzt mivel nem kell nagyobb adatbázist vennünk.
 
-## 9.hét
+## 9 - 10. hét
 Tomi kérésére kellett csinálni új endpointokat amivel kényelmesen lehet lekérdezni adatokat, ezeket megcsináltam.
 Mostantól csak "vicces nevű" játékok lesznek és azok egészen biztosan egyedik lesznek.
 Az összes player service függvényre @Transactional(isolation = Isolation.REPEATABLE_READ) annotációt raktam amivel kiküszöböltük a nem várt viselkedést a lobbyban.
+Lapokat már kitudunk osztani a játékosoknak ennek implementálásának során felmerült egy olyan probléma amit elkerültem volna legszivesebb ez pedig a körkörös service függöségek.
+Ezt sok refaktorálással és a kód minőség romlásása árán tudtam megoldani.
