@@ -22,5 +22,5 @@ public class TableCard {
     private CardConfig cardConfig;
 
     @Column()
-    private PlayerCardState state;
+    private TableCardState state;
 }
