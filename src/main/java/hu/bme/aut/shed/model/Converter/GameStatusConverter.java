@@ -10,11 +10,11 @@ public class GameStatusConverter implements AttributeConverter<GameStatus, Strin
 
     @Override
     public String convertToDatabaseColumn(GameStatus status) {
-        return status.getShortName();
+        return status.getName();
     }
 
     @Override
     public GameStatus convertToEntityAttribute(String dbData) {
-        return GameStatus.fromShortName(dbData);
+        return GameStatus.fromName(dbData);
     }
 }

@@ -5,18 +5,18 @@ public enum GameStatus {
     IN_PROGRESS("In_Progress"),
     FINISHED("Finished");
 
-    private final String shortName;
+    private final String name;
 
-    GameStatus(String shortName) {
-        this.shortName = shortName;
+    GameStatus(String name) {
+        this.name = name;
     }
 
-    public String getShortName() {
-        return shortName;
+    public String getName() {
+        return name;
     }
 
-    public static GameStatus fromShortName(String shortName) throws IllegalArgumentException {
-        switch (shortName) {
+    public static GameStatus fromName(String name) throws IllegalArgumentException {
+        switch (name) {
             case "New":
                 return GameStatus.NEW;
 
@@ -25,8 +25,9 @@ public enum GameStatus {
 
             case "Finished":
                 return GameStatus.FINISHED;
+
             default:
-                throw new IllegalArgumentException("ShortName [" + shortName
+                throw new IllegalArgumentException("GameStatus [" + name
                         + "] not supported.");
         }
     }

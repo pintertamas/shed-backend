@@ -1,9 +1,6 @@
 package hu.bme.aut.shed.service;
 
-import hu.bme.aut.shed.model.CardConfig;
-import hu.bme.aut.shed.model.Game;
-import hu.bme.aut.shed.model.PlayerCard;
-import hu.bme.aut.shed.model.Shape;
+import hu.bme.aut.shed.model.*;
 import hu.bme.aut.shed.repository.CardConfigRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +17,7 @@ public class CardConfigService {
     @Autowired
     PlayerCardService playerCardService;
 
-    public ArrayList<CardConfig> createCards(Game game) {
+    public ArrayList<CardConfig> createCards(Game game , Map<Integer,Rule> cardRules) throws IllegalArgumentException {
         int numberOfCards = game.getNumberOfDecks() * 13 * Shape.values().length;
         if (game.isJokers()) numberOfCards += 2;
 
@@ -33,6 +30,7 @@ public class CardConfigService {
                     newCard.setNumber(cardNumber);
                     newCard.setShape(shape);
                     newCard.setGame(game);
+                    newCard.setRule(cardRules.get(cardNumber));
                     cards.add(newCard);
                     cardConfigRepository.save(newCard);
                 }
@@ -40,6 +38,7 @@ public class CardConfigService {
                 newCard.setNumber(1);
                 newCard.setShape(shape);
                 newCard.setGame(game);
+                newCard.setRule(cardRules.get(1));
                 cards.add(newCard);
                 cardConfigRepository.save(newCard);
             }

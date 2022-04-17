@@ -28,7 +28,7 @@ public class GameService {
     private GameRepository gameRepository;
 
     @Autowired
-    private CardConfigService cardService;
+    private CardConfigService cardConfigService;
 
     @Autowired
     private PlayerService playerService;
@@ -57,7 +57,7 @@ public class GameService {
         return games.get();
     }
 
-    public Game createGame(int numberOfCards, int numberOfDecks, boolean jokers) {
+    public Game createGame(int numberOfCards, int numberOfDecks, Map<Integer,Rule> cardRules, boolean jokers) {
         String url = "http://names.drycodes.com/1?nameOptions=funnyWords";
         RestTemplate restTemplate = new RestTemplate();
         Object[] response;
@@ -65,7 +65,7 @@ public class GameService {
 
         Game game = new Game(numberOfCards, numberOfDecks, new UUID(2, 2).toString(), false, jokers);
         gameRepository.save(game);
-        ArrayList<CardConfig> cards = cardService.createCards(game);
+        ArrayList<CardConfig> cards = cardConfigService.createCards(game, cardRules);
         game.setDeck(cards);
 
         boolean nameIsUniq = false;
@@ -133,7 +133,7 @@ public class GameService {
         LoggerFactory.getLogger(this.getClass()).info("DeleteGamesSchedulerRun");
         finishedGames.ifPresent(deletedGames::addAll);
         for(Game game : deletedGames){
-            cardService.deleteCardConfigs(game.getId());
+            cardConfigService.deleteCardConfigs(game.getId());
             gameRepository.deleteById(game.getId());
         }
     }
