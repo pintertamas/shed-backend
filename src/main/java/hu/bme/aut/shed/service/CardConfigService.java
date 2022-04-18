@@ -2,6 +2,7 @@ package hu.bme.aut.shed.service;
 
 import hu.bme.aut.shed.model.*;
 import hu.bme.aut.shed.repository.CardConfigRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,15 +10,16 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 
 @Service
+@AllArgsConstructor
 public class CardConfigService {
 
     @Autowired
-    CardConfigRepository cardConfigRepository;
+    private final CardConfigRepository cardConfigRepository;
 
     @Autowired
-    PlayerCardService playerCardService;
+    private PlayerCardService playerCardService;
     @Autowired
-    TableCardService tableCardService;
+    private TableCardService tableCardService;
 
     public ArrayList<CardConfig> createCards(Game game , Map<Integer,Rule> cardRules) throws IllegalArgumentException {
         int numberOfCards = game.getNumberOfDecks() * 13 * Shape.values().length;
@@ -56,6 +58,10 @@ public class CardConfigService {
             tableCardService.removeTableCardsByCardConfig(cardConfig); ////I delete also the cards which are already been drawn by table
             cardConfigRepository.deleteById(cardConfig.getId());
         }
+    }
+
+    public List<CardConfig> getCardConfigsByGameId(Long gameId){
+        return cardConfigRepository.findAllByGameId(gameId);
     }
 
     public ArrayList<CardConfig> shuffleDeck(ArrayList<CardConfig> cards) {

@@ -24,11 +24,11 @@ public class Game {
     @Column()
     private GameStatus status;
 
-    @OneToMany(mappedBy = "game", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-    private Set<Player> players = new HashSet<>();
+    @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
+    private Set<Player> players;
 
-    @OneToMany(mappedBy = "game", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-    private List<CardConfig> deck = new ArrayList<>();
+    @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
+    private List<CardConfig> deck;
 
     @Column()
     private LocalDateTime creationTime;
@@ -57,6 +57,8 @@ public class Game {
         this.numberOfDecks = numberOfDecks;
         this.visibility = visibility;
         this.creationTime = LocalDateTime.now();
+        this.players = new HashSet<>();
+        this.deck = new ArrayList<>();
     }
 
 }

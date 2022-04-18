@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 public class JwtUserDetailsService implements UserDetailsService {
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private PasswordEncoder bcryptEncoder;

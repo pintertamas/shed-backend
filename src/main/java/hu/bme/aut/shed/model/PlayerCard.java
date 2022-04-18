@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "PlayerCardsState")
+@Table(name = "playerCards")
 public class PlayerCard {
 
     @Id

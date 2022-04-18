@@ -25,7 +25,7 @@ import java.util.*;
 public class GameService {
 
     @Autowired
-    private GameRepository gameRepository;
+    private final GameRepository gameRepository;
 
     @Autowired
     private CardConfigService cardConfigService;
@@ -69,7 +69,6 @@ public class GameService {
         gameRepository.save(game);
         ArrayList<CardConfig> cards = cardConfigService.createCards(game, cardRules);
         game.setDeck(cards);
-        LoggerFactory.getLogger(this.getClass()).info("GameDeck size : " + String.valueOf(game.getDeck().size()));
 
         boolean nameIsUniq = false;
         int step = 0;
@@ -91,41 +90,26 @@ public class GameService {
 
     public Game initGame(Game game) {
         game.setStatus(GameStatus.IN_PROGRESS);
-        LoggerFactory.getLogger(this.getClass()).info("1.GameDeck size : " + String.valueOf(game.getDeck().size()));
 
         int cardCounter = 0;
         for (Player player : game.getPlayers()){
-            LoggerFactory.getLogger(this.getClass()).info("CardCounter before : " + String.valueOf(cardCounter));
             cardCounter = playerService.initPlayer(player, game , cardCounter);
-            LoggerFactory.getLogger(this.getClass()).info("CardCounter after : " + String.valueOf(cardCounter));
         }
 
         int maxCardNumber = game.getPlayers().size() * (game.getCardsInHand() + 6);
-        LoggerFactory.getLogger(this.getClass()).info("MaxCardNumber : " + String.valueOf(maxCardNumber));
-
-        LoggerFactory.getLogger(this.getClass()).info("2.GameDeck size : " + String.valueOf(game.getDeck().size()));
-
-        for (CardConfig cardConfig : game.getDeck() ) {
-            LoggerFactory.getLogger(this.getClass()).info("faszomebbe 1: " + String.valueOf(cardConfig.getId()));
-        }
-
-        LoggerFactory.getLogger(this.getClass()).info("faszomebbe 2: " + String.valueOf(game.getDeck().size()));
 
         for (int i = maxCardNumber ; i < game.getDeck().size() ; i++){
             LoggerFactory.getLogger(this.getClass()).info(String.valueOf(i));
             LoggerFactory.getLogger(this.getClass()).info(String.valueOf(game.getDeck().get(i).getId()));
             tableCardService.createTableCard(game.getDeck().get(i));
         }
-        LoggerFactory.getLogger(this.getClass()).info("3.GameDeck size : " + String.valueOf(game.getDeck().size()));
         return gameRepository.save(game);
     }
 
     public Game startGame(Long id) throws GameNotFoundException, UserNotFoundException {
         Game game = getGameById(id);
-        LoggerFactory.getLogger(this.getClass()).info("0.1.GameDeck size : " + String.valueOf(game.getDeck().size()));
-        Game game1 = initGame(game);
-        LoggerFactory.getLogger(this.getClass()).info("0.2.GameDeck size : " + String.valueOf(game1.getDeck().size()));
-        return game1;
+        game.setDeck(cardConfigService.getCardConfigsByGameId(game.getId()));
+        return initGame(game);
     }
 
     public Game action(ActionRequest action) throws GameNotFoundException {
@@ -161,6 +145,9 @@ public class GameService {
         finishedGames.ifPresent(deletedGames::addAll);
         for(Game game : deletedGames){
             cardConfigService.deleteCardConfigs(game.getId());
+            for ( Player player : game.getPlayers()){
+                playerService.disconnectPlayer(player.getUsername());
+            }
             gameRepository.deleteById(game.getId());
         }
     }
