@@ -75,24 +75,10 @@ public class CardConfigService {
     }
 
     private void shuffleArrayList(ArrayList<?> array) {
-        /*Iterator<?> itr = array.iterator();
-
-        while (itr.hasNext()) {
-            System.out.print(itr.next() + " ");
-        }*/
-
         Random random = new Random();
 
         for (int i = array.size() - 1; i >= 1; i--) {
             Collections.swap(array, i, random.nextInt(i + 1));
         }
-
-        /*System.out.println("After shuffling Arraylist:");
-
-        itr = array.iterator();
-
-        while (itr.hasNext()) {
-            System.out.print(itr.next() + " ");
-        }*/
     }
 }

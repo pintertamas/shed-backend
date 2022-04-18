@@ -44,7 +44,6 @@ public class PlayerController {
     public ResponseEntity<?> connect(@RequestParam Long gameId, @RequestParam String username) {
         try {
             Game game = gameService.getGameById(gameId);
-            log.info("GameDeckSize : " + game.getDeck().size());
             Player player = playerService.connectPlayer(username, game);
             log.info("User (" + player.getUsername() + ") connected to game: " + gameId);
             return ResponseEntity.ok(new PlayerResponse(player.getId(), player.getUsername()));

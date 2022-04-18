@@ -63,7 +63,6 @@ public class PlayerService {
         game.getPlayers().add(connectedPlayer);
         gameRepository.save(game);
         playerRepository.save(connectedPlayer);
-        LoggerFactory.getLogger(this.getClass()).info("GameDeck size : " + String.valueOf(game.getDeck().size()));
         return connectedPlayer;
     }
 
