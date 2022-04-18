@@ -16,10 +16,12 @@ public class CardConfigService {
 
     @Autowired
     PlayerCardService playerCardService;
+    @Autowired
+    TableCardService tableCardService;
 
     public ArrayList<CardConfig> createCards(Game game , Map<Integer,Rule> cardRules) throws IllegalArgumentException {
         int numberOfCards = game.getNumberOfDecks() * 13 * Shape.values().length;
-        if (game.isJokers()) numberOfCards += 2;
+        if (game.isJokers()) numberOfCards += 4;
 
         ArrayList<CardConfig> cards = new ArrayList<>(numberOfCards);
 
@@ -50,7 +52,8 @@ public class CardConfigService {
     public void deleteCardConfigs(Long gameId){
         List<CardConfig> deletedCards = cardConfigRepository.findAllByGameId(gameId);
         for (CardConfig cardConfig : deletedCards){
-            playerCardService.removeByGameId(cardConfig);
+            playerCardService.removeByGameId(cardConfig);       //I delete also the cards which are already been drawn by players
+            tableCardService.removeTableCardsByCardConfig(cardConfig); ////I delete also the cards which are already been drawn by table
             cardConfigRepository.deleteById(cardConfig.getId());
         }
     }
@@ -59,17 +62,18 @@ public class CardConfigService {
         // copy cards to an ArrayList
         ArrayList<CardConfig> cardsCopy = new ArrayList<>(cards);
 
-        shuffleArrayList(cardsCopy);
-
+        for(int i = 0 ; i < 30 ; i++){
+            shuffleArrayList(cardsCopy);
+        }
         return cardsCopy;
     }
 
     private void shuffleArrayList(ArrayList<?> array) {
-        Iterator<?> itr = array.iterator();
+        /*Iterator<?> itr = array.iterator();
 
         while (itr.hasNext()) {
             System.out.print(itr.next() + " ");
-        }
+        }*/
 
         Random random = new Random();
 
@@ -77,12 +81,12 @@ public class CardConfigService {
             Collections.swap(array, i, random.nextInt(i + 1));
         }
 
-        System.out.println("After shuffling Arraylist:");
+        /*System.out.println("After shuffling Arraylist:");
 
         itr = array.iterator();
 
         while (itr.hasNext()) {
             System.out.print(itr.next() + " ");
-        }
+        }*/
     }
 }

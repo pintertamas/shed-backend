@@ -25,8 +25,8 @@ public class PlayerCardService {
     }
 
     @Transactional()
-    public void removeById(PlayerCardKey playerCardsKey){
-        playerCardRepository.deleteById(playerCardsKey);
+    public void removeById(Long id){
+        playerCardRepository.deleteById(id);
     }
 
     @Transactional()

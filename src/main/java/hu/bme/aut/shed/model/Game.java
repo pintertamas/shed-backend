@@ -24,10 +24,10 @@ public class Game {
     @Column()
     private GameStatus status;
 
-    @OneToMany(mappedBy = "game", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "game", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private Set<Player> players = new HashSet<>();
 
-    @OneToMany(mappedBy = "game", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "game", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<CardConfig> deck = new ArrayList<>();
 
     @Column()

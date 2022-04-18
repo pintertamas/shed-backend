@@ -14,16 +14,16 @@ import javax.persistence.*;
 @Table(name = "PlayerCardsState")
 public class PlayerCard {
 
-    @EmbeddedId
-    PlayerCardKey id = new PlayerCardKey();
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
 
     @ManyToOne
-    @MapsId("cardConfigId")
     @JoinColumn(name = "cardConfig_id")
     CardConfig cardConfig;
 
     @ManyToOne
-    @MapsId("playerId")
     @JoinColumn(name = "player_id")
     Player player;
 
