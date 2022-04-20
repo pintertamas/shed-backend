@@ -28,6 +28,8 @@ public class PlayerService {
     private final PlayerCardService playerCardService;
     @Autowired
     private final UserService userService;
+    @Autowired
+    private final TableCardService tableCardService;
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     public List<Player> getPlayersByGame(Game game){
@@ -83,22 +85,29 @@ public class PlayerService {
     public int initPlayer(Player player, Game game, int OrderId){
 
         for (int i = OrderId ; i < game.getCardsInHand() + OrderId; i++) {
-            PlayerCard playerCardInHand = playerCardService.createPlayerCards(game.getDeck().get(i), player, PlayerCardState.HAND);
+            PlayerCard playerCardInHand = playerCardService.createPlayerCard(game.getDeck().get(i), player, PlayerCardState.HAND);
             player.getCards().add(playerCardInHand);
         }
         OrderId += game.getCardsInHand();
         for (int i = OrderId ; i < (OrderId + 3) ; i++) {
-            PlayerCard playerCardVisible =  playerCardService.createPlayerCards(game.getDeck().get(i), player, PlayerCardState.VISIBLE);
+            PlayerCard playerCardVisible =  playerCardService.createPlayerCard(game.getDeck().get(i), player, PlayerCardState.VISIBLE);
             player.getCards().add(playerCardVisible);
         }
         OrderId += 3;
         for (int i = OrderId; i < (OrderId + 3) ; i++) {
-            PlayerCard playerCardInvisible =  playerCardService.createPlayerCards(game.getDeck().get(i), player, PlayerCardState.INVISIBLE);
+            PlayerCard playerCardInvisible =  playerCardService.createPlayerCard(game.getDeck().get(i), player, PlayerCardState.INVISIBLE);
             player.getCards().add(playerCardInvisible);
         }
         OrderId += 3;
         playerRepository.save(player);
         return OrderId;
+    }
+
+    public void throwCard(PlayerCard playerCard, Player playerFrom){
+        playerFrom.getCards().remove(playerCard);
+        tableCardService.createTableCard(playerCard.getCardConfig(), TableCardState.THROW);
+        playerCardService.removeById(playerCard.getId());
+
     }
 
 

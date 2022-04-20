@@ -16,12 +16,20 @@ public class PlayerCardService {
 
 
     @Transactional()
-    public PlayerCard createPlayerCards(CardConfig cardConfig , Player player , PlayerCardState cardState){
-        PlayerCard playerCards = new PlayerCard();
-        playerCards.setCardConfig(cardConfig);
-        playerCards.setPlayer(player);
-        playerCards.setState(cardState);
-        return playerCardRepository.save(playerCards);
+    public PlayerCard createPlayerCard(CardConfig cardConfig , Player player , PlayerCardState cardState){
+        PlayerCard playerCard = new PlayerCard();
+        playerCard.setCardConfig(cardConfig);
+        playerCard.setPlayer(player);
+        playerCard.setState(cardState);
+        return playerCardRepository.save(playerCard);
+    }
+
+    public void transferPlayerCardConfig(PlayerCard playerCard , Player player){
+        playerCard.setPlayer(player);
+        playerCardRepository.save(playerCard);
+    }
+
+    public void setStateOfPlayerCardConfig(){
     }
 
     @Transactional()

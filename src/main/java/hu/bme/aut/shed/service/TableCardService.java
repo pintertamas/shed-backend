@@ -15,10 +15,10 @@ public class TableCardService {
     @Autowired
     private final TableCardRepository tableCardRepository;
 
-    public void createTableCard(CardConfig cardConfig){
+    public void createTableCard(CardConfig cardConfig , TableCardState tableCardState){
         TableCard tableCard = new TableCard();
         tableCard.setCardConfig(cardConfig);
-        tableCard.setState(TableCardState.PICK);
+        tableCard.setState(tableCardState);
         tableCardRepository.save(tableCard);
     }
 

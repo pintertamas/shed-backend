@@ -50,7 +50,6 @@ public class JwtAuthenticationController {
             LogFactory.getLog(this.getClass()).info("USER NOT FOUND");
             return new ResponseEntity<>(exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e) {
-            e.printStackTrace();
             LogFactory.getLog(this.getClass()).error("ERROR AT LOGIN");
             return new ResponseEntity<>("Could not reach database", HttpStatus.INTERNAL_SERVER_ERROR);
         }
