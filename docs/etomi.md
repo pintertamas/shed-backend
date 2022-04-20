@@ -33,7 +33,7 @@ A cache-es megoldástól még kicsit tartozkodtam mert még nem teljesen értem 
 Ezen a héten a munka CORS konfigurációval kezdődött , mivel Tominak a frontenden(weben) nem mükődött az egyik endpoint(Corsos hibát kapott) ,így ezt a problémát gyorsan orvosoltuk WebSecurityConfigban.
 Refaktoráltam egy két response üzenetet és így már nem 10000 soros JSON - ket adok vissza egy-egy endpointon.
 Backenden megtanultam hogy kell rendesen Enumokkal dologozni ebben ez a [tutoriál](https://thorben-janssen.com/jpa-21-type-converter-better-way-to/) segített
-A Websocketet elkezdtük csinálni de rájöttünk hogy még nem igazán értjük hogy is műkődik igazán de egy [tutoriál](https://medium.com/swlh/websockets-with-spring-part-3-stomp-over-websocket-3dab4a21f397) alapján megértettük és élkezdtük a mi use case-ünkre megvalósítani.
+A Websocketet elkezdtük csinálni de rájöttünk hogy még nem igazán értjük hogy is műkődik igazán de egy [tutoriál](https://medium.com/swlh/websockets-with-spring-part-3-stomp-over-websocket-3dab4a21f397) alapján megértettük és elkezdtük a mi use case-ünkre megvalósítani.
 Mostmár tudunk rajta keresztül üzenetet küldeni a backendre amire reagál is backend.
 
 ## 8.hét
@@ -50,5 +50,7 @@ A nem használt játékokat és hozzá tartozó rekordokat egy ütemező kitörl
 Tomi kérésére kellett csinálni új endpointokat amivel kényelmesen lehet lekérdezni adatokat, ezeket megcsináltam.
 Mostantól csak "vicces nevű" játékok lesznek és azok egészen biztosan egyedik lesznek.
 Az összes player service függvényre @Transactional(isolation = Isolation.REPEATABLE_READ) annotációt raktam amivel kiküszöböltük a nem várt viselkedést a lobbyban.
-Lapokat már kitudunk osztani a játékosoknak ennek implementálásának során felmerült egy olyan probléma amit elkerültem volna legszivesebb ez pedig a körkörös service függöségek.
+Lapokat már kitudunk osztani a játékosoknak meg az asztalra ennek implementálásának során felmerült egy olyan probléma amit elkerültem volna legszivesebb ez pedig a körkörös service függöségek.
 Ezt sok refaktorálással és a kód minőség romlásása árán tudtam megoldani.
+Egy olyan bug is előkerült , hogyha csatlakoztatok egy játékost a játékhoz akkor a game.deck listának a mérete megnött teljesen érthetlen okból mivel a kódból nézve ennek nem kéne megtörtténie.
+Szerencsére az adatbázisban jól vannak a cardconfigok így azokat újra lekérve betudtam állítani a gamenek a deckjet arra aminek kéne lennie alapból is.
