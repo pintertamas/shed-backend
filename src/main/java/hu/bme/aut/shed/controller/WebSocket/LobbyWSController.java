@@ -2,6 +2,7 @@ package hu.bme.aut.shed.controller.WebSocket;
 
 import hu.bme.aut.shed.dto.Response.LobbyMessage;
 import hu.bme.aut.shed.dto.Response.StartGameMessage;
+import hu.bme.aut.shed.exception.GameAlreadyStartedException;
 import hu.bme.aut.shed.exception.GameNotFoundException;
 import hu.bme.aut.shed.exception.LobbyIsFullException;
 import hu.bme.aut.shed.exception.UserNotFoundException;
@@ -42,6 +43,7 @@ public class LobbyWSController {
             LoggerFactory.getLogger(this.getClass()).info("GameStarted : {}", gameName);
 
             return new StartGameMessage("game-start", gameName);
+
         } catch (GameNotFoundException exception) {
             LoggerFactory.getLogger(this.getClass()).info("Game with name (" + gameName + ") not found!");
             return new StartGameMessage("error", exception.getMessage());
@@ -59,6 +61,7 @@ public class LobbyWSController {
             LoggerFactory.getLogger(this.getClass()).info("User (" + username + ") joined to game: " + gameName);
 
             return new LobbyMessage("join", username);
+
         } catch (GameNotFoundException e) {
             LoggerFactory.getLogger(this.getClass()).info("Game with name (" + gameName + ") not found!");
             return new LobbyMessage("error", e.getMessage());
@@ -70,6 +73,10 @@ public class LobbyWSController {
         } catch (LobbyIsFullException e) {
             LoggerFactory.getLogger(this.getClass()).info("Lobby of game (" + gameName + ") is full!");
             return new LobbyMessage("error", e.getMessage());
+
+        } catch (GameAlreadyStartedException e) {
+            LoggerFactory.getLogger(this.getClass()).info("Game (" + gameName + ") is already started!");
+            return new LobbyMessage("error", e.getMessage());
         }
     }
 
@@ -80,6 +87,7 @@ public class LobbyWSController {
             playerService.disconnectPlayer(username);
             LoggerFactory.getLogger(this.getClass()).info("User (" + username + ") left the game: " + gameName);
             return new LobbyMessage("leave", username);
+
         } catch (Exception e) {
             LoggerFactory.getLogger(this.getClass()).info("User (" + username + ") could not leave the game: " + gameName);
             return new LobbyMessage("error", "user could not be disconnected");
