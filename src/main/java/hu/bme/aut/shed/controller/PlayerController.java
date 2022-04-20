@@ -1,10 +1,7 @@
 package hu.bme.aut.shed.controller;
 
 import hu.bme.aut.shed.dto.Response.PlayerResponse;
-import hu.bme.aut.shed.exception.GameAlreadyStartedException;
-import hu.bme.aut.shed.exception.GameNotFoundException;
-import hu.bme.aut.shed.exception.LobbyIsFullException;
-import hu.bme.aut.shed.exception.UserNotFoundException;
+import hu.bme.aut.shed.exception.*;
 import hu.bme.aut.shed.model.Game;
 import hu.bme.aut.shed.model.Player;
 import hu.bme.aut.shed.service.GameService;
@@ -49,7 +46,7 @@ public class PlayerController {
             Player player = playerService.connectPlayer(username, game);
             log.info("User (" + player.getUsername() + ") connected to game: " + gameId);
             return ResponseEntity.ok(new PlayerResponse(player.getId(), player.getUsername()));
-        } catch (GameNotFoundException | UserNotFoundException | LobbyIsFullException | GameAlreadyStartedException e) {
+        } catch (GameNotFoundException | UserNotFoundException | LobbyIsFullException | GameAlreadyStartedException | AlreadyConnectedToOtherGameException e) {
             log.error(e.getMessage());
             return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
         }

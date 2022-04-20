@@ -1,5 +1,6 @@
 package hu.bme.aut.shed.service;
 
+import hu.bme.aut.shed.exception.AlreadyConnectedToOtherGameException;
 import hu.bme.aut.shed.exception.GameAlreadyStartedException;
 import hu.bme.aut.shed.exception.LobbyIsFullException;
 import hu.bme.aut.shed.exception.UserNotFoundException;
@@ -48,8 +49,12 @@ public class PlayerService {
     }
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    public Player connectPlayer(String username, Game game) throws UserNotFoundException, LobbyIsFullException , GameAlreadyStartedException {
+    public Player connectPlayer(String username, Game game) throws UserNotFoundException, LobbyIsFullException , GameAlreadyStartedException , AlreadyConnectedToOtherGameException {
         User searchedUser = userService.getByUsername(username);
+
+        if(playerRepository.findByUsername(username) != null){
+            throw new AlreadyConnectedToOtherGameException();
+        }
 
         if(game.getStatus() == GameStatus.IN_PROGRESS || game.getStatus() == GameStatus.FINISHED){
             throw new GameAlreadyStartedException();

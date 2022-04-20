@@ -2,10 +2,7 @@ package hu.bme.aut.shed.controller.WebSocket;
 
 import hu.bme.aut.shed.dto.Response.LobbyMessage;
 import hu.bme.aut.shed.dto.Response.StartGameMessage;
-import hu.bme.aut.shed.exception.GameAlreadyStartedException;
-import hu.bme.aut.shed.exception.GameNotFoundException;
-import hu.bme.aut.shed.exception.LobbyIsFullException;
-import hu.bme.aut.shed.exception.UserNotFoundException;
+import hu.bme.aut.shed.exception.*;
 import hu.bme.aut.shed.model.Game;
 import hu.bme.aut.shed.repository.GameRepository;
 import hu.bme.aut.shed.service.GameService;
@@ -76,6 +73,9 @@ public class LobbyWSController {
 
         } catch (GameAlreadyStartedException e) {
             LoggerFactory.getLogger(this.getClass()).info("Game (" + gameName + ") is already started!");
+            return new LobbyMessage("error", e.getMessage());
+        } catch (AlreadyConnectedToOtherGameException e) {
+            LoggerFactory.getLogger(this.getClass()).info("User : " + username + " is already connected to other game!");
             return new LobbyMessage("error", e.getMessage());
         }
     }
