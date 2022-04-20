@@ -40,6 +40,7 @@ public class PlayerController {
         }
     }
 
+    // only for testing purposes
     @RequestMapping(value = "/connect/", method = {RequestMethod.POST}, produces = "application/json")
     public ResponseEntity<?> connect(@RequestParam Long gameId, @RequestParam String username) {
         try {

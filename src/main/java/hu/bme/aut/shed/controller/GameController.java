@@ -85,7 +85,7 @@ public class GameController {
             Game game = gameService.startGame(request.getGameId());
             GameResponse gameResponse = new GameResponse(game.getId(), game.getName());
             return ResponseEntity.ok(gameResponse);
-        } catch (GameNotFoundException | UserNotFoundException exception) {
+        } catch (GameNotFoundException exception) {
             log.error(exception.getMessage());
             return new ResponseEntity<>(exception.getMessage(),HttpStatus.NOT_FOUND);
         }
