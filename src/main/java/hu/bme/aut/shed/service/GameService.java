@@ -101,14 +101,15 @@ public class GameService {
         for (int i = maxCardNumber ; i < game.getDeck().size() ; i++){
             LoggerFactory.getLogger(this.getClass()).info(String.valueOf(i));
             LoggerFactory.getLogger(this.getClass()).info(String.valueOf(game.getDeck().get(i).getId()));
-            tableCardService.createTableCard(game.getDeck().get(i));
+            tableCardService.createTableCard(game.getDeck().get(i), TableCardState.PICK);
         }
         return gameRepository.save(game);
     }
 
-    public Game startGame(Long id) throws GameNotFoundException, UserNotFoundException {
+    public Game startGame(Long id) throws GameNotFoundException{
         Game game = getGameById(id);
-        game.setDeck(cardConfigService.getCardConfigsByGameId(game.getId()));
+        game.setDeck(cardConfigService.getCardConfigsByGameId(game.getId())); //Erre azért van szükség mivel valamilyen természetes ellenes okból kifolyolag megváltozik a connect során a game.deck list mérete,
+                                                                             // így a cardconfig gameId-ja alapján újra visszaállítom a rendes decket
         return initGame(game);
     }
 

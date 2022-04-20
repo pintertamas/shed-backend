@@ -35,9 +35,17 @@ public class LobbyWSController {
 
     @MessageMapping("/start-game/{gameName}")
     @SendTo("/topic/{gameName}")
-    public StartGameMessage startGame(@DestinationVariable String gameName) {
-        LoggerFactory.getLogger(this.getClass()).info("GameStarted : {}", gameName);
-        return new StartGameMessage("game-start", gameName);
+    public StartGameMessage startGame(@DestinationVariable String gameName){
+        try{
+            Game game = gameService.getGameByName(gameName);
+            gameService.startGame(game.getId());
+            LoggerFactory.getLogger(this.getClass()).info("GameStarted : {}", gameName);
+
+            return new StartGameMessage("game-start", gameName);
+        } catch (GameNotFoundException exception) {
+            LoggerFactory.getLogger(this.getClass()).info("Game with name (" + gameName + ") not found!");
+            return new StartGameMessage("error", exception.getMessage());
+        }
     }
 
     @MessageMapping("/join-game/{gameName}/{username}")
@@ -71,7 +79,6 @@ public class LobbyWSController {
         try {
             playerService.disconnectPlayer(username);
             LoggerFactory.getLogger(this.getClass()).info("User (" + username + ") left the game: " + gameName);
-
             return new LobbyMessage("leave", username);
         } catch (Exception e) {
             LoggerFactory.getLogger(this.getClass()).info("User (" + username + ") could not leave the game: " + gameName);
