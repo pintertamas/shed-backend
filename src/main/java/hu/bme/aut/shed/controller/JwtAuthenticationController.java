@@ -4,6 +4,7 @@ import hu.bme.aut.shed.component.JwtTokenUtil;
 import hu.bme.aut.shed.exception.UserAlreadyExistsException;
 import hu.bme.aut.shed.dto.Request.JwtRequest;
 import hu.bme.aut.shed.dto.Response.JwtResponse;
+import hu.bme.aut.shed.exception.UserNotFoundException;
 import hu.bme.aut.shed.model.User;
 import hu.bme.aut.shed.service.EmailService;
 import hu.bme.aut.shed.service.OtpService;
@@ -36,16 +37,23 @@ public class JwtAuthenticationController {
     JwtTokenUtil jwtTokenUtil;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
-        String token;
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest){
         try {
-            token = userService.login(authenticationRequest);
+            String token = userService.login(authenticationRequest);
+            User user =  userService.getByUsername(authenticationRequest.getUsername());
+            LogFactory.getLog(this.getClass()).info("NEW LOGIN");
+            return ResponseEntity.ok(new JwtResponse(token, user));
         } catch (LoginException e) {
             LogFactory.getLog(this.getClass()).error("ERROR AT LOGIN");
             return new ResponseEntity<>("Could not reach database", HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (UserNotFoundException exception) {
+            LogFactory.getLog(this.getClass()).info("USER NOT FOUND");
+            return new ResponseEntity<>(exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+            e.printStackTrace();
+            LogFactory.getLog(this.getClass()).error("ERROR AT LOGIN");
+            return new ResponseEntity<>("Could not reach database", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        LogFactory.getLog(this.getClass()).info("NEW LOGIN");
-        return ResponseEntity.ok(new JwtResponse(token, userService.getByUsername(authenticationRequest.getUsername())));
     }
 
     @RequestMapping(value = "/check-availability", method = RequestMethod.GET)
