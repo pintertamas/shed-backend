@@ -48,9 +48,10 @@ A nem használt játékokat és hozzá tartozó rekordokat egy ütemező kitörl
 
 ## 9 - 10. hét
 Tomi kérésére kellett csinálni új endpointokat amivel kényelmesen lehet lekérdezni adatokat, ezeket megcsináltam.
-Mostantól csak "vicces nevű" játékok lesznek és azok egészen biztosan egyedik lesznek.
+Mostantól csak "vicces nevű" játékok lesznek és azok egészen biztosan egyediek lesznek.
 Az összes player service függvényre @Transactional(isolation = Isolation.REPEATABLE_READ) annotációt raktam amivel kiküszöböltük a nem várt viselkedést a lobbyban.
-Lapokat már kitudunk osztani a játékosoknak meg az asztalra ennek implementálásának során felmerült egy olyan probléma amit elkerültem volna legszivesebb ez pedig a körkörös service függöségek.
-Ezt sok refaktorálással és a kód minőség romlásása árán tudtam megoldani.
-Egy olyan bug is előkerült , hogyha csatlakoztatok egy játékost a játékhoz akkor a game.deck listának a mérete megnött teljesen érthetlen okból mivel a kódból nézve ennek nem kéne megtörtténie.
-Szerencsére az adatbázisban jól vannak a cardconfigok így azokat újra lekérve betudtam állítani a gamenek a deckjet arra aminek kéne lennie alapból is.
+Lapokat már kitudunk osztani a játékosoknak meg az asztalra ennek implementálásának során felmerült egy olyan probléma amit elkerültem volna legszívesebben ez pedig a körkörös dependency injection serviceknél.
+Ezt sok refaktorálással és a kód minőség romlásása(playerServiceben használnom kell a gameRepositoryt) árán tudtam megoldani.
+Egy olyan bug is előkerült ,hogy ha csatlakoztatok 3 játékost egy játékhoz(2-nél még nem volt ilyen probléma) akkor a game.deck listának a mérete megnött teljesen érthetlen okból mivel a kódból nézve ennek nem kéne megtörtténie.
+Szerencsére az adatbázisban jól vannak a cardconfigok így azokat újra lekérve betudtam állítani a gamenek a deckjét arra aminek kéne lennie alapból is.
+Összes Enumot megcsináltam a [tutoriál](https://thorben-janssen.com/jpa-21-type-converter-better-way-to/) alapján.
