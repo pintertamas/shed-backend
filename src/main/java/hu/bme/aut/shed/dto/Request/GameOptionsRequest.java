@@ -12,6 +12,7 @@ public class GameOptionsRequest {
     int numberOfDecks;
     int numberOfCardsInHand;
     int numberOfPlayers;
+    boolean visiblity;
     boolean joker;
     List<CardRuleRequest> cardRules;
 }

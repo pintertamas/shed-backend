@@ -69,7 +69,7 @@ public class GameController {
             for (CardRuleRequest cardRuleRequest : request.getCardRules()) {
                 rules.put(cardRuleRequest.getNumber(), Rule.fromName(cardRuleRequest.getRule()));
             }
-            Game game = gameService.createGame(request.getNumberOfCardsInHand(), request.getNumberOfDecks(), rules , true);
+            Game game = gameService.createGame(request.getNumberOfCardsInHand(), request.getNumberOfDecks(), rules , request.isVisiblity(), request.isJoker());
             GameResponse gameResponse = new GameResponse(game.getId(), game.getName());
             return ResponseEntity.ok(gameResponse);
         } catch (Exception exception) {
