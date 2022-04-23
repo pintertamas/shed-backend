@@ -83,3 +83,7 @@ Ezek a jelszók a szerveren vannak egy cache tárolóban, ami úgy működik, ho
 Ehhez még szépítettem is az email küldő funkcióban lévő email templatet, hogy barátságosabban nézzenek ki az emailek.
 Mobilon megcsináltam a bekért inputok validációját, ehhez létrehoztam egy külön service-t, valamint a hibaüzeneteket mutató popupot is elkészítettemm így lesz visszajelzés a usereknek arról, hogy miért akadnak el pl. a regisztrációban.
 
+## 9 & 10. hét
+A mobilos regisztrációkhoz tartozó one time password képernyőt megcsináltam dizájnosra és beraktam egy jelszó újraküldésre alkalmas gombot, amit egy percenként tudnak újra használni a felhasználók, ezzel levéve a terhelést a szerverről.
+Megcsináltam weben a játékok böngészését, ami úgy működik, hogy pár másodperces rendszerességgel lekéri a kliens az új játékokat a szervertől és frissíti a listát.
+A mellette lévő szabály beállíthatóságot is megcsináltam, így mostmár olyan játékot tudunk létrehozni amilyet csak akarunk sliderek, switchek meg dropdown buttonok segítségével.
