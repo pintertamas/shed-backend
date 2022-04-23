@@ -53,7 +53,7 @@ public class GameService {
     }
 
     public List<Game> getGamesByState(GameStatus state) throws GameNotFoundException {
-        Optional<List<Game>> games = gameRepository.findAllByStatus(state);
+        Optional<List<Game>> games = gameRepository.findAllByStatusAndVisibility(state , true);
         if (games.isEmpty()) {
             throw new GameNotFoundException();
         }
@@ -61,7 +61,7 @@ public class GameService {
     }
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    public Game createGame(int numberOfCards, int numberOfDecks, Map<Integer,Rule> cardRules,boolean visibility, boolean jokers) {
+    public Game createGame(int numberOfCards, int numberOfDecks, Map<Integer,Rule> cardRules, boolean visibility, boolean jokers) {
         String url = "http://names.drycodes.com/1?nameOptions=funnyWords";
         RestTemplate restTemplate = new RestTemplate();
         Object[] response;
