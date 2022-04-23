@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
@@ -59,17 +60,14 @@ public class GameService {
         return games.get();
     }
 
-    public Game createGame(int numberOfCards, int numberOfDecks, Map<Integer,Rule> cardRules, boolean jokers) {
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    public Game createGame(int numberOfCards, int numberOfDecks, Map<Integer,Rule> cardRules,boolean visibility, boolean jokers) {
         String url = "http://names.drycodes.com/1?nameOptions=funnyWords";
         RestTemplate restTemplate = new RestTemplate();
         Object[] response;
         Optional<Object> nameResponse;
 
-        Game game = new Game(numberOfCards, numberOfDecks, new UUID(2, 2).toString(), false, jokers);
-        gameRepository.save(game);
-        ArrayList<CardConfig> cards = cardConfigService.createCards(game, cardRules);
-        game.setDeck(cards);
-
+        String gameName = new UUID(0,0).toString();
         boolean nameIsUniq = false;
         int step = 0;
         while(!nameIsUniq && step <= 20){
@@ -78,13 +76,18 @@ public class GameService {
                 nameResponse = Arrays.stream(response).findFirst();
                 if (nameResponse.isPresent()) {
                     if(gameRepository.findByName(nameResponse.get().toString()).isEmpty()){
-                        game.setName(nameResponse.get().toString());
+                        gameName = nameResponse.get().toString();
                         nameIsUniq = true;
                     }
                 }
             }
             step++;
         }
+        Game game = new Game(numberOfCards, numberOfDecks, gameName, visibility, jokers);
+        gameRepository.save(game);
+
+        ArrayList<CardConfig> cards = cardConfigService.createCards(game, cardRules);
+        game.setDeck(cards);
         return gameRepository.save(game);
     }
 
