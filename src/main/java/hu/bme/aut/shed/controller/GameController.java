@@ -47,15 +47,13 @@ public class GameController {
         }
     }
 
-    @GetMapping("/list/")
+    @RequestMapping(value = "/list/", method = {RequestMethod.GET}, produces = "application/json")
     public ResponseEntity<?> getGamesByStatus(@RequestParam String statusValue) {
         try {
             List<Game> games = gameService.getGamesByState(GameStatus.fromName(statusValue));
             List<GameResponse> gameResponses = new ArrayList<>();
             for (Game game : games) {
-                if(game.isVisibility()){
-                    gameResponses.add(new GameResponse(game.getId(), game.getName()));
-                }
+                gameResponses.add(new GameResponse(game.getId(), game.getName()));
             }
             return new ResponseEntity<>(gameResponses, HttpStatus.OK);
         } catch (GameNotFoundException | IllegalArgumentException exception) {
@@ -63,7 +61,7 @@ public class GameController {
         }
     }
 
-    @RequestMapping(value = "/create", method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json")
+    @RequestMapping(value = "/create", method = {RequestMethod.POST}, produces = "application/json")
     public ResponseEntity<?> create(@RequestBody GameOptionsRequest request) {
         log.info("create game request: {}", request);
         try {

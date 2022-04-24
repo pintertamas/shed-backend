@@ -10,6 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface GameRepository extends JpaRepository<Game, Long> {
+    Optional<List<Game>> findAllByStatusAndVisibility(GameStatus status , boolean visibility);
     Optional<List<Game>> findAllByStatus(GameStatus status);
     Optional<Game> findByName(String name);
 }

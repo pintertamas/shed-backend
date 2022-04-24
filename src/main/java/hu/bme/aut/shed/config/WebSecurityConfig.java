@@ -56,6 +56,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/login", "/check-availability","/generate-otp", "/register", "/check-token-validity", "/game/create", "game/start","/users/change-password")
                 .permitAll()
+                .antMatchers("/player/connect/","/player/disconnect","/users/delete/","/users/edit/")
+                .hasAnyRole("USER")
                 .and()
                 .requiresChannel(channel -> channel.anyRequest().requiresSecure())
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
