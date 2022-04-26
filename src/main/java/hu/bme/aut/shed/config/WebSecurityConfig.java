@@ -58,6 +58,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers("/player/connect/","/player/disconnect","/users/delete/","/users/edit/")
                 .hasAnyRole("USER")
+                .antMatchers("/shed/*").authenticated()
                 .and()
                 .requiresChannel(channel -> channel.anyRequest().requiresSecure())
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
