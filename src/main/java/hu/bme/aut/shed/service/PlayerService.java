@@ -39,6 +39,15 @@ public class PlayerService {
     }
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
+    public Player getPlayerByUsername(String username) throws UserNotFoundException {
+        Player player = playerRepository.findByUsername(username);
+        if(player == null){
+            throw new UserNotFoundException();
+        }
+        return player;
+    }
+
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public String getGameNameByPlayerUsername(String username) throws UserNotFoundException{
         Player player = playerRepository.findByUsername(username);
         if(player == null){
@@ -113,11 +122,10 @@ public class PlayerService {
         return OrderId;
     }
 
-    public void throwCard(PlayerCard playerCard, Player playerFrom){
+    public void throwCard(PlayerCard playerCard,TableCard tableCard, Player playerFrom){
         playerFrom.getCards().remove(playerCard);
         tableCardService.createTableCard(playerCard.getCardConfig(), TableCardState.THROW);
         playerCardService.removeById(playerCard.getId());
-
     }
 
 

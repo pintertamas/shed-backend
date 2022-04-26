@@ -1,9 +1,11 @@
 package hu.bme.aut.shed.controller.WebSocket;
 
+import hu.bme.aut.shed.component.JwtTokenUtil;
 import hu.bme.aut.shed.dto.Response.LobbyMessage;
 import hu.bme.aut.shed.dto.Response.StartGameMessage;
 import hu.bme.aut.shed.exception.*;
 import hu.bme.aut.shed.model.Game;
+import hu.bme.aut.shed.model.User;
 import hu.bme.aut.shed.repository.GameRepository;
 import hu.bme.aut.shed.service.GameService;
 import hu.bme.aut.shed.service.PlayerService;
@@ -14,6 +16,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
+import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -24,6 +27,9 @@ public class LobbyWSController {
 
     @Autowired
     private GameService gameService;
+
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
 
     @SubscribeMapping("/subscribe")
     public String sendOneTimeMessage() {
@@ -51,6 +57,12 @@ public class LobbyWSController {
     @SendTo("/topic/{gameName}")
     public LobbyMessage joinGame(@DestinationVariable String gameName, @DestinationVariable String username) {
         try {
+            String token = JwtTokenUtil.getToken();
+            User currentUser = jwtTokenUtil.getUserFromToken(token);
+            if (playerService.getPlayerByUsername(username).getId().equals(currentUser.getId())){
+                throw new AuthorizationServiceException("You dont have permission to make changes");
+            }
+
             Game game = gameService.getGameByName(gameName);
             LoggerFactory.getLogger(this.getClass()).info("Connecting (" + username + ") to game: " + gameName);
 
@@ -77,6 +89,9 @@ public class LobbyWSController {
         } catch (AlreadyConnectedToOtherGameException e) {
             LoggerFactory.getLogger(this.getClass()).info("User : " + username + " is already connected to other game!");
             return new LobbyMessage("error", e.getMessage());
+        }catch (AuthorizationServiceException e){
+            LoggerFactory.getLogger(this.getClass()).info("User (" + username + ") could not join to game: " + gameName);
+            return new LobbyMessage("error", e.getMessage());
         }
     }
 
@@ -84,13 +99,18 @@ public class LobbyWSController {
     @SendTo("/topic/{gameName}")
     public LobbyMessage leaveGame(@DestinationVariable String username, @DestinationVariable String gameName) {
         try {
+            String token = JwtTokenUtil.getToken();
+            User currentUser = jwtTokenUtil.getUserFromToken(token);
+            if (playerService.getPlayerByUsername(username).getId().equals(currentUser.getId())){
+                throw new AuthorizationServiceException("You dont have permission to make changes");
+            }
             playerService.disconnectPlayer(username);
             LoggerFactory.getLogger(this.getClass()).info("User (" + username + ") left the game: " + gameName);
             return new LobbyMessage("leave", username);
 
         } catch (Exception e) {
             LoggerFactory.getLogger(this.getClass()).info("User (" + username + ") could not leave the game: " + gameName);
-            return new LobbyMessage("error", "user could not be disconnected");
+            return new LobbyMessage("error", e.getMessage());
         }
     }
 }
