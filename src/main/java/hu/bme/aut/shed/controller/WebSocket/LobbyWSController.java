@@ -1,12 +1,9 @@
 package hu.bme.aut.shed.controller.WebSocket;
 
-import hu.bme.aut.shed.component.JwtTokenUtil;
 import hu.bme.aut.shed.dto.Response.LobbyMessage;
 import hu.bme.aut.shed.dto.Response.StartGameMessage;
 import hu.bme.aut.shed.exception.*;
 import hu.bme.aut.shed.model.Game;
-import hu.bme.aut.shed.model.User;
-import hu.bme.aut.shed.repository.GameRepository;
 import hu.bme.aut.shed.service.GameService;
 import hu.bme.aut.shed.service.PlayerService;
 import org.slf4j.LoggerFactory;
@@ -14,9 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
-import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -27,9 +22,6 @@ public class LobbyWSController {
 
     @Autowired
     private GameService gameService;
-
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
 
     @SubscribeMapping("/subscribe")
     public String sendOneTimeMessage() {
@@ -57,7 +49,6 @@ public class LobbyWSController {
     @SendTo("/topic/{gameName}")
     public LobbyMessage joinGame(@DestinationVariable String gameName, @DestinationVariable String username) {
         try {
-
             Game game = gameService.getGameByName(gameName);
             LoggerFactory.getLogger(this.getClass()).info("Connecting (" + username + ") to game: " + gameName);
 
