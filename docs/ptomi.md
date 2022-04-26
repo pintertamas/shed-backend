@@ -70,7 +70,7 @@ Elkészítettem a mobil appon egy töltő képernyőt, ami megkérdezi a szerver
 ## 6. hét
 Elkezdtem haladni a webes résszel is, aminél egy problémába akardam már az elején. Nem volt konfigurálva a CORS a backenden, ezért webről nem tudtam hívásokat küldeni a backend felé.
 Ahhoz, hogy ez megoldódjon, követtem a leírást a következő oldalon:
-```https://spring.io/guides/gs/rest-service-cors/```
+[```https://spring.io/guides/gs/rest-service-cors/```](https://spring.io/guides/gs/rest-service-cors/)
 A globális beállítást választottam és így már működött az API hívás, meg tudtam jeleníteni egy új játék nevét és az ahhoz tartozó QR kódot a képernyőn.
 
 ## 7. hét
@@ -87,3 +87,9 @@ Mobilon megcsináltam a bekért inputok validációját, ehhez létrehoztam egy 
 A mobilos regisztrációkhoz tartozó one time password képernyőt megcsináltam dizájnosra és beraktam egy jelszó újraküldésre alkalmas gombot, amit egy percenként tudnak újra használni a felhasználók, ezzel levéve a terhelést a szerverről.
 Megcsináltam weben a játékok böngészését, ami úgy működik, hogy pár másodperces rendszerességgel lekéri a kliens az új játékokat a szervertől és frissíti a listát.
 A mellette lévő szabály beállíthatóságot is megcsináltam, így mostmár olyan játékot tudunk létrehozni amilyet csak akarunk sliderek, switchek meg dropdown buttonok segítségével.
+A QR képernyő készítése közben eldöntöttem hogy kezdek valamit azzal a problémával, hogy a hot reloadnál teljesen újratöltődik az alkalmazás és még a legkisebb változtatások megnéséséért is újra létre kell hoznom egy játékot, ami sok időt vesz igénybe.
+Főleg azért akartam minél hamarabb megoldani ezt, mert a játék képernyőn dolgozva egyre nehezebb lesz ilyen formájában tesztelni a kinézetbeli változtatásokat.
+Nem igazán találtam erre megoldást az interneten, de egy megoldás volt, aminél egyrész egértettem hogy a hiba az, hogy a routingomban pont a QR képernyőnél argumentumokat passzolok át a képernyőnek, ami miatt nem a sima routingot használtam, hanem az ongenerateroute-ot, viszont nem állítottam be a settings-t az új képernyőnél, ezért az összes oldalt a create game URI-val jelenítette meg.
+[```https://stackoverflow.com/questions/62442045/page-url-not-changing-in-flutter-but-the-page-content-changes-fine```](https://stackoverflow.com/questions/62442045/page-url-not-changing-in-flutter-but-the-page-content-changes-fine)
+Ezt megjavítva most van egy workaround megoldásom a problémára, ami úgy néz ki, hogy ha hot reloadolok akkor ott marad a képernyő, csak a képernyő argumentek nullázódnak, ami miatt le kell kezelnem ezeket az értékeket.
+Egyelőre a játék képernyőnél nem tudom hogy fogom ezt megoldani mert feltehetően csomó adat lesz ott amiket nem akarnék placeholderekkel helyettesíteni.
