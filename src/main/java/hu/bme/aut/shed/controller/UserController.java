@@ -31,38 +31,37 @@ public class UserController {
         try {
             User user = userService.getById(id);
             return new ResponseEntity<>(user, HttpStatus.OK);
-        }
-        catch (UserNotFoundException exception){
+        } catch (UserNotFoundException exception) {
             return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
     @RequestMapping(value = "/edit/", method = {RequestMethod.PUT}, produces = "application/json")
-    public ResponseEntity<?> updateUser(@RequestParam Long id,@RequestBody User editedUser) {
-        try{
+    public ResponseEntity<?> updateUser(@RequestParam Long id, @RequestBody User editedUser) {
+        try {
             String token = JwtTokenUtil.getToken();
             User currentUser = jwtTokenUtil.getUserFromToken(token);
-            if (!editedUser.getId().equals(currentUser.getId())){
+            if (!editedUser.getId().equals(currentUser.getId())) {
                 throw new AuthorizationServiceException("You dont have permission to make changes");
             }
-            User user = userService.updateById(id,editedUser);
+            User user = userService.updateById(id, editedUser);
             return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @RequestMapping(value = "/change-password", method = {RequestMethod.PUT}, produces = "application/json")
     public ResponseEntity<?> changePassword(@RequestBody OtpRequest otpRequest) {
-        try{
-            if (!otpService.validateOtp(otpRequest.getEmail(), otpRequest.getOtp())){
+        try {
+            if (!otpService.validateOtp(otpRequest.getEmail(), otpRequest.getOtp())) {
                 throw new Exception("wrong one time password");
             }
-            User user = userService.changePassword(otpRequest.getEmail(),otpRequest.getPassword());
+            User user = userService.changePassword(otpRequest.getEmail(), otpRequest.getPassword());
             LoggerFactory.getLogger(this.getClass()).info("Password changed for: " + user.getUsername());
             return new ResponseEntity<>("Successful password changing", HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -71,13 +70,13 @@ public class UserController {
         try {
             String token = JwtTokenUtil.getToken();
             User currentUser = jwtTokenUtil.getUserFromToken(token);
-            if (!userService.getById(id).getId().equals(currentUser.getId())){
+            if (!userService.getById(id).getId().equals(currentUser.getId())) {
                 throw new AuthorizationServiceException("You dont have permission to make changes");
             }
             userService.deleteById(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

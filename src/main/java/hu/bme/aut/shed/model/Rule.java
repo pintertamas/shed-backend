@@ -9,7 +9,9 @@ public enum Rule {
 
     private final String name;
 
-    Rule(String name){this.name = name;}
+    Rule(String name) {
+        this.name = name;
+    }
 
     public String getName() {
         return name;

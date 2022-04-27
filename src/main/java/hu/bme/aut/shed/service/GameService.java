@@ -1,13 +1,10 @@
 package hu.bme.aut.shed.service;
 
-import hu.bme.aut.shed.exception.GameNotFoundException;
-import hu.bme.aut.shed.exception.UserNotFoundException;
-import hu.bme.aut.shed.model.*;
 import hu.bme.aut.shed.dto.Request.ActionRequest;
+import hu.bme.aut.shed.exception.GameNotFoundException;
+import hu.bme.aut.shed.model.*;
 import hu.bme.aut.shed.repository.GameRepository;
-
 import lombok.AllArgsConstructor;
-
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -53,7 +50,7 @@ public class GameService {
     }
 
     public List<Game> getGamesByState(GameStatus state) throws GameNotFoundException {
-        Optional<List<Game>> games = gameRepository.findAllByStatusAndVisibility(state , true);
+        Optional<List<Game>> games = gameRepository.findAllByStatusAndVisibility(state, true);
         if (games.isEmpty()) {
             throw new GameNotFoundException();
         }
@@ -61,13 +58,13 @@ public class GameService {
     }
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    public Game createGame(int numberOfCards, int numberOfDecks, Map<Integer,Rule> cardRules, boolean visibility, boolean jokers) {
+    public Game createGame(int numberOfCards, int numberOfDecks, Map<Integer, Rule> cardRules, boolean visibility, boolean jokers) {
         String url = "http://names.drycodes.com/1?nameOptions=funnyWords";
         RestTemplate restTemplate = new RestTemplate();
         Object[] response;
         Optional<Object> nameResponse;
 
-        String gameName = new UUID(0,0).toString();
+        String gameName = new UUID(1, 0).toString();
         boolean nameIsUniq = false;
         int step = 0;
         while(!nameIsUniq && step <= 20){
@@ -95,13 +92,13 @@ public class GameService {
         game.setStatus(GameStatus.IN_PROGRESS);
 
         int cardCounter = 0;
-        for (Player player : game.getPlayers()){
-            cardCounter = playerService.initPlayer(player, game , cardCounter);
+        for (Player player : game.getPlayers()) {
+            cardCounter = playerService.initPlayer(player, game, cardCounter);
         }
 
         int maxCardNumber = game.getPlayers().size() * (game.getCardsInHand() + 6);
 
-        for (int i = maxCardNumber ; i < game.getDeck().size() ; i++){
+        for (int i = maxCardNumber; i < game.getDeck().size(); i++) {
             LoggerFactory.getLogger(this.getClass()).info(String.valueOf(i));
             LoggerFactory.getLogger(this.getClass()).info(String.valueOf(game.getDeck().get(i).getId()));
             tableCardService.createTableCard(game.getDeck().get(i), TableCardState.PICK);
@@ -109,10 +106,10 @@ public class GameService {
         return gameRepository.save(game);
     }
 
-    public Game startGame(Long id) throws GameNotFoundException{
+    public Game startGame(Long id) throws GameNotFoundException {
         Game game = getGameById(id);
         game.setDeck(cardConfigService.getCardConfigsByGameId(game.getId())); //Erre azért van szükség mivel valamilyen természetes ellenes okból kifolyolag megváltozik a connect során a game.deck list mérete,
-                                                                             // így a cardconfig gameId-ja alapján újra visszaállítom a rendes decket
+        // így a cardconfig gameId-ja alapján újra visszaállítom a rendes decket
         return initGame(game);
     }
 
@@ -124,32 +121,36 @@ public class GameService {
         return game.get();
     }
 
+    public void checkWinCondition() {
+
+    }
+
     @Scheduled(fixedRate = 900000)
-    public void deleteGamesScheduler(){
+    public void deleteGamesScheduler() {
         List<Game> deletedGames = new ArrayList<>();
         Optional<List<Game>> finishedGames = gameRepository.findAllByStatus(GameStatus.FINISHED);
         Optional<List<Game>> inProgressGames = gameRepository.findAllByStatus(GameStatus.IN_PROGRESS);
         Optional<List<Game>> NewGames = gameRepository.findAllByStatus(GameStatus.NEW);
-        if(NewGames.isPresent()){                   //new games will be deleted if they are created for than 1 hour ago
-            for(Game game : NewGames.get()){
+        if (NewGames.isPresent()) {                   //new games will be deleted if they are created for than 1 hour ago
+            for (Game game : NewGames.get()) {
                 Duration difference = Duration.between(game.getCreationTime(), LocalDateTime.now());
-                if(difference.toHours() >= 1){
+                if (difference.toHours() >= 1) {
                     deletedGames.add(game);
                 }
             }
         }
-        if(inProgressGames.isPresent()){        //In_Progress games will be deleted if they are in progress but nobody is in the game
-            for(Game game: inProgressGames.get()){
-                if(game.getPlayers().isEmpty()){
+        if (inProgressGames.isPresent()) {        //In_Progress games will be deleted if they are in progress but nobody is in the game
+            for (Game game : inProgressGames.get()) {
+                if (game.getPlayers().isEmpty()) {
                     deletedGames.add(game);
                 }
             }
         }
         LoggerFactory.getLogger(this.getClass()).info("DeleteGamesSchedulerRun");
         finishedGames.ifPresent(deletedGames::addAll);
-        for(Game game : deletedGames){
+        for (Game game : deletedGames) {
             cardConfigService.deleteCardConfigs(game.getId());
-            for ( Player player : game.getPlayers()){
+            for (Player player : game.getPlayers()) {
                 playerService.disconnectPlayer(player.getUsername());
             }
             gameRepository.deleteById(game.getId());

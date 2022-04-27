@@ -4,7 +4,6 @@ import hu.bme.aut.shed.model.User;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-
 import java.io.Serial;
 import java.io.Serializable;
 

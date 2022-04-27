@@ -50,7 +50,7 @@ public class PlayerController {
         try {
             String token = JwtTokenUtil.getToken();
             User currentUser = jwtTokenUtil.getUserFromToken(token);
-            if (!username.equals(currentUser.getUsername())){
+            if (!username.equals(currentUser.getUsername())) {
                 throw new AuthorizationServiceException("You dont have permission to make changes");
             }
             Game game = gameService.getGameById(gameId);
@@ -59,16 +59,17 @@ public class PlayerController {
             return ResponseEntity.ok(new PlayerResponse(player.getId(), player.getUsername()));
         } catch (GameNotFoundException | UserNotFoundException | LobbyIsFullException | GameAlreadyStartedException | AlreadyConnectedToOtherGameException e) {
             log.error(e.getMessage());
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
+
     // only for testing purposes
     @RequestMapping(value = "/disconnect/", method = {RequestMethod.DELETE}, produces = "application/json")
     public ResponseEntity<?> disconnect(@RequestParam String username) {
         try {
             String token = JwtTokenUtil.getToken();
             User currentUser = jwtTokenUtil.getUserFromToken(token);
-            if (!username.equals(currentUser.getUsername())){
+            if (!username.equals(currentUser.getUsername())) {
                 throw new AuthorizationServiceException("You dont have permission to make changes");
             }
             playerService.disconnectPlayer(username);
@@ -76,7 +77,7 @@ public class PlayerController {
             return ResponseEntity.ok("Player " + username + "disconnected from the game!");
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
@@ -92,7 +93,7 @@ public class PlayerController {
             return ResponseEntity.ok(playerResponses);
         } catch (GameNotFoundException e) {
             log.error(e.getMessage());
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
@@ -108,7 +109,7 @@ public class PlayerController {
             return ResponseEntity.ok(playerResponses);
         } catch (GameNotFoundException e) {
             log.error(e.getMessage());
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 }

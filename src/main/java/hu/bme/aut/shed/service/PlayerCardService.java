@@ -1,6 +1,9 @@
 package hu.bme.aut.shed.service;
 
-import hu.bme.aut.shed.model.*;
+import hu.bme.aut.shed.model.CardConfig;
+import hu.bme.aut.shed.model.Player;
+import hu.bme.aut.shed.model.PlayerCard;
+import hu.bme.aut.shed.model.PlayerCardState;
 import hu.bme.aut.shed.repository.PlayerCardRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +17,8 @@ public class PlayerCardService {
     @Autowired
     private final PlayerCardRepository playerCardRepository;
 
-
     @Transactional()
-    public PlayerCard createPlayerCard(CardConfig cardConfig , Player player , PlayerCardState cardState){
+    public PlayerCard createPlayerCard(CardConfig cardConfig, Player player, PlayerCardState cardState) {
         PlayerCard playerCard = new PlayerCard();
         playerCard.setCardConfig(cardConfig);
         playerCard.setPlayer(player);
@@ -24,24 +26,23 @@ public class PlayerCardService {
         return playerCardRepository.save(playerCard);
     }
 
-    public void transferPlayerCardConfig(PlayerCard playerCard , Player player){
+    public void transferPlayerCardConfig(PlayerCard playerCard, Player player) {
         playerCard.setPlayer(player);
         playerCardRepository.save(playerCard);
     }
 
-    public void setStateOfPlayerCardConfig(){
+    public void setStateOfPlayerCardConfig() {
     }
 
     @Transactional()
-    public void removeById(Long id){
+    public void removeById(Long id) {
         playerCardRepository.deleteById(id);
     }
 
     @Transactional()
-    public void removeByGameId(CardConfig cardConfig){
+    public void removeByGameId(CardConfig cardConfig) {
         playerCardRepository.deleteByCardConfig(cardConfig);
     }
-
 
 
 }

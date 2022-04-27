@@ -1,9 +1,9 @@
 package hu.bme.aut.shed.controller;
 
 import hu.bme.aut.shed.component.JwtTokenUtil;
-import hu.bme.aut.shed.exception.UserAlreadyExistsException;
 import hu.bme.aut.shed.dto.Request.JwtRequest;
 import hu.bme.aut.shed.dto.Response.JwtResponse;
+import hu.bme.aut.shed.exception.UserAlreadyExistsException;
 import hu.bme.aut.shed.exception.UserNotFoundException;
 import hu.bme.aut.shed.model.User;
 import hu.bme.aut.shed.service.EmailService;
@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 
 import javax.security.auth.login.LoginException;
 import javax.validation.Valid;
@@ -37,10 +36,10 @@ public class JwtAuthenticationController {
     JwtTokenUtil jwtTokenUtil;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest){
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) {
         try {
             String token = userService.login(authenticationRequest);
-            User user =  userService.getByUsername(authenticationRequest.getUsername());
+            User user = userService.getByUsername(authenticationRequest.getUsername());
             LogFactory.getLog(this.getClass()).info("NEW LOGIN");
             return ResponseEntity.ok(new JwtResponse(token, user));
         } catch (LoginException e) {
@@ -88,16 +87,16 @@ public class JwtAuthenticationController {
                 throw new Exception("wrong one time password");
             User user = userService.register(newUser);
             LoggerFactory.getLogger(this.getClass()).info("USER CREATED: " + newUser);
-            emailService.sendMessage(newUser.getEmail(),"Registration successful",
+            emailService.sendMessage(newUser.getEmail(), "Registration successful",
                     "Welcome to Shed " + newUser.getUsername() + "!"
                             + "\n"
-                            +"Good Luck Have Fun"
+                            + "Good Luck Have Fun"
                             + "\n"
                             + "\n"
                             + "Greetings"
                             + "\n"
                             + "Shed team"
-                    );
+            );
             return ResponseEntity.ok(user);
         } catch (UserAlreadyExistsException exception) {
             LoggerFactory.getLogger(this.getClass()).error("USER ALREADY EXISTS: " + exception.getExistingUser());

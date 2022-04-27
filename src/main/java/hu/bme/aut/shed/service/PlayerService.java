@@ -1,13 +1,10 @@
 package hu.bme.aut.shed.service;
 
-import hu.bme.aut.shed.exception.AlreadyConnectedToOtherGameException;
-import hu.bme.aut.shed.exception.GameAlreadyStartedException;
-import hu.bme.aut.shed.exception.LobbyIsFullException;
-import hu.bme.aut.shed.exception.UserNotFoundException;
+import hu.bme.aut.shed.exception.*;
 import hu.bme.aut.shed.model.*;
 import hu.bme.aut.shed.repository.GameRepository;
 import hu.bme.aut.shed.repository.PlayerRepository;
-
+import hu.bme.aut.shed.service.RuleStrategy.RuleStrategy;
 import lombok.AllArgsConstructor;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +13,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @AllArgsConstructor
@@ -32,25 +30,29 @@ public class PlayerService {
     private final UserService userService;
     @Autowired
     private final TableCardService tableCardService;
+    @Autowired
+    private final CardConfigService cardConfigService;
+    @Autowired
+    private final Map<String, RuleStrategy> ruleStrategy;
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    public List<Player> getPlayersByGame(Game game){
+    public List<Player> getPlayersByGame(Game game) {
         return playerRepository.findByGame(game);
     }
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     public Player getPlayerByUsername(String username) throws UserNotFoundException {
         Player player = playerRepository.findByUsername(username);
-        if(player == null){
+        if (player == null) {
             throw new UserNotFoundException();
         }
         return player;
     }
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    public String getGameNameByPlayerUsername(String username) throws UserNotFoundException{
+    public String getGameNameByPlayerUsername(String username) throws UserNotFoundException {
         Player player = playerRepository.findByUsername(username);
-        if(player == null){
+        if (player == null) {
             throw new UserNotFoundException();
         }
         Game game = player.getGame();
@@ -58,10 +60,10 @@ public class PlayerService {
     }
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    public Player connectPlayer(String username, Game game) throws UserNotFoundException, LobbyIsFullException , GameAlreadyStartedException , AlreadyConnectedToOtherGameException {
+    public Player connectPlayer(String username, Game game) throws UserNotFoundException, LobbyIsFullException, GameAlreadyStartedException, AlreadyConnectedToOtherGameException {
         User searchedUser = userService.getByUsername(username);
 
-        if(game.getStatus() == GameStatus.IN_PROGRESS || game.getStatus() == GameStatus.FINISHED){
+        if (game.getStatus() == GameStatus.IN_PROGRESS || game.getStatus() == GameStatus.FINISHED) {
             throw new GameAlreadyStartedException();
         }
 
@@ -70,7 +72,7 @@ public class PlayerService {
             return alreadyConnectedPlayer;
         }
 
-        if(playerRepository.findByUsername(username) != null){
+        if (playerRepository.findByUsername(username) != null) {
             throw new AlreadyConnectedToOtherGameException();
         }
 
@@ -101,20 +103,20 @@ public class PlayerService {
     }
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    public int initPlayer(Player player, Game game, int OrderId){
+    public int initPlayer(Player player, Game game, int OrderId) {
 
-        for (int i = OrderId ; i < game.getCardsInHand() + OrderId; i++) {
+        for (int i = OrderId; i < game.getCardsInHand() + OrderId; i++) {
             PlayerCard playerCardInHand = playerCardService.createPlayerCard(game.getDeck().get(i), player, PlayerCardState.HAND);
             player.getCards().add(playerCardInHand);
         }
         OrderId += game.getCardsInHand();
-        for (int i = OrderId ; i < (OrderId + 3) ; i++) {
-            PlayerCard playerCardVisible =  playerCardService.createPlayerCard(game.getDeck().get(i), player, PlayerCardState.VISIBLE);
+        for (int i = OrderId; i < (OrderId + 3); i++) {
+            PlayerCard playerCardVisible = playerCardService.createPlayerCard(game.getDeck().get(i), player, PlayerCardState.VISIBLE);
             player.getCards().add(playerCardVisible);
         }
         OrderId += 3;
-        for (int i = OrderId; i < (OrderId + 3) ; i++) {
-            PlayerCard playerCardInvisible =  playerCardService.createPlayerCard(game.getDeck().get(i), player, PlayerCardState.INVISIBLE);
+        for (int i = OrderId; i < (OrderId + 3); i++) {
+            PlayerCard playerCardInvisible = playerCardService.createPlayerCard(game.getDeck().get(i), player, PlayerCardState.INVISIBLE);
             player.getCards().add(playerCardInvisible);
         }
         OrderId += 3;
@@ -122,10 +124,11 @@ public class PlayerService {
         return OrderId;
     }
 
-    public void throwCard(PlayerCard playerCard,TableCard tableCard, Player playerFrom){
-        playerFrom.getCards().remove(playerCard);
+    public void throwCard(Player playerFrom, TableCard tableCard, PlayerCard playerCard) throws CantThrowCardException {
+        /*playerFrom.getCards().remove(playerCard);
         tableCardService.createTableCard(playerCard.getCardConfig(), TableCardState.THROW);
-        playerCardService.removeById(playerCard.getId());
+        playerCardService.removeById(playerCard.getId());*/
+        ruleStrategy.get(playerCard.getCardConfig().getRule().name()).throwCard(playerFrom, tableCard, playerCard);
     }
 
 

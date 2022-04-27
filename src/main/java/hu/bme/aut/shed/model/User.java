@@ -31,6 +31,7 @@ public class User implements Comparable {
         this.password = password;
         this.email = email;
     }
+
     @Override
     public int compareTo(Object o) {
         return 0;

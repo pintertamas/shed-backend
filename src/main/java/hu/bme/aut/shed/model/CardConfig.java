@@ -30,7 +30,7 @@ public class CardConfig {
     private Rule rule;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="game_id", nullable=false)
+    @JoinColumn(name = "game_id", nullable = false)
     @JsonIgnore
     private Game game;
 }

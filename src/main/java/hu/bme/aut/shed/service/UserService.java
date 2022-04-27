@@ -1,10 +1,10 @@
 package hu.bme.aut.shed.service;
 
 import hu.bme.aut.shed.component.JwtTokenUtil;
+import hu.bme.aut.shed.dto.Request.JwtRequest;
 import hu.bme.aut.shed.exception.NotValidUpdateException;
 import hu.bme.aut.shed.exception.UserAlreadyExistsException;
 import hu.bme.aut.shed.exception.UserNotFoundException;
-import hu.bme.aut.shed.dto.Request.JwtRequest;
 import hu.bme.aut.shed.model.User;
 import hu.bme.aut.shed.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -82,10 +82,9 @@ public class UserService {
 
     public User getByEmail(String email) throws UserNotFoundException {
         User userData = userRepository.findByEmail(email);
-        if (userData == null){
+        if (userData == null) {
             throw new UserNotFoundException();
-        }
-        else{
+        } else {
             return userData;
         }
     }
@@ -114,8 +113,9 @@ public class UserService {
             }
         }
     }
+
     @Transactional
-    public User changePassword(String email,String password) throws UserNotFoundException {
+    public User changePassword(String email, String password) throws UserNotFoundException {
         User user = getByEmail(email);
         user.setPassword(bcryptEncoder.encode(password));
         return userRepository.save(user);
@@ -131,11 +131,11 @@ public class UserService {
 
     public void checkAvailability(String username, String email) throws UserAlreadyExistsException {
         User user = userRepository.findByUsername(username);
-        if (user != null){
+        if (user != null) {
             throw new UserAlreadyExistsException(user);
         }
         user = userRepository.findByEmail(email);
-        if (user != null){
+        if (user != null) {
             throw new UserAlreadyExistsException(user);
         }
     }

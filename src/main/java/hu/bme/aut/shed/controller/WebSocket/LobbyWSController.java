@@ -31,8 +31,8 @@ public class LobbyWSController {
 
     @MessageMapping("/start-game/{gameName}")
     @SendTo("/topic/{gameName}")
-    public StartGameMessage startGame(@DestinationVariable String gameName){
-        try{
+    public StartGameMessage startGame(@DestinationVariable String gameName) {
+        try {
             Game game = gameService.getGameByName(gameName);
             gameService.startGame(game.getId());
             LoggerFactory.getLogger(this.getClass()).info("GameStarted : {}", gameName);

@@ -1,8 +1,8 @@
 package hu.bme.aut.shed.model;
 
 public enum TableCardState {
-    PICK ("Pick"),
-    THROW ("Throw");
+    PICK("Pick"),
+    THROW("Throw");
 
     private final String name;
 

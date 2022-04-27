@@ -15,14 +15,14 @@ public class TableCardService {
     @Autowired
     private final TableCardRepository tableCardRepository;
 
-    public void createTableCard(CardConfig cardConfig , TableCardState tableCardState){
+    public void createTableCard(CardConfig cardConfig, TableCardState tableCardState) {
         TableCard tableCard = new TableCard();
         tableCard.setCardConfig(cardConfig);
         tableCard.setState(tableCardState);
         tableCardRepository.save(tableCard);
     }
 
-    public void removeTableCardsByCardConfig(CardConfig cardConfig){
+    public void removeTableCardsByCardConfig(CardConfig cardConfig) {
         tableCardRepository.deleteByCardConfig(cardConfig);
     }
 

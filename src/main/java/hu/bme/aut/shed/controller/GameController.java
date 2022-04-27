@@ -1,14 +1,13 @@
 package hu.bme.aut.shed.controller;
 
-import hu.bme.aut.shed.dto.Request.CardRuleRequest;
-import hu.bme.aut.shed.dto.Response.GameResponse;
-import hu.bme.aut.shed.exception.GameNotFoundException;
-import hu.bme.aut.shed.exception.UserNotFoundException;
-import hu.bme.aut.shed.model.Game;
-import hu.bme.aut.shed.model.GameStatus;
 import hu.bme.aut.shed.dto.Request.ActionRequest;
+import hu.bme.aut.shed.dto.Request.CardRuleRequest;
 import hu.bme.aut.shed.dto.Request.ConnectionRequest;
 import hu.bme.aut.shed.dto.Request.GameOptionsRequest;
+import hu.bme.aut.shed.dto.Response.GameResponse;
+import hu.bme.aut.shed.exception.GameNotFoundException;
+import hu.bme.aut.shed.model.Game;
+import hu.bme.aut.shed.model.GameStatus;
 import hu.bme.aut.shed.model.Rule;
 import hu.bme.aut.shed.service.GameService;
 import lombok.AllArgsConstructor;
@@ -40,7 +39,7 @@ public class GameController {
     public ResponseEntity<?> getGameByName(@RequestParam String gameName) {
         try {
             Game game = gameService.getGameByName(gameName);
-            GameResponse gameResponses = new GameResponse(game.getId(),game.getName());
+            GameResponse gameResponses = new GameResponse(game.getId(), game.getName());
             return new ResponseEntity<>(gameResponses, HttpStatus.OK);
         } catch (GameNotFoundException exception) {
             return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
@@ -69,12 +68,12 @@ public class GameController {
             for (CardRuleRequest cardRuleRequest : request.getCardRules()) {
                 rules.put(cardRuleRequest.getNumber(), Rule.fromName(cardRuleRequest.getRule()));
             }
-            Game game = gameService.createGame(request.getNumberOfCardsInHand(), request.getNumberOfDecks(), rules , request.isVisible(), request.isJoker());
+            Game game = gameService.createGame(request.getNumberOfCardsInHand(), request.getNumberOfDecks(), rules, request.isVisible(), request.isJoker());
             GameResponse gameResponse = new GameResponse(game.getId(), game.getName());
             return ResponseEntity.ok(gameResponse);
         } catch (Exception exception) {
             log.error(exception.getMessage());
-            return new ResponseEntity<>(exception.getMessage(),HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
@@ -87,7 +86,7 @@ public class GameController {
             return ResponseEntity.ok(gameResponse);
         } catch (GameNotFoundException exception) {
             log.error(exception.getMessage());
-            return new ResponseEntity<>(exception.getMessage(),HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
@@ -99,7 +98,7 @@ public class GameController {
             simpMessagingTemplate.convertAndSend("/topic/action/" + game.getId(), game);
             return ResponseEntity.ok(game);
         } catch (GameNotFoundException exception) {
-            return new ResponseEntity<>(exception.getMessage(),HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 }
