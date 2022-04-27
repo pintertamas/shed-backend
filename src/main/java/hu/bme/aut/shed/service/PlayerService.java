@@ -65,7 +65,7 @@ public class PlayerService {
             throw new GameAlreadyStartedException();
         }
 
-        Player alreadyConnectedPlayer = playerRepository.findByUserAndGameId(searchedUser, game.getId());
+        Player alreadyConnectedPlayer = playerRepository.findByUsernameAndGameId(username, game.getId());
         if (alreadyConnectedPlayer != null) {
             return alreadyConnectedPlayer;
         }
