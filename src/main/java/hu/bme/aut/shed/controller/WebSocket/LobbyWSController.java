@@ -77,6 +77,7 @@ public class LobbyWSController {
             return new LobbyMessage("error", e.getMessage());
         } catch (Exception e) {
             LoggerFactory.getLogger(this.getClass()).info("User (" + username + ") could not join into game: " + gameName);
+            LoggerFactory.getLogger(this.getClass()).info(e.getMessage());
             return new LobbyMessage("error", e.getMessage());
         }
     }
