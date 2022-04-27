@@ -1,9 +1,11 @@
 package hu.bme.aut.shed.controller;
 
+import hu.bme.aut.shed.component.JwtTokenUtil;
 import hu.bme.aut.shed.dto.Response.PlayerResponse;
 import hu.bme.aut.shed.exception.*;
 import hu.bme.aut.shed.model.Game;
 import hu.bme.aut.shed.model.Player;
+import hu.bme.aut.shed.model.User;
 import hu.bme.aut.shed.service.GameService;
 import hu.bme.aut.shed.service.PlayerService;
 import lombok.AllArgsConstructor;
@@ -11,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -28,6 +31,9 @@ public class PlayerController {
     @Autowired
     private GameService gameService;
 
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+
     @RequestMapping(value = "/check-already-in-game/{username}", method = {RequestMethod.GET}, produces = "application/json")
     public ResponseEntity<?> getPlayerGame(@PathVariable String username) {
         try {
@@ -42,6 +48,11 @@ public class PlayerController {
     @RequestMapping(value = "/connect/", method = {RequestMethod.POST}, produces = "application/json")
     public ResponseEntity<?> connect(@RequestParam Long gameId, @RequestParam String username) {
         try {
+            String token = JwtTokenUtil.getToken();
+            User currentUser = jwtTokenUtil.getUserFromToken(token);
+            if (!username.equals(currentUser.getUsername())){
+                throw new AuthorizationServiceException("You dont have permission to make changes");
+            }
             Game game = gameService.getGameById(gameId);
             Player player = playerService.connectPlayer(username, game);
             log.info("User (" + player.getUsername() + ") connected to game: " + gameId);
@@ -51,10 +62,15 @@ public class PlayerController {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
         }
     }
-
+    // only for testing purposes
     @RequestMapping(value = "/disconnect/", method = {RequestMethod.DELETE}, produces = "application/json")
     public ResponseEntity<?> disconnect(@RequestParam String username) {
         try {
+            String token = JwtTokenUtil.getToken();
+            User currentUser = jwtTokenUtil.getUserFromToken(token);
+            if (!username.equals(currentUser.getUsername())){
+                throw new AuthorizationServiceException("You dont have permission to make changes");
+            }
             playerService.disconnectPlayer(username);
             log.info("User (" + username + ") disconnected from the game");
             return ResponseEntity.ok("Player " + username + "disconnected from the game!");

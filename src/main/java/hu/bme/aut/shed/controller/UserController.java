@@ -43,7 +43,7 @@ public class UserController {
             String token = JwtTokenUtil.getToken();
             User currentUser = jwtTokenUtil.getUserFromToken(token);
             if (!editedUser.getId().equals(currentUser.getId())){
-                    throw new AuthorizationServiceException("You dont have permission to make changes");
+                throw new AuthorizationServiceException("You dont have permission to make changes");
             }
             User user = userService.updateById(id,editedUser);
             return new ResponseEntity<>(user, HttpStatus.OK);
@@ -71,7 +71,7 @@ public class UserController {
         try {
             String token = JwtTokenUtil.getToken();
             User currentUser = jwtTokenUtil.getUserFromToken(token);
-            if (userService.getById(id).getId().equals(currentUser.getId())){
+            if (!userService.getById(id).getId().equals(currentUser.getId())){
                 throw new AuthorizationServiceException("You dont have permission to make changes");
             }
             userService.deleteById(id);
