@@ -38,7 +38,7 @@ public class RuleService {
         playerCardService.removeById(playerCard.getId());
     }
 
-    public void throwInvisibleCard(Player playerFrom, TableCard tableCard, PlayerCard playerCard){
+    public void throwInvisibleCard(Player playerFrom, TableCard tableCard, PlayerCard playerCard) {
         playerFrom.getCards().remove(playerCard);
         tableCardService.createTableCard(playerCard.getCardConfig(), TableCardState.THROW);
         playerCardService.removeById(playerCard.getId());
@@ -67,8 +67,8 @@ public class RuleService {
                 tableCardService.createTableCard(playerCard.getCardConfig(), TableCardState.THROW);
                 playerCardService.removeById(playerCard.getId());
                 List<CardConfig> cardConfigs = cardConfigService.getCardConfigsByGameId(playerFrom.getGame().getId());
-                for (CardConfig cardConfig : cardConfigs){
-                    tableCardService.removeTableCardsByCardConfigAndTableCardState(cardConfig,TableCardState.THROW);
+                for (CardConfig cardConfig : cardConfigs) {
+                    tableCardService.removeTableCardsByCardConfigAndTableCardState(cardConfig, TableCardState.THROW);
                 }
             }
         } else {

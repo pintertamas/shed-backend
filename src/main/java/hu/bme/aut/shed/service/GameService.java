@@ -67,12 +67,12 @@ public class GameService {
         String gameName = new UUID(1, 0).toString();
         boolean nameIsUniq = false;
         int step = 0;
-        while(!nameIsUniq && step <= 20){
+        while (!nameIsUniq && step <= 20) {
             response = restTemplate.getForObject(url, Object[].class);
             if (response != null) {
                 nameResponse = Arrays.stream(response).findFirst();
                 if (nameResponse.isPresent()) {
-                    if(gameRepository.findByName(nameResponse.get().toString()).isEmpty()){
+                    if (gameRepository.findByName(nameResponse.get().toString()).isEmpty()) {
                         gameName = nameResponse.get().toString();
                         nameIsUniq = true;
                     }
