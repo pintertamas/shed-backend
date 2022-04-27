@@ -75,6 +75,9 @@ public class LobbyWSController {
         } catch (AlreadyConnectedToOtherGameException e) {
             LoggerFactory.getLogger(this.getClass()).info("User : " + username + " is already connected to other game!");
             return new LobbyMessage("error", e.getMessage());
+        } catch (Exception e) {
+            LoggerFactory.getLogger(this.getClass()).info("User (" + username + ") could not join into game: " + gameName);
+            return new LobbyMessage("error", e.getMessage());
         }
     }
 
