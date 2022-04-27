@@ -22,7 +22,15 @@ public class TableCardService {
         tableCardRepository.save(tableCard);
     }
 
+    public TableCard getByTableCardState(TableCardState tableCardState){
+        return tableCardRepository.findByState(tableCardState);
+    }
+
     public void removeTableCardsByCardConfig(CardConfig cardConfig) {
+        tableCardRepository.deleteByCardConfig(cardConfig);
+    }
+
+    public void removeTableCardsByCardConfigAndTableCardState(CardConfig cardConfig,TableCardState tableCardState) {
         tableCardRepository.deleteByCardConfig(cardConfig);
     }
 
