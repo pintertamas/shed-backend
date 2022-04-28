@@ -59,6 +59,12 @@ public class PlayerService {
         return game.getName();
     }
 
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    public List<PlayerCard> getPlayerCardsByUsername(String username){
+        Player player = playerRepository.findByUsername(username);
+        return player.getCards();
+    }
+
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public Player connectPlayer(String username, Game game) throws UserNotFoundException, LobbyIsFullException, GameAlreadyStartedException, AlreadyConnectedToOtherGameException {
         User searchedUser = userService.getByUsername(username);
@@ -125,9 +131,6 @@ public class PlayerService {
     }
 
     public void throwCard(Player playerFrom, TableCard tableCard, PlayerCard playerCard) throws CantThrowCardException {
-        /*playerFrom.getCards().remove(playerCard);
-        tableCardService.createTableCard(playerCard.getCardConfig(), TableCardState.THROW);
-        playerCardService.removeById(playerCard.getId());*/
         ruleStrategy.get(playerCard.getCardConfig().getRule().name()).throwCard(playerFrom, tableCard, playerCard);
     }
 

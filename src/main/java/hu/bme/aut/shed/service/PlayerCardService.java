@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class PlayerCardService {
@@ -24,6 +26,10 @@ public class PlayerCardService {
         playerCard.setPlayer(player);
         playerCard.setState(cardState);
         return playerCardRepository.save(playerCard);
+    }
+
+    public List<PlayerCard> getPlayerCardsByPlayer(Player player){
+        return player.getCards();
     }
 
     public void transferPlayerCardConfig(PlayerCard playerCard, Player player) {
