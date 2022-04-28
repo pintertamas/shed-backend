@@ -15,7 +15,7 @@ public class RuleService {
     private final TableCardService tableCardService;
     @Autowired
     private final PlayerCardService playerCardService;
-
+    @Autowired
     private final CardConfigService cardConfigService;
 
     public void throwNoneCard(Player playerFrom, TableCard tableCard, PlayerCard playerCard) throws CantThrowCardException {

@@ -18,7 +18,6 @@ public class PlayerCard {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     @ManyToOne
     @JoinColumn(name = "cardConfig_id")
     CardConfig cardConfig;

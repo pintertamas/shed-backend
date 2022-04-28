@@ -55,3 +55,10 @@ Ezt sok refaktorálással és a kód minőség romlásása(playerServiceben hasz
 Egy olyan bug is előkerült ,hogy ha csatlakoztatok 3 játékost egy játékhoz(2-nél még nem volt ilyen probléma) akkor a game.deck listának a mérete megnött teljesen érthetlen okból mivel a kódból nézve ennek nem kéne megtörtténie.
 Szerencsére az adatbázisban jól vannak a cardconfigok így azokat újra lekérve betudtam állítani a gamenek a deckjét arra aminek kéne lennie alapból is.
 Összes Enumot megcsináltam a [tutoriál](https://thorben-janssen.com/jpa-21-type-converter-better-way-to/) alapján.
+
+## 11.hét
+Ezen a héten elkezdtem a szabályokat implementálni a játék logikába ezt strategy mintával tettem meg.
+Ennek során felmerült egy olyan probléma hogy elkéne tárolni valahol a kártyák sorrendjét a paklikon belül.
+Erre két megoldáson gondolkozok egyik a szerver memoriájában vagy backenden egy külön oszlopot szentelnék ennek.
+Egy olyan probléma is felmerült hogy háromszor probált csatlakozni egy játékos és háromszor is mentettem el az adatbázisba annak ellenére hogy REPEATABLE_READ izolációs szinten volt,
+ezt felemeltem SERIALIZABLE szintre ez megoldotta a backenden a problémát ezutan frontend is orvosoltuk a hibát amiért 3x-or probált csatlakozni.
