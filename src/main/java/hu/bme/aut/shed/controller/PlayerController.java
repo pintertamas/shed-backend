@@ -70,8 +70,8 @@ public class PlayerController {
     }
 
     // only for testing purposes
-    @RequestMapping(value = "/disconnect/", method = {RequestMethod.DELETE}, produces = "application/json")
-    public ResponseEntity<?> disconnect(@RequestParam String username) {
+    @RequestMapping(value = "/disconnect/{username}", method = {RequestMethod.DELETE}, produces = "application/json")
+    public ResponseEntity<?> disconnect(@PathVariable String username) {
         try {
             String token = JwtTokenUtil.getToken();
             User currentUser = jwtTokenUtil.getUserFromToken(token);
