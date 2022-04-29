@@ -80,7 +80,7 @@ public class PlayerController {
             Player player = playerService.getPlayerByUsername(username);
             playerService.disconnectPlayer(username);
             log.info("User (" + username + ") disconnected from the game");
-            simpMessagingTemplate.convertAndSend("/topic/"+player.getGame().getName(), new LobbyMessage("leave" , username));
+            simpMessagingTemplate.convertAndSend("/topic/" + player.getGame().getName(), new LobbyMessage("leave", username));
             return ResponseEntity.ok("Player " + username + "disconnected from the game!");
         } catch (Exception e) {
             log.error(e.getMessage());

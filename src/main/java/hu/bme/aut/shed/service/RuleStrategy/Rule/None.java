@@ -6,7 +6,6 @@ import hu.bme.aut.shed.service.PlayerCardService;
 import hu.bme.aut.shed.service.RuleHelperService;
 import hu.bme.aut.shed.service.RuleStrategy.RuleStrategy;
 import hu.bme.aut.shed.service.TableCardService;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -28,7 +27,7 @@ public class None implements RuleStrategy {
                 TableCard previousCard = ruleHelperService.invisibleCardOnTable(playerFrom, tableCard, playerCard);
 
                 if (previousCard.getCardConfig().getRule() == Rule.REDUCER) {
-                    if ( playerCard.getCardConfig().getNumber() <= previousCard.getCardConfig().getNumber()) {
+                    if (playerCard.getCardConfig().getNumber() <= previousCard.getCardConfig().getNumber()) {
                         playerFrom.getCards().remove(playerCard);
                         tableCardService.createTableCard(playerCard.getCardConfig(), TableCardState.THROW);
                         playerCardService.removeById(playerCard.getId());

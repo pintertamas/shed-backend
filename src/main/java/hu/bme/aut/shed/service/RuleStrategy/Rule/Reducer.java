@@ -20,13 +20,13 @@ public class Reducer implements RuleStrategy {
     private RuleHelperService ruleHelperService;
 
     @Override
-    public void throwCard(Player playerFrom, TableCard tableCard, PlayerCard playerCard) throws CantThrowCardException  {
+    public void throwCard(Player playerFrom, TableCard tableCard, PlayerCard playerCard) throws CantThrowCardException {
         if (playerCard.getCardConfig().getNumber() <= tableCard.getCardConfig().getNumber()) {
             if (tableCard.getCardConfig().getRule() == Rule.INVISIBLE) {
                 TableCard previousCard = ruleHelperService.invisibleCardOnTable(playerFrom, tableCard, playerCard);
 
                 if (previousCard.getCardConfig().getRule() == Rule.REDUCER) {
-                    if ( playerCard.getCardConfig().getNumber() <= previousCard.getCardConfig().getNumber()) {
+                    if (playerCard.getCardConfig().getNumber() <= previousCard.getCardConfig().getNumber()) {
                         playerFrom.getCards().remove(playerCard);
                         tableCardService.createTableCard(playerCard.getCardConfig(), TableCardState.THROW);
                         playerCardService.removeById(playerCard.getId());

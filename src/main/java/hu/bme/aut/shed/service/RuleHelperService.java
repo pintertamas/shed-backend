@@ -1,6 +1,5 @@
 package hu.bme.aut.shed.service;
 
-import hu.bme.aut.shed.exception.CantThrowCardException;
 import hu.bme.aut.shed.model.*;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

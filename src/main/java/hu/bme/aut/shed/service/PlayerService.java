@@ -96,18 +96,18 @@ public class PlayerService {
     }
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    public void disconnectPlayer(String username){
+    public void disconnectPlayer(String username) {
         LoggerFactory.getLogger(this.getClass()).info(String.valueOf(playerRepository.findAll().size()));
         Player player = playerRepository.findByUsername(username);
         Game game = player.getGame();
         player.setCards(playerCardService.getPlayerCardsByPlayer(player));
-        LoggerFactory.getLogger(this.getClass()).info("Player cardSize : "+String.valueOf(player.getCards().size()));
-        for (PlayerCard playerCard : player.getCards() ){
+        LoggerFactory.getLogger(this.getClass()).info("Player cardSize : " + String.valueOf(player.getCards().size()));
+        for (PlayerCard playerCard : player.getCards()) {
             LoggerFactory.getLogger(this.getClass()).info(String.valueOf(playerCard.getId()));
         }
 
-        for (PlayerCard playerCard : player.getCards() ){
-            LoggerFactory.getLogger(this.getClass()).info("Deleting: " +String.valueOf(playerCard.getId()));
+        for (PlayerCard playerCard : player.getCards()) {
+            LoggerFactory.getLogger(this.getClass()).info("Deleting: " + String.valueOf(playerCard.getId()));
             playerCardService.removeById(playerCard.getId());
         }
         game.getPlayers().remove(player);
