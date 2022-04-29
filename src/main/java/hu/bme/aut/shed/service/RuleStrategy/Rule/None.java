@@ -1,11 +1,9 @@
 package hu.bme.aut.shed.service.RuleStrategy.Rule;
 
 import hu.bme.aut.shed.exception.CantThrowCardException;
-import hu.bme.aut.shed.model.Player;
-import hu.bme.aut.shed.model.PlayerCard;
-import hu.bme.aut.shed.model.TableCard;
-import hu.bme.aut.shed.model.TableCardState;
+import hu.bme.aut.shed.model.*;
 import hu.bme.aut.shed.service.PlayerCardService;
+import hu.bme.aut.shed.service.RuleHelperService;
 import hu.bme.aut.shed.service.RuleStrategy.RuleStrategy;
 import hu.bme.aut.shed.service.TableCardService;
 import lombok.AllArgsConstructor;
@@ -13,21 +11,37 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component("NONE")
-@AllArgsConstructor
 public class None implements RuleStrategy {
 
     @Autowired
-    private final TableCardService tableCardService;
-
+    private TableCardService tableCardService;
     @Autowired
-    private final PlayerCardService playerCardService;
+    private PlayerCardService playerCardService;
+    @Autowired
+    private RuleHelperService ruleHelperService;
 
     @Override
     public void throwCard(Player playerFrom, TableCard tableCard, PlayerCard playerCard) throws CantThrowCardException {
         if (playerCard.getCardConfig().getNumber() >= tableCard.getCardConfig().getNumber()) {
-            playerFrom.getCards().remove(playerCard);
-            tableCardService.createTableCard(playerCard.getCardConfig(), TableCardState.THROW);
-            playerCardService.removeById(playerCard.getId());
+
+            if (tableCard.getCardConfig().getRule() == Rule.INVISIBLE) {
+                TableCard previousCard = ruleHelperService.invisibleCardOnTable(playerFrom, tableCard, playerCard);
+
+                if (previousCard.getCardConfig().getRule() == Rule.REDUCER) {
+                    if ( playerCard.getCardConfig().getNumber() <= previousCard.getCardConfig().getNumber()) {
+                        playerFrom.getCards().remove(playerCard);
+                        tableCardService.createTableCard(playerCard.getCardConfig(), TableCardState.THROW);
+                        playerCardService.removeById(playerCard.getId());
+                    } else {
+                        throw new CantThrowCardException();
+                    }
+                }
+
+            } else {
+                playerFrom.getCards().remove(playerCard);
+                tableCardService.createTableCard(playerCard.getCardConfig(), TableCardState.THROW);
+                playerCardService.removeById(playerCard.getId());
+            }
         } else {
             throw new CantThrowCardException();
         }
