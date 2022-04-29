@@ -101,12 +101,17 @@ public class PlayerService {
         Player player = playerRepository.findByUsername(username);
         Game game = player.getGame();
 
-        game.getPlayers().remove(player);
-        gameRepository.save(game);
+        LoggerFactory.getLogger(this.getClass()).info("Player cardSize : "+String.valueOf(player.getCards().size()));
+        for (PlayerCard playerCard : player.getCards() ){
+            LoggerFactory.getLogger(this.getClass()).info(String.valueOf(playerCard.getId()));
+        }
 
         for (PlayerCard playerCard : player.getCards() ){
+            LoggerFactory.getLogger(this.getClass()).info("Deleting: " +String.valueOf(playerCard.getId()));
             playerCardService.removeById(playerCard.getId());
         }
+        game.getPlayers().remove(player);
+        gameRepository.save(game);
         playerRepository.deleteById(player.getId());
         LoggerFactory.getLogger(this.getClass()).info(String.valueOf(playerRepository.findAll().size()));
     }

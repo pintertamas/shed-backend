@@ -69,7 +69,6 @@ public class PlayerController {
         }
     }
 
-    // only for testing purposes
     @RequestMapping(value = "/disconnect/{username}", method = {RequestMethod.DELETE}, produces = "application/json")
     public ResponseEntity<?> disconnect(@PathVariable String username) {
         try {
