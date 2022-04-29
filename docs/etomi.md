@@ -60,5 +60,7 @@ Szerencsére az adatbázisban jól vannak a cardconfigok így azokat újra leké
 Ezen a héten elkezdtem a szabályokat implementálni a játék logikába ezt strategy mintával tettem meg.
 Ennek során felmerült egy olyan probléma hogy elkéne tárolni valahol a kártyák sorrendjét a paklikon belül.
 Erre két megoldáson gondolkozok egyik a szerver memoriájában vagy backenden egy külön oszlopot szentelnék ennek.
+Végül ugy döntöttem hogy backenden lesz ennek külön sor de miközben ezen gondolkoztam rájöttem hogy a TableCard meg PlayerCard táblákban,
+ott az id(amit az adatbázis generál), amit használhatok sorrendre és ezekbe a táblákba már összekeverve kerülnek majd be a kártyák.
 Egy olyan probléma is felmerült hogy háromszor probált csatlakozni egy játékos és háromszor is mentettem el az adatbázisba annak ellenére hogy REPEATABLE_READ izolációs szinten volt,
 ezt felemeltem SERIALIZABLE szintre ez megoldotta a backenden a problémát ezutan frontend is orvosoltuk a hibát amiért 3x-or probált csatlakozni.
