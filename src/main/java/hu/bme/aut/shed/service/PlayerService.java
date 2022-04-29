@@ -69,13 +69,13 @@ public class PlayerService {
     public Player connectPlayer(String username, Game game) throws UserNotFoundException, LobbyIsFullException, GameAlreadyStartedException, AlreadyConnectedToOtherGameException {
         User searchedUser = userService.getByUsername(username);
 
-        if (game.getStatus() == GameStatus.IN_PROGRESS || game.getStatus() == GameStatus.FINISHED) {
-            throw new GameAlreadyStartedException();
-        }
-
         Player alreadyConnectedPlayer = playerRepository.findByUsernameAndGameId(username, game.getId());
         if (alreadyConnectedPlayer != null) {
             return alreadyConnectedPlayer;
+        }
+
+        if (game.getStatus() == GameStatus.IN_PROGRESS || game.getStatus() == GameStatus.FINISHED) {
+            throw new GameAlreadyStartedException();
         }
 
         if (playerRepository.findByUsername(username) != null) {
@@ -96,7 +96,7 @@ public class PlayerService {
     }
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    public void disconnectPlayer(String username) {
+    public void disconnectPlayer(String username){
         LoggerFactory.getLogger(this.getClass()).info(String.valueOf(playerRepository.findAll().size()));
         Player player = playerRepository.findByUsername(username);
         Game game = player.getGame();
