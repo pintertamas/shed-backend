@@ -28,7 +28,7 @@ public class PlayerCardService {
         return playerCardRepository.save(playerCard);
     }
 
-    public List<PlayerCard> getPlayerCardsByPlayer(Player player){
+    public List<PlayerCard> getPlayerCardsByPlayer(Player player) {
         return player.getCards();
     }
 

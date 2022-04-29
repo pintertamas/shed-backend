@@ -42,7 +42,7 @@ public class LobbyWSController {
         } catch (GameNotFoundException exception) {
             LoggerFactory.getLogger(this.getClass()).info("Game with name (" + gameName + ") not found!");
             return new StartGameMessage("error", exception.getMessage());
-        } catch (Exception exception){
+        } catch (Exception exception) {
             LoggerFactory.getLogger(this.getClass()).info("Game with name (" + gameName + ") could not started!");
             LoggerFactory.getLogger(this.getClass()).info(exception.getMessage());
             return new StartGameMessage("error", exception.getMessage());
