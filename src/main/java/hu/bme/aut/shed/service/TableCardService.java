@@ -27,11 +27,11 @@ public class TableCardService {
         tableCardRepository.save(tableCard);
     }
 
-    public List<TableCard> getAllByTableCardStateAndGame(TableCardState tableCardState , Game game) {
+    public List<TableCard> getAllByTableCardStateAndGame(TableCardState tableCardState, Game game) {
         List<TableCard> withOutFilter = tableCardRepository.findAllByState(tableCardState);
         List<TableCard> withFilter = new ArrayList<>();
-        for (TableCard tableCard : withOutFilter ){
-            if(Objects.equals(tableCard.getCardConfig().getGame().getId(), game.getId())){
+        for (TableCard tableCard : withOutFilter) {
+            if (Objects.equals(tableCard.getCardConfig().getGame().getId(), game.getId())) {
                 withFilter.add(tableCard);
             }
         }

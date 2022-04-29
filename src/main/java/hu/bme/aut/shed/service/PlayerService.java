@@ -60,7 +60,7 @@ public class PlayerService {
     }
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    public List<PlayerCard> getPlayerCardsByUsername(String username){
+    public List<PlayerCard> getPlayerCardsByUsername(String username) {
         Player player = playerRepository.findByUsername(username);
         return player.getCards();
     }
