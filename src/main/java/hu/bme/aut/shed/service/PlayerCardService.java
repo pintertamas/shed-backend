@@ -29,7 +29,7 @@ public class PlayerCardService {
     }
 
     public List<PlayerCard> getPlayerCardsByPlayer(Player player) {
-        return player.getCards();
+        return playerCardRepository.findAllByPlayer(player);
     }
 
     public void transferPlayerCardConfig(PlayerCard playerCard, Player player) {
