@@ -104,6 +104,9 @@ public class PlayerService {
         game.getPlayers().remove(player);
         gameRepository.save(game);
 
+        for (PlayerCard playerCard : player.getCards() ){
+            playerCardService.removeById(playerCard.getId());
+        }
         playerRepository.deleteById(player.getId());
         LoggerFactory.getLogger(this.getClass()).info(String.valueOf(playerRepository.findAll().size()));
     }
