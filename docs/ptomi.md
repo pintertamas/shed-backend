@@ -93,3 +93,10 @@ Nem igazán találtam erre megoldást az interneten, de egy megoldás volt, amin
 [```https://stackoverflow.com/questions/62442045/page-url-not-changing-in-flutter-but-the-page-content-changes-fine```](https://stackoverflow.com/questions/62442045/page-url-not-changing-in-flutter-but-the-page-content-changes-fine)
 Ezt megjavítva most van egy workaround megoldásom a problémára, ami úgy néz ki, hogy ha hot reloadolok akkor ott marad a képernyő, csak a képernyő argumentek nullázódnak, ami miatt le kell kezelnem ezeket az értékeket.
 Egyelőre a játék képernyőnél nem tudom hogy fogom ezt megoldani mert feltehetően csomó adat lesz ott amiket nem akarnék placeholderekkel helyettesíteni.
+Ezek után megcsináltam a QR képernyőn a játékba becsatlakozó játékosok listázását, így most a képernyőn is látszik ugyan az a lista ami telefonon is.
+
+## 11. hét
+Találtunk egy nagy hibát a websocketünkkel, amit nagyon sokáig debugoltunk, mert nem találtuk meg hogy mi okozhatja. A probléma az volt, hogy amikor bekerült a webes képernyőkre is a lobby, akkor a frontendre rengeteg stacktrace hibaüzenet jött stompBadStateException néven.
+Úgy oldottuk ezt meg, hogy én nyomoztam a kód websocketes részeiben, Tomi pedig a Herokus logokat mondta nekem. Egy idő után (és plusz logok bevezetésével) feltűnt, hogy gyanúsan sokszor próbál a webes kliens becsatlakozni a websocketre és ezt a tudást felhasználva megtaláltuk frontenden a hibát, ami az volt, hogy a Lobby képernyőt hasznosítottam újra weben is, viszont mivel mobilon ez a képernyő csatlakoztatja be a játékosokat a websocketre, ez felülírta a weben már meglévő websocket kapcsolatot.
+Ezzel nagyon sok időnk ment el, de szerencsére most már minden jól működik.
+Mobilon kijavítottam a register és login képernyőn egy overflow bugot és bevezettem projekt szinten a gombok letiltását, így most kattintás után nem működnek amíg el nem végzik a feladatukat.

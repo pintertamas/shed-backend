@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 public class OtpService {
 
     private static final Integer EXPIRE_MINS = 10;
-    private LoadingCache<String, Integer> otpCache;
+    private final LoadingCache<String, Integer> otpCache;
 
     public OtpService() {
         otpCache = CacheBuilder.newBuilder().expireAfterWrite(EXPIRE_MINS, TimeUnit.MINUTES).build(new CacheLoader<>() {
