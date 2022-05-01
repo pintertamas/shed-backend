@@ -83,7 +83,7 @@ public class GameService {
         Game game = new Game(numberOfCards, numberOfDecks, gameName, visibility, jokers);
         gameRepository.save(game);
 
-        ArrayList<CardConfig> cards = cardConfigService.createCards(game, cardRules);
+        List<CardConfig> cards = cardConfigService.createCards(game, cardRules);
         game.setDeck(cards);
         return gameRepository.save(game);
     }

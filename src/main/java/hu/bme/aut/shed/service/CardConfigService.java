@@ -24,7 +24,7 @@ public class CardConfigService {
     @Autowired
     private TableCardService tableCardService;
 
-    public ArrayList<CardConfig> createCards(Game game, Map<Integer, Rule> cardRules) throws IllegalArgumentException {
+    public List<CardConfig> createCards(Game game, Map<Integer, Rule> cardRules) throws IllegalArgumentException {
         int numberOfCards = game.getNumberOfDecks() * 13 * Shape.values().length;
         if (game.isJokers()) numberOfCards += 4;
 
@@ -39,7 +39,7 @@ public class CardConfigService {
                     newCard.setGame(game);
                     newCard.setRule(cardRules.get(cardNumber));
                     cards.add(newCard);
-                    cardConfigRepository.save(newCard);
+                    //cardConfigRepository.save(newCard);
                 }
                 CardConfig newCard = new CardConfig();
                 newCard.setNumber(1);
@@ -47,11 +47,11 @@ public class CardConfigService {
                 newCard.setGame(game);
                 newCard.setRule(cardRules.get(1));
                 cards.add(newCard);
-                cardConfigRepository.save(newCard);
+                //cardConfigRepository.save(newCard);
             }
         }
         Collections.shuffle(cards);
-        return shuffleDeck(cards);
+        return cardConfigRepository.saveAll(cards);
     }
 
     @Transactional
@@ -68,21 +68,4 @@ public class CardConfigService {
         return cardConfigRepository.findAllByGameId(gameId);
     }
 
-    public ArrayList<CardConfig> shuffleDeck(ArrayList<CardConfig> cards) {
-        // copy cards to an ArrayList
-        ArrayList<CardConfig> cardsCopy = new ArrayList<>(cards);
-
-        for (int i = 0; i < 30; i++) {
-            shuffleArrayList(cardsCopy);
-        }
-        return cardsCopy;
-    }
-
-    private void shuffleArrayList(ArrayList<?> array) {
-        Random random = new Random();
-
-        for (int i = array.size() - 1; i >= 1; i--) {
-            Collections.swap(array, i, random.nextInt(i + 1));
-        }
-    }
 }
