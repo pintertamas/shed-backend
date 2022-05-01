@@ -1,6 +1,5 @@
 package hu.bme.aut.shed.dto.Response;
 
-import hu.bme.aut.shed.model.Rule;
 import hu.bme.aut.shed.model.Shape;
 import lombok.AllArgsConstructor;
 import lombok.Data;

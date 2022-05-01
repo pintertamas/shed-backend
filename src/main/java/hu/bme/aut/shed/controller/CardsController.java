@@ -11,7 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AuthorizationServiceException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,44 +48,45 @@ public class CardsController {
 
             List<PlayerCard> playerCards = playerService.getPlayerCardsByUsername(username);
             List<CardResponse> responseList = new ArrayList<>();
-            for (PlayerCard playerCard : playerCards){
+            for (PlayerCard playerCard : playerCards) {
                 CardResponse response = new CardResponse(playerCard.getCardConfig().getShape(),
-                                                         playerCard.getCardConfig().getRule().getName(),
-                                                         playerCard.getCardConfig().getGame().getName(),
-                                                         playerCard.getCardConfig().getNumber());
+                        playerCard.getCardConfig().getRule().getName(),
+                        playerCard.getCardConfig().getGame().getName(),
+                        playerCard.getCardConfig().getNumber());
                 responseList.add(response);
             }
-            return new ResponseEntity<>(responseList,HttpStatus.OK);
+            return new ResponseEntity<>(responseList, HttpStatus.OK);
 
-        } catch (UserNotFoundException exception){
+        } catch (UserNotFoundException exception) {
             LoggerFactory.getLogger(this.getClass()).info(username + ": Not Found");
             return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
 
-        } catch (Exception exception){
+        } catch (Exception exception) {
             LoggerFactory.getLogger(exception.getMessage());
             return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
+
     @RequestMapping(value = "/table/{gameName}/{tableCardState}", method = {RequestMethod.GET}, produces = "application/json")
-    public ResponseEntity<?> getTableCards(@PathVariable String gameName,@PathVariable String tableCardState) {
+    public ResponseEntity<?> getTableCards(@PathVariable String gameName, @PathVariable String tableCardState) {
         try {
             Game game = gameService.getGameByName(gameName);
-            List<TableCard> tableCards = tableCardService.getAllByTableCardStateAndGame(TableCardState.fromName(tableCardState),game);
+            List<TableCard> tableCards = tableCardService.getAllByTableCardStateAndGame(TableCardState.fromName(tableCardState), game);
             List<CardResponse> responseList = new ArrayList<>();
-            for (TableCard tableCard : tableCards){
+            for (TableCard tableCard : tableCards) {
                 CardResponse response = new CardResponse(tableCard.getCardConfig().getShape(),
                         tableCard.getCardConfig().getRule().getName(),
                         tableCard.getCardConfig().getGame().getName(),
                         tableCard.getCardConfig().getNumber());
                 responseList.add(response);
             }
-            return new ResponseEntity<>(responseList,HttpStatus.OK);
+            return new ResponseEntity<>(responseList, HttpStatus.OK);
 
-        } catch (GameNotFoundException exception){
+        } catch (GameNotFoundException exception) {
             LoggerFactory.getLogger(this.getClass()).info(gameName + ": Not Found");
             return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
 
-        } catch (Exception exception){
+        } catch (Exception exception) {
             LoggerFactory.getLogger(exception.getMessage());
             return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
         }
