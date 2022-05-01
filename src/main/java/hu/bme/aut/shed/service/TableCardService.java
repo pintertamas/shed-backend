@@ -43,7 +43,7 @@ public class TableCardService {
     }
 
     public void removeTableCardsByCardConfigAndTableCardState(CardConfig cardConfig, TableCardState tableCardState) {
-        tableCardRepository.deleteByCardConfigAndAndState(cardConfig, tableCardState);
+        tableCardRepository.deleteByCardConfigAndState(cardConfig, tableCardState);
     }
 
 }

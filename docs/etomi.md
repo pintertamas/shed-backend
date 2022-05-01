@@ -63,4 +63,4 @@ Erre két megoldáson gondolkozok egyik a szerver memoriájában vagy backenden 
 Végül ugy döntöttem hogy backenden lesz ennek külön sor de miközben ezen gondolkoztam rájöttem hogy a TableCard meg PlayerCard táblákban,
 ott az id(amit az adatbázis generál), amit használhatok sorrendre és ezekbe a táblákba már összekeverve kerülnek majd be a kártyák.
 Egy olyan probléma is felmerült hogy háromszor probált csatlakozni egy játékos és háromszor is mentettem el az adatbázisba annak ellenére hogy REPEATABLE_READ izolációs szinten volt,
-ezt felemeltem SERIALIZABLE szintre ez megoldotta a backenden a problémát ezutan frontend is orvosoltuk a hibát amiért 3x-or probált csatlakozni.
+ezt felemeltem SERIALIZABLE szintre ez megoldotta a backenden a problémát ezután frontenden is orvosoltuk a hibát, amiért 3x-or probált csatlakozni.

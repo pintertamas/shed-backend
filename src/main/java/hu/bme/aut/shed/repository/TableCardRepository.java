@@ -14,7 +14,7 @@ public interface TableCardRepository extends JpaRepository<TableCard, Long> {
 
     TableCard findByState(TableCardState tableCardState);
 
-    void deleteByCardConfigAndAndState(CardConfig cardConfig, TableCardState tableCardState);
+    void deleteByCardConfigAndState(CardConfig cardConfig, TableCardState tableCardState);
 
     List<TableCard> findAllByState(TableCardState tableCardState);
 }
