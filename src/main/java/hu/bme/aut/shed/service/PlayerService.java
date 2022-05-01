@@ -60,8 +60,12 @@ public class PlayerService {
     }
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    public List<PlayerCard> getPlayerCardsByUsername(String username) {
+    public List<PlayerCard> getPlayerCardsByUsername(String username) throws UserNotFoundException {
         Player player = playerRepository.findByUsername(username);
+        if (player == null) {
+            throw new UserNotFoundException();
+        }
+        player.setCards(playerCardService.getPlayerCardsByPlayer(player));
         return player.getCards();
     }
 
