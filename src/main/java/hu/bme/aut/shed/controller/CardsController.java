@@ -57,7 +57,7 @@ public class CardsController {
                         playerCard.getCardConfig().getRule().getName(),
                         playerCard.getCardConfig().getGame().getName(),
                         playerCard.getState().getName()
-                        );
+                );
                 responseList.add(response);
             }
 
@@ -87,7 +87,7 @@ public class CardsController {
                         tableCard.getCardConfig().getRule().getName(),
                         tableCard.getCardConfig().getGame().getName(),
                         tableCard.getState().getName()
-                        );
+                );
                 responseList.add(response);
             }
 
