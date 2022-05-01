@@ -37,19 +37,19 @@ public class CardsController {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
-    @RequestMapping(value = "/player/{username}", method = {RequestMethod.GET}, produces = "application/json")
-    public ResponseEntity<?> getPlayerCards(@PathVariable String username) {
+    @RequestMapping(value = "/player/{username}/{playerCardState}", method = {RequestMethod.GET}, produces = "application/json")
+    public ResponseEntity<?> getPlayerCards(@PathVariable String username, @PathVariable String playerCardState) {
         try {
             String token = JwtTokenUtil.getToken();
             User currentUser = jwtTokenUtil.getUserFromToken(token);
             if (!username.equals(currentUser.getUsername())) {
                 throw new AuthorizationServiceException("You dont have permission to make changes");
             }
-
-            List<PlayerCard> playerCards = playerService.getPlayerCardsByUsername(username);
+            Player player = playerService.getPlayerByUsername(username);
+            List<PlayerCard> playerCards = playerCardService.getAllPlayerCardsByPlayerAndState(player, PlayerCardState.fromName(playerCardState));
             List<CardResponse> responseList = new ArrayList<>();
             for (PlayerCard playerCard : playerCards) {
-                CardResponse response = new CardResponse(playerCard.getCardConfig().getShape(),
+                CardResponse response = new CardResponse(playerCard.getCardConfig().getShape().getName(),
                         playerCard.getCardConfig().getRule().getName(),
                         playerCard.getCardConfig().getGame().getName(),
                         playerCard.getCardConfig().getNumber());
@@ -74,7 +74,7 @@ public class CardsController {
             List<TableCard> tableCards = tableCardService.getAllByTableCardStateAndGame(TableCardState.fromName(tableCardState), game);
             List<CardResponse> responseList = new ArrayList<>();
             for (TableCard tableCard : tableCards) {
-                CardResponse response = new CardResponse(tableCard.getCardConfig().getShape(),
+                CardResponse response = new CardResponse(tableCard.getCardConfig().getShape().getName(),
                         tableCard.getCardConfig().getRule().getName(),
                         tableCard.getCardConfig().getGame().getName(),
                         tableCard.getCardConfig().getNumber());
@@ -91,5 +91,4 @@ public class CardsController {
             return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
-
 }

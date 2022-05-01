@@ -32,6 +32,10 @@ public class PlayerCardService {
         return playerCardRepository.findAllByPlayer(player);
     }
 
+    public List<PlayerCard> getAllPlayerCardsByPlayerAndState(Player player, PlayerCardState playerCardState) {
+        return playerCardRepository.findAllByPlayerAndState(player, playerCardState);
+    }
+
     public void transferPlayerCardConfig(PlayerCard playerCard, Player player) {
         playerCard.setPlayer(player);
         playerCardRepository.save(playerCard);
