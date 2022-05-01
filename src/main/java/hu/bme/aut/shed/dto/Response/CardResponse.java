@@ -6,8 +6,9 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class CardResponse {
+    int number;
     String shape;
     String rule;
     String gameName;
-    int number;
+    String state;
 }

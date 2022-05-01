@@ -45,16 +45,22 @@ public class CardsController {
             if (!username.equals(currentUser.getUsername())) {
                 throw new AuthorizationServiceException("You dont have permission to make changes");
             }
+
             Player player = playerService.getPlayerByUsername(username);
+
             List<PlayerCard> playerCards = playerCardService.getAllPlayerCardsByPlayerAndState(player, PlayerCardState.fromName(playerCardState));
             List<CardResponse> responseList = new ArrayList<>();
+
             for (PlayerCard playerCard : playerCards) {
-                CardResponse response = new CardResponse(playerCard.getCardConfig().getShape().getName(),
+                CardResponse response = new CardResponse(playerCard.getCardConfig().getNumber(),
+                        playerCard.getCardConfig().getShape().getName(),
                         playerCard.getCardConfig().getRule().getName(),
                         playerCard.getCardConfig().getGame().getName(),
-                        playerCard.getCardConfig().getNumber());
+                        playerCard.getState().getName()
+                        );
                 responseList.add(response);
             }
+
             return new ResponseEntity<>(responseList, HttpStatus.OK);
 
         } catch (UserNotFoundException exception) {
@@ -70,16 +76,21 @@ public class CardsController {
     @RequestMapping(value = "/table/{gameName}/{tableCardState}", method = {RequestMethod.GET}, produces = "application/json")
     public ResponseEntity<?> getTableCards(@PathVariable String gameName, @PathVariable String tableCardState) {
         try {
+
             Game game = gameService.getGameByName(gameName);
             List<TableCard> tableCards = tableCardService.getAllByTableCardStateAndGame(TableCardState.fromName(tableCardState), game);
             List<CardResponse> responseList = new ArrayList<>();
+
             for (TableCard tableCard : tableCards) {
-                CardResponse response = new CardResponse(tableCard.getCardConfig().getShape().getName(),
+                CardResponse response = new CardResponse(tableCard.getCardConfig().getNumber(),
+                        tableCard.getCardConfig().getShape().getName(),
                         tableCard.getCardConfig().getRule().getName(),
                         tableCard.getCardConfig().getGame().getName(),
-                        tableCard.getCardConfig().getNumber());
+                        tableCard.getState().getName()
+                        );
                 responseList.add(response);
             }
+
             return new ResponseEntity<>(responseList, HttpStatus.OK);
 
         } catch (GameNotFoundException exception) {
