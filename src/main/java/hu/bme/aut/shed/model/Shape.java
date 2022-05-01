@@ -3,7 +3,7 @@ package hu.bme.aut.shed.model;
 public enum Shape {
     CLUBS("Clubs"),
     DIAMONDS("Diamonds"),
-    HEART("Heart"),
+    HEARTS("Hearts"),
     SPADES("Spades");
 
     private final String name;
@@ -24,8 +24,8 @@ public enum Shape {
             case "Diamonds":
                 return Shape.DIAMONDS;
 
-            case "Heart":
-                return Shape.HEART;
+            case "Hearts":
+                return Shape.HEARTS;
 
             case "Spades":
                 return Shape.SPADES;
