@@ -52,7 +52,8 @@ public class CardsController {
             List<CardResponse> responseList = new ArrayList<>();
 
             for (PlayerCard playerCard : playerCards) {
-                CardResponse response = new CardResponse(playerCard.getCardConfig().getNumber(),
+                CardResponse response = new CardResponse(playerCard.getCardConfig().getId(),
+                        playerCard.getCardConfig().getNumber(),
                         playerCard.getCardConfig().getShape().getName(),
                         playerCard.getCardConfig().getRule().getName(),
                         playerCard.getCardConfig().getGame().getName(),
@@ -82,7 +83,8 @@ public class CardsController {
             List<CardResponse> responseList = new ArrayList<>();
 
             for (TableCard tableCard : tableCards) {
-                CardResponse response = new CardResponse(tableCard.getCardConfig().getNumber(),
+                CardResponse response = new CardResponse(tableCard.getCardConfig().getId(),
+                        tableCard.getCardConfig().getNumber(),
                         tableCard.getCardConfig().getShape().getName(),
                         tableCard.getCardConfig().getRule().getName(),
                         tableCard.getCardConfig().getGame().getName(),

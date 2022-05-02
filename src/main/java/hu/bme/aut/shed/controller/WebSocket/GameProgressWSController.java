@@ -18,9 +18,9 @@ public class GameProgressWSController {
     @Autowired
     private GameService gameService;
 
-    @MessageMapping("/throw-a-card/{username}/{gameName}")
+    @MessageMapping("/throw-a-card/{gameName}/{username}")
     @SendTo("/topic/{gameName}")
-    public void throwACard(@DestinationVariable String username, @DestinationVariable String gameName) {
+    public void throwACard(@DestinationVariable String gameName, @DestinationVariable String username) {
 
     }
 

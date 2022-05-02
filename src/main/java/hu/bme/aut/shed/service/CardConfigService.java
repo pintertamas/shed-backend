@@ -10,7 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @AllArgsConstructor
@@ -42,15 +45,15 @@ public class CardConfigService {
                     //cardConfigRepository.save(newCard);
                 }
                 CardConfig newCard = new CardConfig();
-                newCard.setNumber(1);
+                newCard.setNumber(15);
                 newCard.setShape(shape);
                 newCard.setGame(game);
-                newCard.setRule(cardRules.get(1));
+                newCard.setRule(cardRules.get(15));
                 cards.add(newCard);
                 //cardConfigRepository.save(newCard);
             }
         }
-        Collections.shuffle(cards);
+        //Collections.shuffle(cards);
         return cardConfigRepository.saveAll(cards);
     }
 
