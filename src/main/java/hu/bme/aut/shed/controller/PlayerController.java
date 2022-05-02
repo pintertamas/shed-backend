@@ -1,7 +1,7 @@
 package hu.bme.aut.shed.controller;
 
 import hu.bme.aut.shed.component.JwtTokenUtil;
-import hu.bme.aut.shed.dto.Response.LobbyMessage;
+import hu.bme.aut.shed.dto.Response.Message;
 import hu.bme.aut.shed.dto.Response.PlayerResponse;
 import hu.bme.aut.shed.exception.*;
 import hu.bme.aut.shed.model.Game;
@@ -80,7 +80,7 @@ public class PlayerController {
             Player player = playerService.getPlayerByUsername(username);
             playerService.disconnectPlayer(username);
             log.info("User (" + username + ") disconnected from the game");
-            simpMessagingTemplate.convertAndSend("/topic/" + player.getGame().getName(), new LobbyMessage("leave", username));
+            simpMessagingTemplate.convertAndSend("/topic/" + player.getGame().getName(), new Message("leave", username));
             return ResponseEntity.ok("Player " + username + "disconnected from the game!");
         } catch (Exception e) {
             log.error(e.getMessage());
