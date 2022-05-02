@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -41,7 +42,6 @@ public class CardConfigService {
                     newCard.setGame(game);
                     newCard.setRule(cardRules.get(cardNumber));
                     cards.add(newCard);
-                    //cardConfigRepository.save(newCard);
                 }
                 CardConfig newCard = new CardConfig();
                 newCard.setNumber(15);
@@ -49,10 +49,9 @@ public class CardConfigService {
                 newCard.setGame(game);
                 newCard.setRule(cardRules.get(15));
                 cards.add(newCard);
-                //cardConfigRepository.save(newCard);
             }
         }
-        //Collections.shuffle(cards);
+        Collections.shuffle(cards);
         return cardConfigRepository.saveAll(cards);
     }
 

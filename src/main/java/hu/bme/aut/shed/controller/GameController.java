@@ -31,9 +31,6 @@ public class GameController {
 
     @Autowired
     private final GameService gameService;
-    @Autowired
-    private final SimpMessagingTemplate simpMessagingTemplate;
-
 
     @RequestMapping(value = "/", method = {RequestMethod.GET}, produces = "application/json")
     public ResponseEntity<?> getGameByName(@RequestParam String gameName) {
