@@ -1,5 +1,6 @@
 package hu.bme.aut.shed.service;
 
+import hu.bme.aut.shed.exception.CardConfigNotFound;
 import hu.bme.aut.shed.model.CardConfig;
 import hu.bme.aut.shed.model.Game;
 import hu.bme.aut.shed.model.Rule;
@@ -10,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -60,13 +58,21 @@ public class CardConfigService {
         List<CardConfig> deletedCards = cardConfigRepository.findAllByGameId(gameId);
         for (CardConfig cardConfig : deletedCards) {
             playerCardService.removeByGameId(cardConfig);       //I delete also the cards which are already been drawn by players
-            tableCardService.removeTableCardsByCardConfig(cardConfig); ////I delete also the cards which are already been drawn by table
+            tableCardService.removeTableCardByCardConfig(cardConfig); ////I delete also the cards which are already been drawn by table
             cardConfigRepository.deleteById(cardConfig.getId());
         }
     }
 
     public List<CardConfig> getCardConfigsByGameId(Long gameId) {
         return cardConfigRepository.findAllByGameId(gameId);
+    }
+
+    public CardConfig getCardConfigById(Long id) throws CardConfigNotFound {
+        Optional<CardConfig> cardConfig = cardConfigRepository.findById(id);
+        if (cardConfig.isEmpty()) {
+            throw new CardConfigNotFound();
+        }
+        return cardConfig.get();
     }
 
 }

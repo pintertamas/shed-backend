@@ -16,4 +16,6 @@ public interface PlayerCardRepository extends JpaRepository<PlayerCard, Long> {
     List<PlayerCard> findAllByPlayer(Player player);
 
     List<PlayerCard> findAllByPlayerAndState(Player player, PlayerCardState tableCardState);
+
+    PlayerCard findByCardConfig(CardConfig cardConfig);
 }

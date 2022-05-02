@@ -18,7 +18,6 @@ public class LobbyWSController {
 
     @Autowired
     private PlayerService playerService;
-
     @Autowired
     private GameService gameService;
 

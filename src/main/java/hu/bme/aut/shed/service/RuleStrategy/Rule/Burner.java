@@ -45,7 +45,7 @@ public class Burner implements RuleStrategy {
                 playerCardService.removeById(playerCard.getId());
                 List<CardConfig> cardConfigs = cardConfigService.getCardConfigsByGameId(playerFrom.getGame().getId());
                 for (CardConfig cardConfig : cardConfigs) {
-                    tableCardService.removeTableCardsByCardConfigAndTableCardState(cardConfig, TableCardState.THROW);
+                    tableCardService.removeTableCardByCardConfigAndTableCardState(cardConfig, TableCardState.THROW);
                 }
             }
         } else {

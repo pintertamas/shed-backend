@@ -146,6 +146,12 @@ public class PlayerService {
         ruleStrategy.get(playerCard.getCardConfig().getRule().name()).throwCard(playerFrom, tableCard, playerCard);
     }
 
+    public void pickCard(Player playerTo, TableCard tableCard) {
+        CardConfig cardConfig = tableCard.getCardConfig();
+        playerCardService.createPlayerCard(cardConfig, playerTo, PlayerCardState.HAND); //This adds card also to player cards list
+        tableCardService.removeTableCardByCardConfig(tableCard.getCardConfig());
+    }
+
 
 }
 

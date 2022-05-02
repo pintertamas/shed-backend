@@ -32,6 +32,10 @@ public class PlayerCardService {
         return playerCardRepository.findAllByPlayer(player);
     }
 
+    public PlayerCard getPlayerCardByCardConfig(CardConfig cardConfig) {
+        return playerCardRepository.findByCardConfig(cardConfig);
+    }
+
     public List<PlayerCard> getAllPlayerCardsByPlayerAndState(Player player, PlayerCardState playerCardState) {
         return playerCardRepository.findAllByPlayerAndState(player, playerCardState);
     }

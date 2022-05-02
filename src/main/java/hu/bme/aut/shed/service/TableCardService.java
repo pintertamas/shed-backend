@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -38,11 +39,21 @@ public class TableCardService {
         return withFilter;
     }
 
-    public void removeTableCardsByCardConfig(CardConfig cardConfig) {
+    public TableCard getLastTableCardOfTheDeck(TableCardState tableCardState, Game game) {
+        List<TableCard> tableCards = this.getAllByTableCardStateAndGame(tableCardState, game);
+        tableCards.sort(Comparator.comparing(TableCard::getId));
+        return tableCards.get(tableCards.size() - 1);
+    }
+
+    public void removeById(Long id) {
+        tableCardRepository.deleteById(id);
+    }
+
+    public void removeTableCardByCardConfig(CardConfig cardConfig) {
         tableCardRepository.deleteByCardConfig(cardConfig);
     }
 
-    public void removeTableCardsByCardConfigAndTableCardState(CardConfig cardConfig, TableCardState tableCardState) {
+    public void removeTableCardByCardConfigAndTableCardState(CardConfig cardConfig, TableCardState tableCardState) {
         tableCardRepository.deleteByCardConfigAndState(cardConfig, tableCardState);
     }
 

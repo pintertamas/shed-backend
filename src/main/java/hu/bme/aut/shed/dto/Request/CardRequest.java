@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class CardRequest {
-    Long id;
+    Long cardConfigId;
     int number;
     String shape;
     String rule;

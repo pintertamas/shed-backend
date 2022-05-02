@@ -1,6 +1,5 @@
 package hu.bme.aut.shed.dto.Response;
 
-import hu.bme.aut.shed.dto.Request.CardRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -12,5 +11,5 @@ public class ActionResponse {
     boolean valid;
     Message message;
     String username;
-    List<CardRequest> cards;
+    List<CardResponse> cards;
 }
