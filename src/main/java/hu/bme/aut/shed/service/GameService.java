@@ -1,6 +1,5 @@
 package hu.bme.aut.shed.service;
 
-import hu.bme.aut.shed.dto.Request.ActionRequest;
 import hu.bme.aut.shed.exception.GameNotFoundException;
 import hu.bme.aut.shed.model.*;
 import hu.bme.aut.shed.repository.GameRepository;
@@ -111,14 +110,6 @@ public class GameService {
         game.setDeck(cardConfigService.getCardConfigsByGameId(game.getId())); //Erre azért van szükség mivel valamilyen természetes ellenes okból kifolyolag megváltozik a connect során a game.deck list mérete,
         // így a cardconfig gameId-ja alapján újra visszaállítom a rendes decket
         return initGame(game);
-    }
-
-    public Game action(ActionRequest action) throws GameNotFoundException {
-        Optional<Game> game = gameRepository.findById(action.getGameId());
-        if (game.isEmpty()) {
-            throw new GameNotFoundException();
-        }
-        return game.get();
     }
 
     public void checkWinCondition() {
