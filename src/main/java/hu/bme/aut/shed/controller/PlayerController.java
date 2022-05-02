@@ -1,6 +1,7 @@
 package hu.bme.aut.shed.controller;
 
 import hu.bme.aut.shed.component.JwtTokenUtil;
+import hu.bme.aut.shed.dto.Response.Message;
 import hu.bme.aut.shed.dto.Response.PlayerResponse;
 import hu.bme.aut.shed.exception.*;
 import hu.bme.aut.shed.model.Game;
@@ -13,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,6 +35,9 @@ public class PlayerController {
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
+
+    @Autowired
+    private SimpMessagingTemplate simpMessagingTemplate;
 
     @RequestMapping(value = "/check-already-in-game/{username}", method = {RequestMethod.GET}, produces = "application/json")
     public ResponseEntity<?> getPlayerGame(@PathVariable String username) {
@@ -64,17 +69,18 @@ public class PlayerController {
         }
     }
 
-    // only for testing purposes
-    @RequestMapping(value = "/disconnect/", method = {RequestMethod.DELETE}, produces = "application/json")
-    public ResponseEntity<?> disconnect(@RequestParam String username) {
+    @RequestMapping(value = "/disconnect/{username}", method = {RequestMethod.DELETE}, produces = "application/json")
+    public ResponseEntity<?> disconnect(@PathVariable String username) {
         try {
             String token = JwtTokenUtil.getToken();
             User currentUser = jwtTokenUtil.getUserFromToken(token);
             if (!username.equals(currentUser.getUsername())) {
                 throw new AuthorizationServiceException("You dont have permission to make changes");
             }
+            Player player = playerService.getPlayerByUsername(username);
             playerService.disconnectPlayer(username);
             log.info("User (" + username + ") disconnected from the game");
+            simpMessagingTemplate.convertAndSend("/topic/" + player.getGame().getName(), new Message("leave", username));
             return ResponseEntity.ok("Player " + username + "disconnected from the game!");
         } catch (Exception e) {
             log.error(e.getMessage());

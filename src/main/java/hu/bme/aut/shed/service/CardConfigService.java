@@ -1,5 +1,6 @@
 package hu.bme.aut.shed.service;
 
+import hu.bme.aut.shed.exception.CardConfigNotFound;
 import hu.bme.aut.shed.model.CardConfig;
 import hu.bme.aut.shed.model.Game;
 import hu.bme.aut.shed.model.Rule;
@@ -24,7 +25,7 @@ public class CardConfigService {
     @Autowired
     private TableCardService tableCardService;
 
-    public ArrayList<CardConfig> createCards(Game game, Map<Integer, Rule> cardRules) throws IllegalArgumentException {
+    public List<CardConfig> createCards(Game game, Map<Integer, Rule> cardRules) throws IllegalArgumentException {
         int numberOfCards = game.getNumberOfDecks() * 13 * Shape.values().length;
         if (game.isJokers()) numberOfCards += 4;
 
@@ -39,19 +40,17 @@ public class CardConfigService {
                     newCard.setGame(game);
                     newCard.setRule(cardRules.get(cardNumber));
                     cards.add(newCard);
-                    cardConfigRepository.save(newCard);
                 }
                 CardConfig newCard = new CardConfig();
-                newCard.setNumber(1);
+                newCard.setNumber(15);
                 newCard.setShape(shape);
                 newCard.setGame(game);
-                newCard.setRule(cardRules.get(1));
+                newCard.setRule(cardRules.get(15));
                 cards.add(newCard);
-                cardConfigRepository.save(newCard);
             }
         }
         Collections.shuffle(cards);
-        return shuffleDeck(cards);
+        return cardConfigRepository.saveAll(cards);
     }
 
     @Transactional
@@ -59,7 +58,7 @@ public class CardConfigService {
         List<CardConfig> deletedCards = cardConfigRepository.findAllByGameId(gameId);
         for (CardConfig cardConfig : deletedCards) {
             playerCardService.removeByGameId(cardConfig);       //I delete also the cards which are already been drawn by players
-            tableCardService.removeTableCardsByCardConfig(cardConfig); ////I delete also the cards which are already been drawn by table
+            tableCardService.removeTableCardByCardConfig(cardConfig); ////I delete also the cards which are already been drawn by table
             cardConfigRepository.deleteById(cardConfig.getId());
         }
     }
@@ -68,21 +67,12 @@ public class CardConfigService {
         return cardConfigRepository.findAllByGameId(gameId);
     }
 
-    public ArrayList<CardConfig> shuffleDeck(ArrayList<CardConfig> cards) {
-        // copy cards to an ArrayList
-        ArrayList<CardConfig> cardsCopy = new ArrayList<>(cards);
-
-        for (int i = 0; i < 30; i++) {
-            shuffleArrayList(cardsCopy);
+    public CardConfig getCardConfigById(Long id) throws CardConfigNotFound {
+        Optional<CardConfig> cardConfig = cardConfigRepository.findById(id);
+        if (cardConfig.isEmpty()) {
+            throw new CardConfigNotFound();
         }
-        return cardsCopy;
+        return cardConfig.get();
     }
 
-    private void shuffleArrayList(ArrayList<?> array) {
-        Random random = new Random();
-
-        for (int i = array.size() - 1; i >= 1; i--) {
-            Collections.swap(array, i, random.nextInt(i + 1));
-        }
-    }
 }

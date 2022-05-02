@@ -1,12 +1,13 @@
 package hu.bme.aut.shed.dto.Request;
 
-import hu.bme.aut.shed.model.CardConfig;
-import hu.bme.aut.shed.model.Player;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
+@AllArgsConstructor
 public class ActionRequest {
-    Long gameId;
-    Player player;
-    CardConfig playedCard;
+    String username;
+    List<CardRequest> cards;
 }

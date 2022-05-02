@@ -13,7 +13,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "player")
+@Entity(name = "Player")
 @Table(name = "players")
 public class Player implements Comparable {
     @Id

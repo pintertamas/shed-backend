@@ -1,13 +1,11 @@
 package hu.bme.aut.shed.dto.Response;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 @AllArgsConstructor
-@Setter
-@Getter
-public class LobbyMessage {
+@Data
+public class Message {
     String type;
     String message;
 }

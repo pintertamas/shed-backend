@@ -1,6 +1,5 @@
 package hu.bme.aut.shed.controller;
 
-import hu.bme.aut.shed.dto.Request.ActionRequest;
 import hu.bme.aut.shed.dto.Request.CardRuleRequest;
 import hu.bme.aut.shed.dto.Request.ConnectionRequest;
 import hu.bme.aut.shed.dto.Request.GameOptionsRequest;
@@ -15,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -32,9 +30,6 @@ public class GameController {
 
     @Autowired
     private final GameService gameService;
-    @Autowired
-    private final SimpMessagingTemplate simpMessagingTemplate;
-
 
     @RequestMapping(value = "/", method = {RequestMethod.GET}, produces = "application/json")
     public ResponseEntity<?> getGameByName(@RequestParam String gameName) {
@@ -87,18 +82,6 @@ public class GameController {
             return ResponseEntity.ok(gameResponse);
         } catch (GameNotFoundException exception) {
             log.error(exception.getMessage());
-            return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @RequestMapping(value = "/action", method = {RequestMethod.POST}, produces = "application/json")
-    public ResponseEntity<?> gamePlay(@RequestBody ActionRequest request) {
-        log.info("action: {}", request);
-        try {
-            Game game = gameService.action(request);
-            simpMessagingTemplate.convertAndSend("/topic/action/" + game.getId(), game);
-            return ResponseEntity.ok(game);
-        } catch (GameNotFoundException exception) {
             return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
