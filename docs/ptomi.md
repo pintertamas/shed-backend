@@ -100,3 +100,12 @@ Találtunk egy nagy hibát a websocketünkkel, amit nagyon sokáig debugoltunk, 
 Úgy oldottuk ezt meg, hogy én nyomoztam a kód websocketes részeiben, Tomi pedig a Herokus logokat mondta nekem. Egy idő után (és plusz logok bevezetésével) feltűnt, hogy gyanúsan sokszor próbál a webes kliens becsatlakozni a websocketre és ezt a tudást felhasználva megtaláltuk frontenden a hibát, ami az volt, hogy a Lobby képernyőt hasznosítottam újra weben is, viszont mivel mobilon ez a képernyő csatlakoztatja be a játékosokat a websocketre, ez felülírta a weben már meglévő websocket kapcsolatot.
 Ezzel nagyon sok időnk ment el, de szerencsére most már minden jól működik.
 Mobilon kijavítottam a register és login képernyőn egy overflow bugot és bevezettem projekt szinten a gombok letiltását, így most kattintás után nem működnek amíg el nem végzik a feladatukat.
+Megcsináltam a mobilos játék képernyőt, amin már lehet kártyákat kiválasztani (még nem teljesen tökéletes, javításra szorul), valamint a websocketre üzeneteket küldeni.
+A terv az, hogy a backendnek küld a mobil egy olyan üzenetet, ami a kártyák listáját tárolja id-val együtt és egy usernevet, amit amikor megkap a backend, kiértékel (hogy szabályos-e a lépés) és válaszban visszaküldi a sikerességet, hiba esetén meg a hiba megnevezését.
+Abban az esetben ha a játékosnak kevesebb, mint 3 lapja van, vagy húznia kell midnenképpen, a szerver a válaszban elküldi a húzott lapokat is.
+Ha a mobil azt kapja, hogy sikeres volt a lépés, akkor kitörli a lerakott kártyáit, ha viszont sikertelen volt, akkor kitörli a választott kártyák listáját.
+A kártyák állapotához a sima Provider könyvtárat használom, egyelőre még vannak vele hibák, de majd ha teljseen megértem a működését akkor szerintem elég lesz erre a feladatra.
+A kártyák animálására az a tervem, hogy a választott kártyák megnőnek és a lerakásukkor egy oldalra csúszó animációt fogok használni.
+Mivel nem vagyok annyira tisztában az animációkkal, ezért kerestem egy könyvtárat ami ilyenekre képes és az AnimatedList-et találtam, ami segítségével egész szép animációkat fogok tudni készíteni, remélhetőleg kevés energia befektetéssel is.
+A jelenlegi célom a mobilos képernyő tökéletesítése, főképp a websocketes kommunikációé.
+Ezek után fogom majd a webes képernyőt megcsinálni.
