@@ -8,7 +8,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class ActionResponse {
-    boolean valid;
+    String validity;
     Message message;
     String username;
     List<CardResponse> cards;

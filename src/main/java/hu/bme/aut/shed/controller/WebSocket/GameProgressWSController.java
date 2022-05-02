@@ -71,27 +71,27 @@ public class GameProgressWSController {
                 tableCardService.removeById(lastPickTableCard.getId());
             }
 
-            return new ActionResponse(true, null, username, pickPlayerCards);
+            return new ActionResponse("valid", null, username, pickPlayerCards);
 
         } catch (GameNotFoundException exception) {
             LoggerFactory.getLogger(this.getClass()).info("Game with name (" + gameName + ") not found!");
-            return new ActionResponse(false, new Message("error", exception.getMessage()), username, null);
+            return new ActionResponse("invalid", new Message("error", exception.getMessage()), username, null);
 
         } catch (UserNotFoundException exception) {
             LoggerFactory.getLogger(this.getClass()).info("User with name (" + username + ") not found!");
-            return new ActionResponse(false, new Message("error", exception.getMessage()), username, null);
+            return new ActionResponse("invalid", new Message("error", exception.getMessage()), username, null);
 
         } catch (CantThrowCardException exception) {
             LoggerFactory.getLogger(this.getClass()).info("Can't throw this card");
-            return new ActionResponse(false, new Message("error", exception.getMessage()), username, null);
+            return new ActionResponse("invalid", new Message("error", exception.getMessage()), username, null);
 
         } catch (CardConfigNotFound exception) {
             LoggerFactory.getLogger(this.getClass()).info("Card not found");
-            return new ActionResponse(false, new Message("error", exception.getMessage()), username, null);
+            return new ActionResponse("invalid", new Message("error", exception.getMessage()), username, null);
 
         } catch (Exception exception) {
             LoggerFactory.getLogger(this.getClass()).info("You Can't Play these Cards");
-            return new ActionResponse(false, new Message("error", exception.getMessage()), username, null);
+            return new ActionResponse("invalid", new Message("error", exception.getMessage()), username, null);
         }
     }
 
@@ -105,15 +105,15 @@ public class GameProgressWSController {
             return null;
         } catch (GameNotFoundException exception) {
             LoggerFactory.getLogger(this.getClass()).info("Game with name (" + gameName + ") not found!");
-            return new ActionResponse(false, new Message("error", exception.getMessage()), username, null);
+            return new ActionResponse("invalid", new Message("error", exception.getMessage()), username, null);
 
         } catch (UserNotFoundException exception) {
             LoggerFactory.getLogger(this.getClass()).info("User with name (" + username + ") not found!");
-            return new ActionResponse(false, new Message("error", exception.getMessage()), username, null);
+            return new ActionResponse("invalid", new Message("error", exception.getMessage()), username, null);
 
         } catch (Exception exception) {
             LoggerFactory.getLogger(this.getClass()).info("You Can't Play these Cards");
-            return new ActionResponse(false, new Message("error", exception.getMessage()), username, null);
+            return new ActionResponse("invalid", new Message("error", exception.getMessage()), username, null);
         }
     }
 
