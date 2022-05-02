@@ -1,13 +1,15 @@
 package hu.bme.aut.shed.dto.Request;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 
-@AllArgsConstructor
 @Data
-public class CardRuleRequest {
+@AllArgsConstructor
+public class CardRequest {
+    Long id;
     int number;
+    String shape;
     String rule;
+    String gameName;
+    String state;
 }

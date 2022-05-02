@@ -1,6 +1,6 @@
-package hu.bme.aut.shed.dto.Request;
+package hu.bme.aut.shed.dto.Response;
 
-import hu.bme.aut.shed.model.Player;
+import hu.bme.aut.shed.dto.Request.CardRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -8,7 +8,8 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class ActionRequest {
+public class ActionResponse {
     String username;
+    boolean Valid;
     List<CardRequest> cards;
 }
