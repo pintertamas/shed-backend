@@ -109,7 +109,25 @@ public class GameService {
         Game game = getGameById(id);
         game.setDeck(cardConfigService.getCardConfigsByGameId(game.getId())); //Erre azért van szükség mivel valamilyen természetes ellenes okból kifolyolag megváltozik a connect során a game.deck list mérete,
         // így a cardconfig gameId-ja alapján újra visszaállítom a rendes decket
+        game.setCurrentPlayer(game.getPlayers().get(0));
         return initGame(game);
+    }
+
+    public void setNextPlayer(Game game) {
+        Player player = game.getCurrentPlayer();
+
+        int index = game.getPlayers().indexOf(player);
+        int lastPlayerIndex = game.getPlayers().size() - 1;
+
+        if (index + 1 > lastPlayerIndex) {
+            Player firstPlayerOfTheList = game.getPlayers().get(0);
+            game.setCurrentPlayer(firstPlayerOfTheList);
+
+        } else {
+            Player nextPlayer = game.getPlayers().get(index + 1);
+            game.setCurrentPlayer(nextPlayer);
+        }
+        gameRepository.save(game);
     }
 
     public void checkWinCondition() {

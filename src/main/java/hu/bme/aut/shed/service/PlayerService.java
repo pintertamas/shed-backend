@@ -114,6 +114,22 @@ public class PlayerService {
             LoggerFactory.getLogger(this.getClass()).info("Deleting: " + String.valueOf(playerCard.getId()));
             playerCardService.removeById(playerCard.getId());
         }
+
+        if (game.getPlayers().size() == 1) {
+            game.setCurrentPlayer(null);
+        } else {
+            Player currentPlayer = game.getCurrentPlayer();
+            int index = game.getPlayers().indexOf(currentPlayer);
+            int lastPlayerIndex = game.getPlayers().size() - 1;
+            if (index + 1 > lastPlayerIndex) {
+                Player firstPlayerOfTheList = game.getPlayers().get(0);
+                game.setCurrentPlayer(firstPlayerOfTheList);
+            } else {
+                Player nextPlayer = game.getPlayers().get(index + 1);
+                game.setCurrentPlayer(nextPlayer);
+            }
+        }
+
         game.getPlayers().remove(player);
         gameRepository.save(game);
         playerRepository.deleteById(player.getId());

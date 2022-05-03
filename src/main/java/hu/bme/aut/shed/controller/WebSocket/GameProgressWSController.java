@@ -4,10 +4,7 @@ import hu.bme.aut.shed.dto.Request.ActionRequest;
 import hu.bme.aut.shed.dto.Response.ActionResponse;
 import hu.bme.aut.shed.dto.Response.CardResponse;
 import hu.bme.aut.shed.dto.Response.Message;
-import hu.bme.aut.shed.exception.CantThrowCardException;
-import hu.bme.aut.shed.exception.CardConfigNotFound;
-import hu.bme.aut.shed.exception.GameNotFoundException;
-import hu.bme.aut.shed.exception.UserNotFoundException;
+import hu.bme.aut.shed.exception.*;
 import hu.bme.aut.shed.model.*;
 import hu.bme.aut.shed.service.*;
 import org.slf4j.LoggerFactory;
@@ -41,6 +38,10 @@ public class GameProgressWSController {
             Player player = playerService.getPlayerByUsername(username);
             player.setCards(playerCardService.getPlayerCardsByPlayer(player)); //I set the players cards list for safety purposes
 
+            if (game.getCurrentPlayer() != player) {
+                throw new NotYourRoundException();
+            }
+
             for (int i = 0; i < actionRequest.getCards().size(); i++) {
                 TableCard lastPickTableCard = tableCardService.getLastTableCardOfTheDeck(TableCardState.PICK, game);
                 CardConfig cardConfig = cardConfigService.getCardConfigById(actionRequest.getCards().get(i).getCardConfigId());
@@ -71,6 +72,7 @@ public class GameProgressWSController {
                 tableCardService.removeById(lastPickTableCard.getId());
             }
 
+            gameService.setNextPlayer(game);
             return new ActionResponse("valid", null, username, pickPlayerCards);
 
         } catch (GameNotFoundException exception) {
@@ -79,6 +81,10 @@ public class GameProgressWSController {
 
         } catch (UserNotFoundException exception) {
             LoggerFactory.getLogger(this.getClass()).info("User with name (" + username + ") not found!");
+            return new ActionResponse("invalid", new Message("error", exception.getMessage()), username, null);
+
+        } catch (NotYourRoundException exception) {
+            LoggerFactory.getLogger(this.getClass()).info("Not your round");
             return new ActionResponse("invalid", new Message("error", exception.getMessage()), username, null);
 
         } catch (CantThrowCardException exception) {
