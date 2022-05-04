@@ -43,13 +43,18 @@ public class GameProgressWSController {
             }
 
             for (int i = 0; i < actionRequest.getCards().size(); i++) {
-                TableCard lastPickTableCard = tableCardService.getLastTableCardOfTheDeck(TableCardState.PICK, game);
+                TableCard lastThrowTableCard = tableCardService.getLastTableCard(TableCardState.THROW, game);
                 CardConfig cardConfig = cardConfigService.getCardConfigById(actionRequest.getCards().get(i).getCardConfigId());
                 PlayerCard playerCard = playerCardService.getPlayerCardByCardConfig(cardConfig);
 
-                playerService.throwCard(player, lastPickTableCard, playerCard);
+                playerService.throwCard(player, lastThrowTableCard, playerCard);
 
-                tableCardService.removeById(lastPickTableCard.getId());
+                boolean fourLastSame = tableCardService.checkSameFourLastThrowTableCard(game);
+                if (fourLastSame) {
+                    tableCardService.removeAllTableCardByTableCardStateAndGame(TableCardState.THROW, game);
+                }
+
+                //tableCardService.removeById(lastPickTableCard.getId());
             }
 
             List<CardResponse> pickPlayerCards = new ArrayList<>();
@@ -57,7 +62,7 @@ public class GameProgressWSController {
             LoggerFactory.getLogger(this.getClass()).info("Player card size: " + player.getCards().size());
             while (player.getCards().size() != 3) {
 
-                TableCard lastPickTableCard = tableCardService.getLastTableCardOfTheDeck(TableCardState.PICK, game);
+                TableCard lastPickTableCard = tableCardService.getLastTableCard(TableCardState.PICK, game);
                 playerService.pickCard(player, lastPickTableCard);
 
                 CardResponse cardResponse = new CardResponse(lastPickTableCard.getCardConfig().getId(),
@@ -73,6 +78,7 @@ public class GameProgressWSController {
             }
 
             gameService.setNextPlayer(game);
+
             return new ActionResponse("valid", null, username, pickPlayerCards);
 
         } catch (GameNotFoundException exception) {

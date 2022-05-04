@@ -39,10 +39,31 @@ public class TableCardService {
         return withFilter;
     }
 
-    public TableCard getLastTableCardOfTheDeck(TableCardState tableCardState, Game game) {
+    public TableCard getLastTableCard(TableCardState tableCardState, Game game) {
         List<TableCard> tableCards = this.getAllByTableCardStateAndGame(tableCardState, game);
         tableCards.sort(Comparator.comparing(TableCard::getId));
+        if (tableCards.size() == 0) {
+            return null;
+        }
         return tableCards.get(tableCards.size() - 1);
+    }
+
+    public boolean checkSameFourLastThrowTableCard(Game game) {
+        List<TableCard> tableCards = this.getAllByTableCardStateAndGame(TableCardState.THROW, game);
+        tableCards.sort(Comparator.comparing(TableCard::getId));
+        boolean fourLastSame = false;
+        if (tableCards.size() >= 4) {
+            for (int i = tableCards.size() - 1; i > tableCards.size() - 4; i--) {
+                if (tableCards.get(i).getCardConfig().getNumber() == tableCards.get(i - 1).getCardConfig().getNumber()) {
+                    fourLastSame = true;
+                } else {
+                    fourLastSame = false;
+                    break;
+                }
+            }
+
+        }
+        return false;
     }
 
     public void removeById(Long id) {
@@ -55,6 +76,11 @@ public class TableCardService {
 
     public void removeTableCardByCardConfigAndTableCardState(CardConfig cardConfig, TableCardState tableCardState) {
         tableCardRepository.deleteByCardConfigAndState(cardConfig, tableCardState);
+    }
+
+    public void removeAllTableCardByTableCardStateAndGame(TableCardState tableCardState, Game game) {
+        List<TableCard> tableCards = this.getAllByTableCardStateAndGame(tableCardState, game);
+        tableCardRepository.deleteAll(tableCards);
     }
 
 }

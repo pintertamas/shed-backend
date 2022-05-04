@@ -159,6 +159,9 @@ public class PlayerService {
     }
 
     public void throwCard(Player playerFrom, TableCard tableCard, PlayerCard playerCard) throws CantThrowCardException {
+        if (tableCard == null) {                                                  //If we dont a have a throw table card then all card works like a jolly
+            ruleStrategy.get("JOLLY_JOKER").throwCard(playerFrom, tableCard, playerCard);
+        }
         ruleStrategy.get(playerCard.getCardConfig().getRule().name()).throwCard(playerFrom, tableCard, playerCard);
     }
 

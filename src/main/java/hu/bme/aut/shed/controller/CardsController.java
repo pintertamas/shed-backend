@@ -43,7 +43,7 @@ public class CardsController {
             String token = JwtTokenUtil.getToken();
             User currentUser = jwtTokenUtil.getUserFromToken(token);
             if (!username.equals(currentUser.getUsername())) {
-                throw new AuthorizationServiceException("You dont have permission to make changes");
+                throw new AuthorizationServiceException("You dont have permission to get data");
             }
 
             Player player = playerService.getPlayerByUsername(username);
