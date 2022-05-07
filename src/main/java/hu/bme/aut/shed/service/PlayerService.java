@@ -101,9 +101,11 @@ public class PlayerService {
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     public void disconnectPlayer(String username) {
-        LoggerFactory.getLogger(this.getClass()).info(String.valueOf(playerRepository.findAll().size()));
+        LoggerFactory.getLogger(this.getClass()).info("Players in tables" + String.valueOf(playerRepository.findAll().size()));
         Player player = playerRepository.findByUsername(username);
         Game game = player.getGame();
+        LoggerFactory.getLogger(this.getClass()).info("Players in tables" + String.valueOf(game.getPlayers().size()));
+
         player.setCards(playerCardService.getPlayerCardsByPlayer(player));
         LoggerFactory.getLogger(this.getClass()).info("Player cardSize : " + String.valueOf(player.getCards().size()));
         for (PlayerCard playerCard : player.getCards()) {
@@ -115,6 +117,7 @@ public class PlayerService {
             playerCardService.removeById(playerCard.getId());
         }
 
+        LoggerFactory.getLogger(this.getClass()).info("2.Players in tables" + String.valueOf(game.getPlayers().size()));
         if (game.getPlayers().size() == 1) {
             game.setCurrentPlayer(null);
         } else {

@@ -44,8 +44,8 @@ public class GameProgressWSController {
 
             for (int i = 0; i < actionRequest.getCards().size(); i++) {
                 TableCard lastThrowTableCard = tableCardService.getLastTableCard(TableCardState.THROW, game);
-                CardConfig cardConfig = cardConfigService.getCardConfigById(actionRequest.getCards().get(i).getCardConfigId());
-                PlayerCard playerCard = playerCardService.getPlayerCardByCardConfig(cardConfig);
+                CardConfig cardConfig = cardConfigService.getCardConfigById(actionRequest.getCards().get(i).getCardConfigId());//Checked if its real if its not then throw error
+                PlayerCard playerCard = playerCardService.getPlayerCardByCardConfig(cardConfig);//Checked if its real if not then throw error
 
                 playerService.throwCard(player, lastThrowTableCard, playerCard);
 
