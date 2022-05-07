@@ -65,17 +65,18 @@ public class GameProgressWSController {
             }
 
             List<CardResponse> pickPlayerCards = new ArrayList<>();
-            LoggerFactory.getLogger(this.getClass()).info(String.valueOf("idaig 9"));
             LoggerFactory.getLogger(this.getClass()).info("Player card size: " + player.getCards().size());
             List<PlayerCard> InHandsCards = playerCardService.getAllPlayerCardsByPlayerAndState(player, PlayerCardState.HAND);
             LoggerFactory.getLogger(this.getClass()).info("Player HandCard size: " + InHandsCards.size());
+
             while (InHandsCards.size() < 3) {
                 if (tableCardService.getAllByTableCardStateAndGame(TableCardState.PICK, game).size() == 0) {
                     break;
                 }
-                LoggerFactory.getLogger(this.getClass()).info(String.valueOf("idaig 10"));
+                LoggerFactory.getLogger(this.getClass()).info(String.valueOf("idaig 9"));
                 TableCard lastPickTableCard = tableCardService.getLastTableCard(TableCardState.PICK, game);
                 playerService.pickCard(player, lastPickTableCard);
+                InHandsCards = playerCardService.getAllPlayerCardsByPlayerAndState(player, PlayerCardState.HAND);
                 LoggerFactory.getLogger(this.getClass()).info(String.valueOf("Card has been drawn : " + lastPickTableCard.getId()));
                 LoggerFactory.getLogger(this.getClass()).info("Player HandCard size: " + InHandsCards.size());
                 CardResponse cardResponse = new CardResponse(lastPickTableCard.getCardConfig().getId(),
@@ -87,10 +88,10 @@ public class GameProgressWSController {
                 );
                 pickPlayerCards.add(cardResponse);
             }
-            LoggerFactory.getLogger(this.getClass()).info(String.valueOf("idaig 11"));
+
             gameService.setNextPlayer(game);
             LoggerFactory.getLogger(this.getClass()).info(String.valueOf("NextPlayer :" + game.getCurrentPlayer()));
-            LoggerFactory.getLogger(this.getClass()).info(String.valueOf("ThrowCardEnds"));
+            LoggerFactory.getLogger(this.getClass()).info(String.valueOf("ThrowCardMethodEnds"));
             return new ActionResponse(UUID.randomUUID().toString(), "valid", null, username, pickPlayerCards);
 
         } catch (GameNotFoundException exception) {
