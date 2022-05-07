@@ -46,6 +46,10 @@ public class GameProgressWSController {
                 throw new NotYourRoundException();
             }
 
+            if (actionRequest.getCards().size() == 0) {
+                throw new NoCardsSelectedException();
+            }
+
             for (int i = 0; i < actionRequest.getCards().size(); i++) {
                 TableCard lastThrowTableCard = tableCardService.getLastTableCard(TableCardState.THROW, game);
                 CardConfig cardConfig = cardConfigService.getCardConfigById(actionRequest.getCards().get(i).getCardConfigId());//Checked if its real if its not then throw error

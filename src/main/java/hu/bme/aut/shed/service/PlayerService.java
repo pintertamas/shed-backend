@@ -28,7 +28,7 @@ public class PlayerService {
     private final UserService userService;
     @Autowired
     private final TableCardService tableCardService;
-    ;
+
     @Autowired
     private final PlayerCardStateHelperService playerCardStateHelperService;
 
