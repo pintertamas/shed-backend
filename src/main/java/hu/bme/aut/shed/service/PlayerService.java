@@ -174,7 +174,7 @@ public class PlayerService {
         }
         LoggerFactory.getLogger(this.getClass()).info(String.valueOf("idaig 6"));
     }
-
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public void pickCard(Player playerTo, TableCard tableCard) {
         CardConfig cardConfig = tableCard.getCardConfig();
         playerCardService.createPlayerCard(cardConfig, playerTo, PlayerCardState.HAND); //This adds card also to player cards list

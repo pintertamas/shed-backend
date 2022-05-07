@@ -82,8 +82,6 @@ public class GameProgressWSController {
                         lastPickTableCard.getState().getName()
                 );
                 pickPlayerCards.add(cardResponse);
-
-                tableCardService.removeById(lastPickTableCard.getId());
             }
             LoggerFactory.getLogger(this.getClass()).info(String.valueOf("idaig 11"));
             gameService.setNextPlayer(game);
