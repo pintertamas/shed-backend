@@ -77,7 +77,7 @@ public class GameProgressWSController {
                 TableCard lastPickTableCard = tableCardService.getLastTableCard(TableCardState.PICK, game);
                 playerService.pickCard(player, lastPickTableCard);
                 LoggerFactory.getLogger(this.getClass()).info(String.valueOf("Card has been drawn : " + lastPickTableCard.getId()));
-
+                LoggerFactory.getLogger(this.getClass()).info("Player HandCard size: " + InHandsCards.size());
                 CardResponse cardResponse = new CardResponse(lastPickTableCard.getCardConfig().getId(),
                         lastPickTableCard.getCardConfig().getNumber(),
                         lastPickTableCard.getCardConfig().getShape().getName(),
