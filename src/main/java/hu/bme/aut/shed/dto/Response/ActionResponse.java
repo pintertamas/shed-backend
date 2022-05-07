@@ -8,6 +8,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class ActionResponse {
+    String uuid;
     String type;
     Message message;
     String username;

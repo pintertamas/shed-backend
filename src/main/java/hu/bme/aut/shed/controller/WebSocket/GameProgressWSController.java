@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Controller
 public class GameProgressWSController {
@@ -51,6 +52,7 @@ public class GameProgressWSController {
                 PlayerCard playerCard = playerCardService.getPlayerCardByCardConfig(cardConfig);//Checked if its real if not then throw error
 
                 playerService.throwCard(player, lastThrowTableCard, playerCard);
+                LoggerFactory.getLogger(this.getClass()).info(String.valueOf("Card has been thrown : " + playerCard.getId()));
 
                 boolean fourLastSame = tableCardService.checkSameFourLastThrowTableCard(game);
                 LoggerFactory.getLogger(this.getClass()).info(String.valueOf("FourLastSame : " + fourLastSame));
@@ -65,15 +67,16 @@ public class GameProgressWSController {
             List<CardResponse> pickPlayerCards = new ArrayList<>();
             LoggerFactory.getLogger(this.getClass()).info(String.valueOf("idaig 9"));
             LoggerFactory.getLogger(this.getClass()).info("Player card size: " + player.getCards().size());
-            List<PlayerCard> InHandsCards = playerCardService.getAllPlayerCardsByPlayerAndState(player,PlayerCardState.HAND);
+            List<PlayerCard> InHandsCards = playerCardService.getAllPlayerCardsByPlayerAndState(player, PlayerCardState.HAND);
             LoggerFactory.getLogger(this.getClass()).info("Player HandCard size: " + InHandsCards.size());
             while (InHandsCards.size() < 3) {
-                if(tableCardService.getAllByTableCardStateAndGame(TableCardState.PICK,game).size() == 0){
+                if (tableCardService.getAllByTableCardStateAndGame(TableCardState.PICK, game).size() == 0) {
                     break;
                 }
                 LoggerFactory.getLogger(this.getClass()).info(String.valueOf("idaig 10"));
                 TableCard lastPickTableCard = tableCardService.getLastTableCard(TableCardState.PICK, game);
                 playerService.pickCard(player, lastPickTableCard);
+                LoggerFactory.getLogger(this.getClass()).info(String.valueOf("Card has been drawn : " + lastPickTableCard.getId()));
 
                 CardResponse cardResponse = new CardResponse(lastPickTableCard.getCardConfig().getId(),
                         lastPickTableCard.getCardConfig().getNumber(),
@@ -86,33 +89,34 @@ public class GameProgressWSController {
             }
             LoggerFactory.getLogger(this.getClass()).info(String.valueOf("idaig 11"));
             gameService.setNextPlayer(game);
-            LoggerFactory.getLogger(this.getClass()).info(String.valueOf("idaig 12"));
-            return new ActionResponse("valid", null, username, pickPlayerCards);
+            LoggerFactory.getLogger(this.getClass()).info(String.valueOf("NextPlayer :" + game.getCurrentPlayer()));
+            LoggerFactory.getLogger(this.getClass()).info(String.valueOf("ThrowCardEnds"));
+            return new ActionResponse(UUID.randomUUID().toString(), "valid", null, username, pickPlayerCards);
 
         } catch (GameNotFoundException exception) {
             LoggerFactory.getLogger(this.getClass()).info("Game with name (" + gameName + ") not found!");
-            return new ActionResponse("invalid", new Message("error", exception.getMessage()), username, null);
+            return new ActionResponse(UUID.randomUUID().toString(), "invalid", new Message("error", exception.getMessage()), username, null);
 
         } catch (UserNotFoundException exception) {
             LoggerFactory.getLogger(this.getClass()).info("User with name (" + username + ") not found!");
-            return new ActionResponse("invalid", new Message("error", exception.getMessage()), username, null);
+            return new ActionResponse(UUID.randomUUID().toString(), "invalid", new Message("error", exception.getMessage()), username, null);
 
         } catch (NotYourRoundException exception) {
             LoggerFactory.getLogger(this.getClass()).info("Not your round");
-            return new ActionResponse("invalid", new Message("error", exception.getMessage()), username, null);
+            return new ActionResponse(UUID.randomUUID().toString(), "invalid", new Message("error", exception.getMessage()), username, null);
 
         } catch (CantThrowCardException exception) {
             LoggerFactory.getLogger(this.getClass()).info("Can't throw this card");
-            return new ActionResponse("invalid", new Message("error", exception.getMessage()), username, null);
+            return new ActionResponse(UUID.randomUUID().toString(), "invalid", new Message("error", exception.getMessage()), username, null);
 
         } catch (CardConfigNotFound exception) {
             LoggerFactory.getLogger(this.getClass()).info("Card not found");
-            return new ActionResponse("invalid", new Message("error", exception.getMessage()), username, null);
+            return new ActionResponse(UUID.randomUUID().toString(), "invalid", new Message("error", exception.getMessage()), username, null);
 
         } catch (Exception exception) {
             LoggerFactory.getLogger(this.getClass()).info("You Can't Play these Cards");
             LoggerFactory.getLogger(this.getClass()).info(exception.getMessage());
-            return new ActionResponse("invalid", new Message("error", exception.getMessage()), username, null);
+            return new ActionResponse(UUID.randomUUID().toString(), "invalid", new Message("error", exception.getMessage()), username, null);
         }
     }
 
@@ -126,15 +130,15 @@ public class GameProgressWSController {
             return null;
         } catch (GameNotFoundException exception) {
             LoggerFactory.getLogger(this.getClass()).info("Game with name (" + gameName + ") not found!");
-            return new ActionResponse("invalid", new Message("error", exception.getMessage()), username, null);
+            return new ActionResponse(UUID.randomUUID().toString(), "invalid", new Message("error", exception.getMessage()), username, null);
 
         } catch (UserNotFoundException exception) {
             LoggerFactory.getLogger(this.getClass()).info("User with name (" + username + ") not found!");
-            return new ActionResponse("invalid", new Message("error", exception.getMessage()), username, null);
+            return new ActionResponse(UUID.randomUUID().toString(), "invalid", new Message("error", exception.getMessage()), username, null);
 
         } catch (Exception exception) {
             LoggerFactory.getLogger(this.getClass()).info("You Can't Play these Cards");
-            return new ActionResponse("invalid", new Message("error", exception.getMessage()), username, null);
+            return new ActionResponse(UUID.randomUUID().toString(), "invalid", new Message("error", exception.getMessage()), username, null);
         }
     }
 

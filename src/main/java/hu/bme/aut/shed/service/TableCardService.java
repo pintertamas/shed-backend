@@ -71,10 +71,12 @@ public class TableCardService {
     public void removeById(Long id) {
         tableCardRepository.deleteById(id);
     }
+
     @Transactional
     public void removeTableCardByCardConfig(CardConfig cardConfig) {
         tableCardRepository.deleteByCardConfig(cardConfig);
     }
+
     @Transactional
     public void removeTableCardByCardConfigAndTableCardState(CardConfig cardConfig, TableCardState tableCardState) {
         tableCardRepository.deleteByCardConfigAndState(cardConfig, tableCardState);
