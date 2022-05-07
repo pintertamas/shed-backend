@@ -4,6 +4,7 @@ import hu.bme.aut.shed.exception.*;
 import hu.bme.aut.shed.model.*;
 import hu.bme.aut.shed.repository.GameRepository;
 import hu.bme.aut.shed.repository.PlayerRepository;
+import hu.bme.aut.shed.service.PlayerCardStateStrategy.PlayerCardStateStrategy;
 import hu.bme.aut.shed.service.RuleStrategy.RuleStrategy;
 import lombok.AllArgsConstructor;
 import org.slf4j.LoggerFactory;
@@ -33,7 +34,7 @@ public class PlayerService {
     @Autowired
     private final CardConfigService cardConfigService;
     @Autowired
-    private final Map<String, RuleStrategy> ruleStrategy;
+    private final Map<String, PlayerCardStateStrategy> playerCardStateStrategy;
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     public List<Player> getPlayersByGame(Game game) {
@@ -165,14 +166,7 @@ public class PlayerService {
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public void throwCard(Player playerFrom, TableCard tableCard, PlayerCard playerCard) throws CantThrowCardException {
-        LoggerFactory.getLogger(this.getClass()).info(String.valueOf("idaig 1"));
-        if (tableCard == null) {                                                  //If we dont a have a throw table card then all card works like a jolly
-            LoggerFactory.getLogger(this.getClass()).info(String.valueOf("idaig 2"));
-            ruleStrategy.get("JOLLY_JOKER").throwCard(playerFrom, tableCard, playerCard);
-        } else {
-            ruleStrategy.get(playerCard.getCardConfig().getRule().name()).throwCard(playerFrom, tableCard, playerCard);
-        }
-        LoggerFactory.getLogger(this.getClass()).info(String.valueOf("idaig 6"));
+        playerCardStateStrategy.get(playerCard.getState().name()).throwCard(playerFrom, tableCard, playerCard);
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
