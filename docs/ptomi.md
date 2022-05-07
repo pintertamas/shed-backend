@@ -109,3 +109,7 @@ A kártyák animálására az a tervem, hogy a választott kártyák megnőnek �
 Mivel nem vagyok annyira tisztában az animációkkal, ezért kerestem egy könyvtárat ami ilyenekre képes és az AnimatedList-et találtam, ami segítségével egész szép animációkat fogok tudni készíteni, remélhetőleg kevés energia befektetéssel is.
 A jelenlegi célom a mobilos képernyő tökéletesítése, főképp a websocketes kommunikációé.
 Ezek után fogom majd a webes képernyőt megcsinálni.
+
+## 12. hét
+A kártya rakás hibáin dolgoztam, hogy rendesen lehessen rakni kártyát a játékosoknak, ami után a képernyő frissül és az újonnan húzott kártyák is látszódnak.
+Egyelőre nem működik a képernyő frissítés és a húzott kártyák parsolása, de a websocketen való rakó kártyák küldése működik és a visszajövő üzeneteket is le tudja már kezelni az alkalmazás.
