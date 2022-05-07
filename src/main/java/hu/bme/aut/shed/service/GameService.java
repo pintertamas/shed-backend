@@ -112,8 +112,7 @@ public class GameService {
         if(game.getPlayers().size()==0){
             throw new NoPlayersInTheRoomException();
         }
-        game.setDeck(cardConfigService.getCardConfigsByGameId(game.getId())); //Erre azért van szükség mivel valamilyen természetes ellenes okból kifolyolag megváltozik a connect során a game.deck list mérete,
-        // így a cardconfig gameId-ja alapján újra visszaállítom a rendes decket
+        game.setDeck(cardConfigService.getCardConfigsByGameId(game.getId())); //Erre azért van szükség mivel valamilyen természetes ellenes okból kifolyolag megváltozik a connect során a game.deck list mérete, így a cardconfig gameId-ja alapján újra visszaállítom a rendes decket
         game.setCurrentPlayer(game.getPlayers().get(0));
         return initGame(game);
     }

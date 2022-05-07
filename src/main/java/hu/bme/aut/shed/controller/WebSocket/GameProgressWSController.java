@@ -106,6 +106,7 @@ public class GameProgressWSController {
 
         } catch (Exception exception) {
             LoggerFactory.getLogger(this.getClass()).info("You Can't Play these Cards");
+            LoggerFactory.getLogger(this.getClass()).info(exception.getMessage());
             return new ActionResponse("invalid", new Message("error", exception.getMessage()), username, null);
         }
     }
