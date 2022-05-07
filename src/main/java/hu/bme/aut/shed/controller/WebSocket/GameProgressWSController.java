@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 public class GameProgressWSController {
@@ -38,9 +39,9 @@ public class GameProgressWSController {
             Player player = playerService.getPlayerByUsername(username);
             player.setCards(playerCardService.getPlayerCardsByPlayer(player)); //I set the players cards list for safety purposes
 
-            LoggerFactory.getLogger(this.getClass()).info("1.Player" + player.getUsername());
-            LoggerFactory.getLogger(this.getClass()).info("1.1Player: " + player.getGame().getCurrentPlayer().getUsername());
-            if (game.getCurrentPlayer() != player) {
+            LoggerFactory.getLogger(this.getClass()).info("Player  :" + player.getUsername() + player.getId());
+            LoggerFactory.getLogger(this.getClass()).info("CurrentPlayer : " + player.getGame().getCurrentPlayer().getUsername() + player.getGame().getCurrentPlayer().getId());
+            if (!Objects.equals(game.getCurrentPlayer().getId(), player.getId())) {
                 throw new NotYourRoundException();
             }
 
