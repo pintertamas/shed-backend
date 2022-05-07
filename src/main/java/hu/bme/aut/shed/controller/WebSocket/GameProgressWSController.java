@@ -66,6 +66,7 @@ public class GameProgressWSController {
             LoggerFactory.getLogger(this.getClass()).info(String.valueOf("idaig 9"));
             LoggerFactory.getLogger(this.getClass()).info("Player card size: " + player.getCards().size());
             List<PlayerCard> InHandsCards = playerCardService.getAllPlayerCardsByPlayerAndState(player,PlayerCardState.HAND);
+            LoggerFactory.getLogger(this.getClass()).info("Player HandCard size: " + InHandsCards.size());
             while (InHandsCards.size() < 3) {
                 if(tableCardService.getAllByTableCardStateAndGame(TableCardState.PICK,game).size() == 0){
                     break;
