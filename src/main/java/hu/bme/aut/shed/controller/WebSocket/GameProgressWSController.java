@@ -38,6 +38,8 @@ public class GameProgressWSController {
             Player player = playerService.getPlayerByUsername(username);
             player.setCards(playerCardService.getPlayerCardsByPlayer(player)); //I set the players cards list for safety purposes
 
+            LoggerFactory.getLogger(this.getClass()).info("1.Player" + player.getUsername());
+            LoggerFactory.getLogger(this.getClass()).info("1.1Player: " + player.getGame().getCurrentPlayer().getUsername());
             if (game.getCurrentPlayer() != player) {
                 throw new NotYourRoundException();
             }
