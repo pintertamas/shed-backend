@@ -27,7 +27,10 @@ public class PlayerCardStrategyHelperService {
         }
         if (playerCard.getState() == PlayerCardState.VISIBLE) {
             if (tableCardService.getAllByTableCardStateAndGame(TableCardState.PICK, playerFrom.getGame()).size() == 0) {
-
+                if (tableCard == null) {                                                  //If we dont a have a throw table card then all card works like a jolly
+                    ruleStrategy.get("JOLLY_JOKER").throwCard(playerFrom, tableCard, playerCard);
+                }
+                ruleStrategy.get(playerCard.getCardConfig().getRule().name()).throwCard(playerFrom, tableCard, playerCard);
             }
         }
         if (playerCard.getState() == PlayerCardState.INVISIBLE) {

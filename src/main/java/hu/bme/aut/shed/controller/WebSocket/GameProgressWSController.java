@@ -53,18 +53,19 @@ public class GameProgressWSController {
                 playerService.throwCard(player, lastThrowTableCard, playerCard);
 
                 boolean fourLastSame = tableCardService.checkSameFourLastThrowTableCard(game);
+                LoggerFactory.getLogger(this.getClass()).info(String.valueOf("idaig 7"));
                 if (fourLastSame) {
                     tableCardService.removeAllTableCardByTableCardStateAndGame(TableCardState.THROW, game);
                 }
-
+                LoggerFactory.getLogger(this.getClass()).info(String.valueOf("idaig 8"));
                 //tableCardService.removeById(lastPickTableCard.getId());
             }
 
             List<CardResponse> pickPlayerCards = new ArrayList<>();
-
+            LoggerFactory.getLogger(this.getClass()).info(String.valueOf("idaig 9"));
             LoggerFactory.getLogger(this.getClass()).info("Player card size: " + player.getCards().size());
             while (player.getCards().size() != 3) {
-
+                LoggerFactory.getLogger(this.getClass()).info(String.valueOf("idaig 10"));
                 TableCard lastPickTableCard = tableCardService.getLastTableCard(TableCardState.PICK, game);
                 playerService.pickCard(player, lastPickTableCard);
 
@@ -79,9 +80,9 @@ public class GameProgressWSController {
 
                 tableCardService.removeById(lastPickTableCard.getId());
             }
-
+            LoggerFactory.getLogger(this.getClass()).info(String.valueOf("idaig 11"));
             gameService.setNextPlayer(game);
-
+            LoggerFactory.getLogger(this.getClass()).info(String.valueOf("idaig 12"));
             return new ActionResponse("valid", null, username, pickPlayerCards);
 
         } catch (GameNotFoundException exception) {
