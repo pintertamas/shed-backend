@@ -109,7 +109,7 @@ public class GameService {
     public Game startGame(Long id) throws GameNotFoundException, NoPlayersInTheRoomException {
         Game game = getGameById(id);
         game.setPlayers(playerService.getPlayersByGame(game));//Spring array list novelo hiba miatt
-        if(game.getPlayers().size()==0){
+        if (game.getPlayers().size() == 0) {
             throw new NoPlayersInTheRoomException();
         }
         game.setDeck(cardConfigService.getCardConfigsByGameId(game.getId())); //Erre azért van szükség mivel valamilyen természetes ellenes okból kifolyolag megváltozik a connect során a game.deck list mérete, így a cardconfig gameId-ja alapján újra visszaállítom a rendes decket

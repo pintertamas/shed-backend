@@ -35,7 +35,7 @@ public class PlayerCardService {
 
     public PlayerCard getPlayerCardByCardConfig(CardConfig cardConfig) throws PlayerNotHaveThisCardException {
         PlayerCard playerCard = playerCardRepository.findByCardConfig(cardConfig);
-        if(playerCard == null){
+        if (playerCard == null) {
             throw new PlayerNotHaveThisCardException();
         }
         return playerCard;
