@@ -8,7 +8,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class ActionResponse {
-    String validity;
+    String type;
     Message message;
     String username;
     List<CardResponse> cards;
