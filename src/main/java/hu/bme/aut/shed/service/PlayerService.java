@@ -163,8 +163,11 @@ public class PlayerService {
         return OrderId;
     }
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public void throwCard(Player playerFrom, TableCard tableCard, PlayerCard playerCard) throws CantThrowCardException {
+        LoggerFactory.getLogger(this.getClass()).info(String.valueOf("idaig 1"));
         if (tableCard == null) {                                                  //If we dont a have a throw table card then all card works like a jolly
+            LoggerFactory.getLogger(this.getClass()).info(String.valueOf("idaig 2"));
             ruleStrategy.get("JOLLY_JOKER").throwCard(playerFrom, tableCard, playerCard);
         }
         ruleStrategy.get(playerCard.getCardConfig().getRule().name()).throwCard(playerFrom, tableCard, playerCard);
