@@ -56,11 +56,10 @@ public class GameProgressWSController {
 
                 boolean fourLastSame = tableCardService.checkSameFourLastThrowTableCard(game);
                 LoggerFactory.getLogger(this.getClass()).info(String.valueOf("FourLastSame : " + fourLastSame));
-                LoggerFactory.getLogger(this.getClass()).info(String.valueOf("idaig 7"));
                 if (fourLastSame) {
                     tableCardService.removeAllTableCardByTableCardStateAndGame(TableCardState.THROW, game);
                 }
-                LoggerFactory.getLogger(this.getClass()).info(String.valueOf("idaig 8"));
+                LoggerFactory.getLogger(this.getClass()).info(String.valueOf("idaig 7"));
                 //tableCardService.removeById(lastPickTableCard.getId());
             }
 
@@ -73,7 +72,6 @@ public class GameProgressWSController {
                 if (tableCardService.getAllByTableCardStateAndGame(TableCardState.PICK, game).size() == 0) {
                     break;
                 }
-                LoggerFactory.getLogger(this.getClass()).info(String.valueOf("idaig 9"));
                 TableCard lastPickTableCard = tableCardService.getLastTableCard(TableCardState.PICK, game);
                 playerService.pickCard(player, lastPickTableCard);
                 InHandsCards = playerCardService.getAllPlayerCardsByPlayerAndState(player, PlayerCardState.HAND);
