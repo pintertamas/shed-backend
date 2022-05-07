@@ -1,5 +1,6 @@
 package hu.bme.aut.shed.service;
 
+import hu.bme.aut.shed.exception.PlayerNotHaveThisCardException;
 import hu.bme.aut.shed.model.CardConfig;
 import hu.bme.aut.shed.model.Player;
 import hu.bme.aut.shed.model.PlayerCard;
@@ -32,8 +33,12 @@ public class PlayerCardService {
         return playerCardRepository.findAllByPlayer(player);
     }
 
-    public PlayerCard getPlayerCardByCardConfig(CardConfig cardConfig) {
-        return playerCardRepository.findByCardConfig(cardConfig);
+    public PlayerCard getPlayerCardByCardConfig(CardConfig cardConfig) throws PlayerNotHaveThisCardException {
+        PlayerCard playerCard = playerCardRepository.findByCardConfig(cardConfig);
+        if (playerCard == null) {
+            throw new PlayerNotHaveThisCardException();
+        }
+        return playerCard;
     }
 
     public List<PlayerCard> getAllPlayerCardsByPlayerAndState(Player player, PlayerCardState playerCardState) {

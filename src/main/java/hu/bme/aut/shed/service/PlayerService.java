@@ -4,7 +4,6 @@ import hu.bme.aut.shed.exception.*;
 import hu.bme.aut.shed.model.*;
 import hu.bme.aut.shed.repository.GameRepository;
 import hu.bme.aut.shed.repository.PlayerRepository;
-import hu.bme.aut.shed.service.RuleStrategy.RuleStrategy;
 import lombok.AllArgsConstructor;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 @AllArgsConstructor
@@ -30,10 +28,9 @@ public class PlayerService {
     private final UserService userService;
     @Autowired
     private final TableCardService tableCardService;
+
     @Autowired
-    private final CardConfigService cardConfigService;
-    @Autowired
-    private final Map<String, RuleStrategy> ruleStrategy;
+    private final PlayerCardStateHelperService playerCardStateHelperService;
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     public List<Player> getPlayersByGame(Game game) {
@@ -101,9 +98,11 @@ public class PlayerService {
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     public void disconnectPlayer(String username) {
-        LoggerFactory.getLogger(this.getClass()).info(String.valueOf(playerRepository.findAll().size()));
+        LoggerFactory.getLogger(this.getClass()).info("Players in tables" + String.valueOf(playerRepository.findAll().size()));
         Player player = playerRepository.findByUsername(username);
         Game game = player.getGame();
+        LoggerFactory.getLogger(this.getClass()).info("Players in tables" + String.valueOf(game.getPlayers().size()));
+
         player.setCards(playerCardService.getPlayerCardsByPlayer(player));
         LoggerFactory.getLogger(this.getClass()).info("Player cardSize : " + String.valueOf(player.getCards().size()));
         for (PlayerCard playerCard : player.getCards()) {
@@ -114,6 +113,25 @@ public class PlayerService {
             LoggerFactory.getLogger(this.getClass()).info("Deleting: " + String.valueOf(playerCard.getId()));
             playerCardService.removeById(playerCard.getId());
         }
+
+
+        game.setPlayers(this.getPlayersByGame(game)); //Spring array list novelo hiba miatt
+        LoggerFactory.getLogger(this.getClass()).info("2.Players in tables" + String.valueOf(game.getPlayers().size()));
+        if (game.getPlayers().size() == 1) {
+            game.setCurrentPlayer(null);
+        } else {
+            Player currentPlayer = game.getCurrentPlayer();
+            int index = game.getPlayers().indexOf(currentPlayer);
+            int lastPlayerIndex = game.getPlayers().size() - 1;
+            if (index + 1 > lastPlayerIndex) {
+                Player firstPlayerOfTheList = game.getPlayers().get(0);
+                game.setCurrentPlayer(firstPlayerOfTheList);
+            } else {
+                Player nextPlayer = game.getPlayers().get(index + 1);
+                game.setCurrentPlayer(nextPlayer);
+            }
+        }
+
         game.getPlayers().remove(player);
         gameRepository.save(game);
         playerRepository.deleteById(player.getId());
@@ -142,10 +160,12 @@ public class PlayerService {
         return OrderId;
     }
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public void throwCard(Player playerFrom, TableCard tableCard, PlayerCard playerCard) throws CantThrowCardException {
-        ruleStrategy.get(playerCard.getCardConfig().getRule().name()).throwCard(playerFrom, tableCard, playerCard);
+        playerCardStateHelperService.throwCard(playerFrom, tableCard, playerCard);
     }
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public void pickCard(Player playerTo, TableCard tableCard) {
         CardConfig cardConfig = tableCard.getCardConfig();
         playerCardService.createPlayerCard(cardConfig, playerTo, PlayerCardState.HAND); //This adds card also to player cards list

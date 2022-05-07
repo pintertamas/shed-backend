@@ -1,6 +1,9 @@
-package hu.bme.aut.shed.service;
+package hu.bme.aut.shed.service.RuleStrategy;
 
 import hu.bme.aut.shed.model.*;
+import hu.bme.aut.shed.service.CardConfigService;
+import hu.bme.aut.shed.service.PlayerCardService;
+import hu.bme.aut.shed.service.TableCardService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

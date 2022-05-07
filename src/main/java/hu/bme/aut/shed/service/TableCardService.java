@@ -8,6 +8,7 @@ import hu.bme.aut.shed.repository.TableCardRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -39,22 +40,52 @@ public class TableCardService {
         return withFilter;
     }
 
-    public TableCard getLastTableCardOfTheDeck(TableCardState tableCardState, Game game) {
+    public TableCard getLastTableCard(TableCardState tableCardState, Game game) {
         List<TableCard> tableCards = this.getAllByTableCardStateAndGame(tableCardState, game);
         tableCards.sort(Comparator.comparing(TableCard::getId));
+        if (tableCards.size() == 0) {
+            return null;
+        }
         return tableCards.get(tableCards.size() - 1);
     }
 
+    public boolean checkSameFourLastThrowTableCard(Game game) {
+        List<TableCard> tableCards = this.getAllByTableCardStateAndGame(TableCardState.THROW, game);
+        tableCards.sort(Comparator.comparing(TableCard::getId));
+        boolean fourLastSame = false;
+        if (tableCards.size() >= 4) {
+            for (int i = tableCards.size() - 1; i > tableCards.size() - 4; i--) {
+                if (tableCards.get(i).getCardConfig().getNumber() == tableCards.get(i - 1).getCardConfig().getNumber()) {
+                    fourLastSame = true;
+                } else {
+                    fourLastSame = false;
+                    break;
+                }
+            }
+
+        }
+        return false;
+    }
+
+    @Transactional
     public void removeById(Long id) {
         tableCardRepository.deleteById(id);
     }
 
+    @Transactional
     public void removeTableCardByCardConfig(CardConfig cardConfig) {
         tableCardRepository.deleteByCardConfig(cardConfig);
     }
 
+    @Transactional
     public void removeTableCardByCardConfigAndTableCardState(CardConfig cardConfig, TableCardState tableCardState) {
         tableCardRepository.deleteByCardConfigAndState(cardConfig, tableCardState);
+    }
+
+    @Transactional
+    public void removeAllTableCardByTableCardStateAndGame(TableCardState tableCardState, Game game) {
+        List<TableCard> tableCards = this.getAllByTableCardStateAndGame(tableCardState, game);
+        tableCardRepository.deleteAll(tableCards);
     }
 
 }

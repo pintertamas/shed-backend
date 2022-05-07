@@ -1,6 +1,7 @@
 package hu.bme.aut.shed.service;
 
 import hu.bme.aut.shed.exception.GameNotFoundException;
+import hu.bme.aut.shed.exception.NoPlayersInTheRoomException;
 import hu.bme.aut.shed.model.*;
 import hu.bme.aut.shed.repository.GameRepository;
 import lombok.AllArgsConstructor;
@@ -105,11 +106,33 @@ public class GameService {
         return gameRepository.save(game);
     }
 
-    public Game startGame(Long id) throws GameNotFoundException {
+    public Game startGame(Long id) throws GameNotFoundException, NoPlayersInTheRoomException {
         Game game = getGameById(id);
-        game.setDeck(cardConfigService.getCardConfigsByGameId(game.getId())); //Erre azért van szükség mivel valamilyen természetes ellenes okból kifolyolag megváltozik a connect során a game.deck list mérete,
-        // így a cardconfig gameId-ja alapján újra visszaállítom a rendes decket
+        game.setPlayers(playerService.getPlayersByGame(game));//Spring array list novelo hiba miatt
+        if (game.getPlayers().size() == 0) {
+            throw new NoPlayersInTheRoomException();
+        }
+        game.setDeck(cardConfigService.getCardConfigsByGameId(game.getId())); //Erre azért van szükség mivel valamilyen természetes ellenes okból kifolyolag megváltozik a connect során a game.deck list mérete, így a cardconfig gameId-ja alapján újra visszaállítom a rendes decket
+        game.setCurrentPlayer(game.getPlayers().get(0));
         return initGame(game);
+    }
+
+    public void setNextPlayer(Game game) {
+        game.setPlayers(playerService.getPlayersByGame(game));//Spring array list novelo hiba miatt
+        Player player = game.getCurrentPlayer();
+
+        int index = game.getPlayers().indexOf(player);
+        int lastPlayerIndex = game.getPlayers().size() - 1;
+
+        if (index + 1 > lastPlayerIndex) {
+            Player firstPlayerOfTheList = game.getPlayers().get(0);
+            game.setCurrentPlayer(firstPlayerOfTheList);
+
+        } else {
+            Player nextPlayer = game.getPlayers().get(index + 1);
+            game.setCurrentPlayer(nextPlayer);
+        }
+        gameRepository.save(game);
     }
 
     public void checkWinCondition() {

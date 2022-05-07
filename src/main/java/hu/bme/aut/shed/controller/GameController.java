@@ -5,6 +5,7 @@ import hu.bme.aut.shed.dto.Request.ConnectionRequest;
 import hu.bme.aut.shed.dto.Request.GameOptionsRequest;
 import hu.bme.aut.shed.dto.Response.GameResponse;
 import hu.bme.aut.shed.exception.GameNotFoundException;
+import hu.bme.aut.shed.exception.NoPlayersInTheRoomException;
 import hu.bme.aut.shed.model.Game;
 import hu.bme.aut.shed.model.GameStatus;
 import hu.bme.aut.shed.model.Rule;
@@ -80,7 +81,7 @@ public class GameController {
             Game game = gameService.startGame(request.getGameId());
             GameResponse gameResponse = new GameResponse(game.getId(), game.getName());
             return ResponseEntity.ok(gameResponse);
-        } catch (GameNotFoundException exception) {
+        } catch (GameNotFoundException | NoPlayersInTheRoomException exception) {
             log.error(exception.getMessage());
             return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
         }

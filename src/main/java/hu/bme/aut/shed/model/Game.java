@@ -7,9 +7,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -28,7 +26,10 @@ public class Game {
     private GameStatus status;
 
     @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
-    private Set<Player> players;
+    private List<Player> players;
+
+    @OneToOne()
+    private Player currentPlayer;
 
     @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
     private List<CardConfig> deck;
@@ -60,7 +61,7 @@ public class Game {
         this.numberOfDecks = numberOfDecks;
         this.visibility = visibility;
         this.creationTime = LocalDateTime.now();
-        this.players = new HashSet<>();
+        this.players = new ArrayList<>();
         this.deck = new ArrayList<>();
     }
 
