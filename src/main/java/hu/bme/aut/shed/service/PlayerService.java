@@ -4,8 +4,6 @@ import hu.bme.aut.shed.exception.*;
 import hu.bme.aut.shed.model.*;
 import hu.bme.aut.shed.repository.GameRepository;
 import hu.bme.aut.shed.repository.PlayerRepository;
-import hu.bme.aut.shed.service.PlayerCardStateStrategy.PlayerCardStateStrategy;
-import hu.bme.aut.shed.service.RuleStrategy.RuleStrategy;
 import lombok.AllArgsConstructor;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +12,6 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 @AllArgsConstructor
@@ -31,10 +28,9 @@ public class PlayerService {
     private final UserService userService;
     @Autowired
     private final TableCardService tableCardService;
+    ;
     @Autowired
-    private final CardConfigService cardConfigService;
-    @Autowired
-    private final Map<String, PlayerCardStateStrategy> playerCardStateStrategy;
+    private final PlayerCardStateHelperService playerCardStateHelperService;
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     public List<Player> getPlayersByGame(Game game) {
@@ -166,7 +162,7 @@ public class PlayerService {
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public void throwCard(Player playerFrom, TableCard tableCard, PlayerCard playerCard) throws CantThrowCardException {
-        playerCardStateStrategy.get(playerCard.getState().name()).throwCard(playerFrom, tableCard, playerCard);
+        playerCardStateHelperService.throwCard(playerFrom, tableCard, playerCard);
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
