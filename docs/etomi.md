@@ -66,3 +66,9 @@ Egy olyan probléma is felmerült hogy háromszor probált csatlakozni egy ját�
 ezt felemeltem SERIALIZABLE szintre ez megoldotta a backenden a problémát ezután frontenden is orvosoltuk a hibát, amiért 3x-or probált csatlakozni.
 Készítettem Cards endpointokat P.Tomi kérései alapján.
 A Card dto-kkal(response,request) még nem jutottunk dülőre hogy minek kéne benne lennie és minek nem.
+
+## 12.hét
+Ezen a héten felvettem a game táblába egy új oszlopot ami az aktuális játékost tartalmazza ezzel könnyebben tudom kezelni azt hogy ki van soron.
+Mostmár nem tudok elkezdeni egy gamet ha nincs becsatlakozva egy játékos se.
+Rájöttem hogy az arraylisttekkel van a baj és azoknak növeli csak a méretét erre akkor jöttem amikor a players set listát átirtam arraylistre és eltört a disconnect így ezt is mindig újra be kell állítani.
+Ezen a héten eltudtam kezdeni tesztelni is a kártyarakás mechanikáját is eközben sok hiba merült föl amiket orvosolni kellett.
