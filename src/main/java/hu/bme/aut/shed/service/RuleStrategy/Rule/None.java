@@ -3,7 +3,7 @@ package hu.bme.aut.shed.service.RuleStrategy.Rule;
 import hu.bme.aut.shed.exception.CantThrowCardException;
 import hu.bme.aut.shed.model.*;
 import hu.bme.aut.shed.service.PlayerCardService;
-import hu.bme.aut.shed.service.RuleHelperService;
+import hu.bme.aut.shed.service.RuleStrategy.RuleHelperService;
 import hu.bme.aut.shed.service.RuleStrategy.RuleStrategy;
 import hu.bme.aut.shed.service.TableCardService;
 import org.springframework.beans.factory.annotation.Autowired;
