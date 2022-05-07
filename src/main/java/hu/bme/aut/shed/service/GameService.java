@@ -110,10 +110,12 @@ public class GameService {
         game.setDeck(cardConfigService.getCardConfigsByGameId(game.getId())); //Erre azért van szükség mivel valamilyen természetes ellenes okból kifolyolag megváltozik a connect során a game.deck list mérete,
         // így a cardconfig gameId-ja alapján újra visszaállítom a rendes decket
         game.setCurrentPlayer(game.getPlayers().get(0));
+        game.setPlayers(playerService.getPlayersByGame(game));//Spring array list novelo hiba miatt
         return initGame(game);
     }
 
     public void setNextPlayer(Game game) {
+        game.setPlayers(playerService.getPlayersByGame(game));//Spring array list novelo hiba miatt
         Player player = game.getCurrentPlayer();
 
         int index = game.getPlayers().indexOf(player);

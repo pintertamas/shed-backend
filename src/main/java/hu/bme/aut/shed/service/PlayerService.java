@@ -117,6 +117,8 @@ public class PlayerService {
             playerCardService.removeById(playerCard.getId());
         }
 
+
+        game.setPlayers(this.getPlayersByGame(game)); //Spring array list novelo hiba miatt
         LoggerFactory.getLogger(this.getClass()).info("2.Players in tables" + String.valueOf(game.getPlayers().size()));
         if (game.getPlayers().size() == 1) {
             game.setCurrentPlayer(null);
