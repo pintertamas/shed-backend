@@ -8,6 +8,7 @@ import hu.bme.aut.shed.repository.TableCardRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -66,18 +67,20 @@ public class TableCardService {
         return false;
     }
 
+    @Transactional
     public void removeById(Long id) {
         tableCardRepository.deleteById(id);
     }
-
+    @Transactional
     public void removeTableCardByCardConfig(CardConfig cardConfig) {
         tableCardRepository.deleteByCardConfig(cardConfig);
     }
-
+    @Transactional
     public void removeTableCardByCardConfigAndTableCardState(CardConfig cardConfig, TableCardState tableCardState) {
         tableCardRepository.deleteByCardConfigAndState(cardConfig, tableCardState);
     }
 
+    @Transactional
     public void removeAllTableCardByTableCardStateAndGame(TableCardState tableCardState, Game game) {
         List<TableCard> tableCards = this.getAllByTableCardStateAndGame(tableCardState, game);
         tableCardRepository.deleteAll(tableCards);
