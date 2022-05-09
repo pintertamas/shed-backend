@@ -124,14 +124,18 @@ public class GameService {
         int index = game.getPlayers().indexOf(player);
         int lastPlayerIndex = game.getPlayers().size() - 1;
 
-        if (index + 1 > lastPlayerIndex) {
-            Player firstPlayerOfTheList = game.getPlayers().get(0);
-            game.setCurrentPlayer(firstPlayerOfTheList);
+        Player nextPlayer = new Player();
+        while(nextPlayer.getGameStatus() != GameStatus.IN_PROGRESS){
+            if (index + 1 > lastPlayerIndex) {
+                nextPlayer = game.getPlayers().get(0); //first player of the list
+                game.setCurrentPlayer(nextPlayer);
 
-        } else {
-            Player nextPlayer = game.getPlayers().get(index + 1);
-            game.setCurrentPlayer(nextPlayer);
+            } else {
+                nextPlayer = game.getPlayers().get(index + 1); //if index bigger than the last index than then we go back to the first index
+                game.setCurrentPlayer(nextPlayer);
+            }
         }
+
         gameRepository.save(game);
     }
 

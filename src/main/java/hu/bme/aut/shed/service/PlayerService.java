@@ -90,16 +90,20 @@ public class PlayerService {
 
         Player connectedPlayer = new Player(searchedUser);
         connectedPlayer.setGame(game);
+        connectedPlayer.setGameStatus(GameStatus.NEW);
+
         game.getPlayers().add(connectedPlayer);
         gameRepository.save(game);
         playerRepository.save(connectedPlayer);
+
         return connectedPlayer;
     }
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     public void disconnectPlayer(String username) {
-        LoggerFactory.getLogger(this.getClass()).info("Players in tables" + String.valueOf(playerRepository.findAll().size()));
+
         Player player = playerRepository.findByUsername(username);
+        player.setGameStatus(GameStatus.IN_PROGRESS);
         Game game = player.getGame();
         LoggerFactory.getLogger(this.getClass()).info("Players in tables" + String.valueOf(game.getPlayers().size()));
 
@@ -116,7 +120,7 @@ public class PlayerService {
 
 
         game.setPlayers(this.getPlayersByGame(game)); //Spring array list novelo hiba miatt
-        LoggerFactory.getLogger(this.getClass()).info("2.Players in tables" + String.valueOf(game.getPlayers().size()));
+        LoggerFactory.getLogger(this.getClass()).info("Players in tables" + String.valueOf(game.getPlayers().size()));
         if (game.getPlayers().size() == 1) {
             game.setCurrentPlayer(null);
         } else {

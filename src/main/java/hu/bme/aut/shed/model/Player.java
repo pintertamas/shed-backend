@@ -33,7 +33,14 @@ public class Player implements Comparable {
     @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
     List<PlayerCard> cards = new ArrayList<PlayerCard>();
 
+    @Column()
+    private GameStatus gameStatus;
+
+    @Column(nullable = true)
+    private int finishedPosition;
+
     public Player(User user) {
+        this.gameStatus = GameStatus.NEW;
         this.user = user;
         this.username = user.getUsername();
     }
