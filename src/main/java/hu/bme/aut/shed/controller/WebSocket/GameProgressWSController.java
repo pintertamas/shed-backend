@@ -72,13 +72,16 @@ public class GameProgressWSController {
             List<PlayerCard> InHandsCards = playerCardService.getAllPlayerCardsByPlayerAndState(player, PlayerCardState.HAND);
             LoggerFactory.getLogger(this.getClass()).info("Player HandCard size: " + InHandsCards.size());
 
-            while (InHandsCards.size() < 3) {
-                if (tableCardService.getAllByTableCardStateAndGame(TableCardState.PICK, game).size() == 0) {
+            while (InHandsCards.size() < 3) { //Pick up cards for the player while he have at least 3 cards in his hands
+
+                if (tableCardService.getAllByTableCardStateAndGame(TableCardState.PICK, game).size() == 0) { //If no more pick card then ha cant pick up cards
                     break;
                 }
+
                 TableCard lastPickTableCard = tableCardService.getLastTableCard(TableCardState.PICK, game);
                 playerService.pickCard(player, lastPickTableCard);
                 InHandsCards = playerCardService.getAllPlayerCardsByPlayerAndState(player, PlayerCardState.HAND);
+
                 LoggerFactory.getLogger(this.getClass()).info(String.valueOf("Card has been drawn : " + lastPickTableCard.getId()));
                 LoggerFactory.getLogger(this.getClass()).info("Player HandCard size: " + InHandsCards.size());
                 CardResponse cardResponse = new CardResponse(lastPickTableCard.getCardConfig().getId(),
@@ -88,6 +91,7 @@ public class GameProgressWSController {
                         lastPickTableCard.getCardConfig().getGame().getName(),
                         lastPickTableCard.getState().getName()
                 );
+
                 pickPlayerCards.add(cardResponse);
             }
 
