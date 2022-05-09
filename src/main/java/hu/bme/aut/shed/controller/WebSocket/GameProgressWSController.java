@@ -95,6 +95,9 @@ public class GameProgressWSController {
                 pickPlayerCards.add(cardResponse);
             }
 
+            playerService.checkEndConditon(player,game);
+            gameService.checkEndCondition(game);
+
             gameService.setNextPlayer(game);
             LoggerFactory.getLogger(this.getClass()).info(String.valueOf("NextPlayer :" + game.getCurrentPlayer()));
             LoggerFactory.getLogger(this.getClass()).info(String.valueOf("ThrowCardMethodEnds"));

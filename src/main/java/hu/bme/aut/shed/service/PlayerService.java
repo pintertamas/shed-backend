@@ -181,7 +181,10 @@ public class PlayerService {
         int pickCardsSize = tableCardService.getAllByTableCardStateAndGame(TableCardState.PICK,game).size();
         if(player.getCards().size() == 0 && pickCardsSize == 0){
             player.setStatus(GameStatus.FINISHED);
-
+            List<Player> finishedPlayers = playerRepository.findAllByStatusAndGame(GameStatus.FINISHED , game);
+            player.setFinishedPosition(finishedPlayers.size() + 1);
+            LoggerFactory.getLogger(this.getClass()).info("Player is Finished" + String.valueOf(player.getUsername()) + "Position :" + String.valueOf(player.getFinishedPosition()) );
+            playerRepository.save(player);
         }
     }
 

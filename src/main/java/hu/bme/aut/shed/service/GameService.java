@@ -139,7 +139,7 @@ public class GameService {
         gameRepository.save(game);
     }
 
-    public void checkWinCondition() {
+    public void checkEndCondition(Game game) {
 
     }
 
