@@ -34,13 +34,13 @@ public class Player implements Comparable {
     List<PlayerCard> cards = new ArrayList<PlayerCard>();
 
     @Column()
-    private GameStatus gameStatus;
+    private GameStatus status;
 
     @Column(nullable = true)
     private int finishedPosition;
 
     public Player(User user) {
-        this.gameStatus = GameStatus.NEW;
+        this.status = GameStatus.NEW;
         this.user = user;
         this.username = user.getUsername();
     }

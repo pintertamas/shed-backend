@@ -125,7 +125,7 @@ public class GameService {
         int lastPlayerIndex = game.getPlayers().size() - 1;
 
         Player nextPlayer = new Player();
-        while(nextPlayer.getGameStatus() != GameStatus.IN_PROGRESS){
+        while(nextPlayer.getStatus() != GameStatus.IN_PROGRESS){
             if (index + 1 > lastPlayerIndex) {
                 nextPlayer = game.getPlayers().get(0); //first player of the list
                 game.setCurrentPlayer(nextPlayer);

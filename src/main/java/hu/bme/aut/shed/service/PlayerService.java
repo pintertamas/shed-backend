@@ -90,7 +90,7 @@ public class PlayerService {
 
         Player connectedPlayer = new Player(searchedUser);
         connectedPlayer.setGame(game);
-        connectedPlayer.setGameStatus(GameStatus.NEW);
+        connectedPlayer.setStatus(GameStatus.NEW);
 
         game.getPlayers().add(connectedPlayer);
         gameRepository.save(game);
@@ -103,7 +103,6 @@ public class PlayerService {
     public void disconnectPlayer(String username) {
 
         Player player = playerRepository.findByUsername(username);
-        player.setGameStatus(GameStatus.IN_PROGRESS);
         Game game = player.getGame();
         LoggerFactory.getLogger(this.getClass()).info("Players in tables" + String.valueOf(game.getPlayers().size()));
 
@@ -144,6 +143,7 @@ public class PlayerService {
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     public int initPlayer(Player player, Game game, int OrderId) {
+        player.setStatus(GameStatus.IN_PROGRESS);
 
         for (int i = OrderId; i < game.getCardsInHand() + OrderId; i++) {
             PlayerCard playerCardInHand = playerCardService.createPlayerCard(game.getDeck().get(i), player, PlayerCardState.HAND);
@@ -174,6 +174,15 @@ public class PlayerService {
         CardConfig cardConfig = tableCard.getCardConfig();
         playerCardService.createPlayerCard(cardConfig, playerTo, PlayerCardState.HAND); //This adds card also to player cards list
         tableCardService.removeTableCardByCardConfig(tableCard.getCardConfig());
+    }
+
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    public void checkEndConditon(Player player , Game game){
+        int pickCardsSize = tableCardService.getAllByTableCardStateAndGame(TableCardState.PICK,game).size();
+        if(player.getCards().size() == 0 && pickCardsSize == 0){
+            player.setStatus(GameStatus.FINISHED);
+
+        }
     }
 
 
