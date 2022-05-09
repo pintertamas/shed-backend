@@ -72,3 +72,5 @@ Ezen a héten felvettem a game táblába egy új oszlopot ami az aktuális ját�
 Mostmár nem tudok elkezdeni egy gamet ha nincs becsatlakozva egy játékos se.
 Rájöttem hogy az arraylisttekkel van a baj és azoknak növeli csak a méretét erre akkor jöttem amikor a players set listát átirtam arraylistre és eltört a disconnect így ezt is mindig újra be kell állítani.
 Ezen a héten eltudtam kezdeni tesztelni is a kártyarakás mechanikáját is eközben sok hiba merült föl amiket orvosolni kellett.
+Játékosoknak mostmár van egy állapota(Uj,Folyamatban,Befejezte) ugyanaz ami van a játéknak is így majd aki befejezte az nem lehet következő játékos.
+Pluszban kaptak még egy helyezés adattagot ami azt mondja meg hogy hanyadikként fejezték be a játékot.
