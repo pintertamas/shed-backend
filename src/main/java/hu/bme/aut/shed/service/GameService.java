@@ -140,7 +140,14 @@ public class GameService {
     }
 
     public void checkEndCondition(Game game) {
-
+        List<Player> in_progressPlayers = playerService.getAllPlayersByStateAndGame(GameStatus.IN_PROGRESS , game);
+        if(in_progressPlayers.size() == 1){
+            in_progressPlayers.get(0).setStatus(GameStatus.FINISHED);
+            List<Player> finishedPlayers = playerService.getAllPlayersByStateAndGame(GameStatus.FINISHED , game);
+            in_progressPlayers.get(0).setFinishedPosition(finishedPlayers.size() + 1);
+            game.setStatus(GameStatus.FINISHED);
+            gameRepository.save(game);
+        }
     }
 
     @Scheduled(fixedRate = 900000)
