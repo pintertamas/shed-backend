@@ -74,3 +74,6 @@ Rájöttem hogy az arraylisttekkel van a baj és azoknak növeli csak a méreté
 Ezen a héten eltudtam kezdeni tesztelni is a kártyarakás mechanikáját is eközben sok hiba merült föl amiket orvosolni kellett.
 Játékosoknak mostmár van egy állapota(Uj,Folyamatban,Befejezte) ugyanaz ami van a játéknak is így majd aki befejezte az nem lehet következő játékos.
 Pluszban kaptak még egy helyezés adattagot ami azt mondja meg hogy hanyadikként fejezték be a játékot.
+
+## 13.hét
+Ezen héten csak kisebb bugokat warningokat javitottam amiket a SonarLint javasolt

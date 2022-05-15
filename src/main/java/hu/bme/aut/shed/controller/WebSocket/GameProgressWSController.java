@@ -69,21 +69,21 @@ public class GameProgressWSController {
 
             List<CardResponse> pickPlayerCards = new ArrayList<>();
             LoggerFactory.getLogger(this.getClass()).info("Player card size: " + player.getCards().size());
-            List<PlayerCard> InHandsCards = playerCardService.getAllPlayerCardsByPlayerAndState(player, PlayerCardState.HAND);
-            LoggerFactory.getLogger(this.getClass()).info("Player HandCard size: " + InHandsCards.size());
+            List<PlayerCard> inHandsCards = playerCardService.getAllPlayerCardsByPlayerAndState(player, PlayerCardState.HAND);
+            LoggerFactory.getLogger(this.getClass()).info("Player HandCard size: " + inHandsCards.size());
 
-            while (InHandsCards.size() < 3) { //Pick up cards for the player while he have at least 3 cards in his hands
+            while (inHandsCards.size() < 3) { //Pick up cards for the player while he have at least 3 cards in his hands
 
-                if (tableCardService.getAllByTableCardStateAndGame(TableCardState.PICK, game).size() == 0) { //If no more pick card then ha cant pick up cards
+                if (tableCardService.getAllByTableCardStateAndGame(TableCardState.PICK, game).size() == 0) { //If no more pick card then ha can't pick up cards
                     break;
                 }
 
                 TableCard lastPickTableCard = tableCardService.getLastTableCard(TableCardState.PICK, game);
                 playerService.pickCard(player, lastPickTableCard);
-                InHandsCards = playerCardService.getAllPlayerCardsByPlayerAndState(player, PlayerCardState.HAND);
+                inHandsCards = playerCardService.getAllPlayerCardsByPlayerAndState(player, PlayerCardState.HAND);
 
                 LoggerFactory.getLogger(this.getClass()).info(String.valueOf("Card has been drawn : " + lastPickTableCard.getId()));
-                LoggerFactory.getLogger(this.getClass()).info("Player HandCard size: " + InHandsCards.size());
+                LoggerFactory.getLogger(this.getClass()).info("Player HandCard size: " + inHandsCards.size());
                 CardResponse cardResponse = new CardResponse(lastPickTableCard.getCardConfig().getId(),
                         lastPickTableCard.getCardConfig().getNumber(),
                         lastPickTableCard.getCardConfig().getShape().getName(),
