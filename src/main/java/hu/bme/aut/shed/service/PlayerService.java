@@ -67,8 +67,8 @@ public class PlayerService {
     }
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    public List<Player> getAllPlayersByStateAndGame(GameStatus status , Game game){
-        return playerRepository.findAllByStatusAndGame(status , game);
+    public List<Player> getAllPlayersByStateAndGame(GameStatus status, Game game) {
+        return playerRepository.findAllByStatusAndGame(status, game);
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
@@ -182,19 +182,19 @@ public class PlayerService {
     }
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    public void setPlayerFinishedPosition(Player player , Game game){
+    public void setPlayerFinishedPosition(Player player, Game game) {
         player.setStatus(GameStatus.FINISHED);
-        List<Player> finishedPlayers = this.getAllPlayersByStateAndGame(GameStatus.FINISHED , game);
+        List<Player> finishedPlayers = this.getAllPlayersByStateAndGame(GameStatus.FINISHED, game);
         player.setFinishedPosition(finishedPlayers.size() + 1);
-        LoggerFactory.getLogger(this.getClass()).info("Player is Finished" + String.valueOf(player.getUsername()) + "Position :" + String.valueOf(player.getFinishedPosition()) );
+        LoggerFactory.getLogger(this.getClass()).info("Player is Finished" + String.valueOf(player.getUsername()) + "Position :" + String.valueOf(player.getFinishedPosition()));
         playerRepository.save(player);
     }
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    public void checkEndCondition(Player player , Game game){
-        int pickCardsSize = tableCardService.getAllByTableCardStateAndGame(TableCardState.PICK,game).size();
-        if(player.getCards().size() == 0 && pickCardsSize == 0){
-            this.setPlayerFinishedPosition(player , game);
+    public void checkEndCondition(Player player, Game game) {
+        int pickCardsSize = tableCardService.getAllByTableCardStateAndGame(TableCardState.PICK, game).size();
+        if (player.getCards().size() == 0 && pickCardsSize == 0) {
+            this.setPlayerFinishedPosition(player, game);
         }
     }
 

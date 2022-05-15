@@ -95,7 +95,7 @@ public class GameProgressWSController {
                 pickPlayerCards.add(cardResponse);
             }
 
-            playerService.checkEndCondition(player,game);
+            playerService.checkEndCondition(player, game);
             //gameService.checkEndCondition(game);
 
             gameService.setNextPlayer(game);

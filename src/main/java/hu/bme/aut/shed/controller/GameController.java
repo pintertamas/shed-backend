@@ -1,7 +1,6 @@
 package hu.bme.aut.shed.controller;
 
 import hu.bme.aut.shed.dto.Request.CardRuleRequest;
-import hu.bme.aut.shed.dto.Request.ConnectionRequest;
 import hu.bme.aut.shed.dto.Request.GameOptionsRequest;
 import hu.bme.aut.shed.dto.Response.GameResponse;
 import hu.bme.aut.shed.exception.GameNotFoundException;
@@ -75,10 +74,10 @@ public class GameController {
     }
 
     @RequestMapping(value = "/start", method = {RequestMethod.POST}, produces = "application/json")
-    public ResponseEntity<?> start(@RequestBody ConnectionRequest request) {
-        log.info("start game request: {}", request);
+    public ResponseEntity<?> start(@RequestBody Long gameId) {
+        log.info("start game request: {}", gameId);
         try {
-            Game game = gameService.startGame(request.getGameId());
+            Game game = gameService.startGame(gameId);
             GameResponse gameResponse = new GameResponse(game.getId(), game.getName());
             return ResponseEntity.ok(gameResponse);
         } catch (GameNotFoundException | NoPlayersInTheRoomException exception) {

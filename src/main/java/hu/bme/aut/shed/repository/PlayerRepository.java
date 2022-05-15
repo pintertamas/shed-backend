@@ -16,5 +16,5 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
 
     Player findByUsername(String username);
 
-    List<Player> findAllByStatusAndGame(GameStatus status , Game game);
+    List<Player> findAllByStatusAndGame(GameStatus status, Game game);
 }
