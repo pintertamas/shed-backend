@@ -74,7 +74,7 @@ public class GameController {
     }
 
     @RequestMapping(value = "/start", method = {RequestMethod.POST}, produces = "application/json")
-    public ResponseEntity<?> start(@RequestBody Long gameId) {
+    public ResponseEntity<?> start(@RequestParam Long gameId) {
         log.info("start game request: {}", gameId);
         try {
             Game game = gameService.startGame(gameId);
