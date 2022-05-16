@@ -1,5 +1,6 @@
 package hu.bme.aut.shed.service;
 
+import hu.bme.aut.shed.exception.TableCardNotFoundException;
 import hu.bme.aut.shed.model.CardConfig;
 import hu.bme.aut.shed.model.Game;
 import hu.bme.aut.shed.model.TableCard;
@@ -38,6 +39,14 @@ public class TableCardService {
             }
         }
         return withFilter;
+    }
+
+    public TableCard getTableCardByCardConfig(CardConfig cardConfig , TableCardState tableCardState) throws TableCardNotFoundException {
+        TableCard tableCard = tableCardRepository.findByCardConfig(cardConfig);
+        if(tableCard == null || tableCard.getState() != tableCardState){
+            throw new TableCardNotFoundException();
+        }
+        return tableCard;
     }
 
     public TableCard getLastTableCard(TableCardState tableCardState, Game game) {

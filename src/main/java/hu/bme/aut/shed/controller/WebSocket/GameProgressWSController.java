@@ -134,10 +134,39 @@ public class GameProgressWSController {
     @SendTo("/topic/{gameName}")
     public ActionResponse pickACard(@DestinationVariable String gameName, @DestinationVariable String username, ActionRequest actionRequest) {
         try {
+
             Game game = gameService.getGameByName(gameName);
             Player player = playerService.getPlayerByUsername(username);
+            if(actionRequest.getCards().size() > 1){   // if he want to pick up more than one then throw an error
+                throw new CantPickUpCardException();
+            }
+            if (tableCardService.getAllByTableCardStateAndGame(TableCardState.PICK, game).size() == 0) { //If no more pick card then ha can't pick up cards
+                throw new CantPickUpCardException();
+            }
 
-            return null;
+            CardConfig cardConfig = cardConfigService.getCardConfigById(actionRequest.getCards().get(0).getCardConfigId());//Checked if its real if its not then throw error
+            TableCard tableCard = tableCardService.getTableCardByCardConfig(cardConfig,TableCardState.PICK);
+            TableCard lastPickTableCard = tableCardService.getLastTableCard(TableCardState.PICK,game);
+
+            if(tableCard.getCardConfig() != lastPickTableCard.getCardConfig()){ //Cant pick up a card if its not the last one in the row
+                throw new CantPickUpCardException();
+            }
+
+            playerService.pickCard(player, lastPickTableCard);
+
+            LoggerFactory.getLogger(this.getClass()).info(String.valueOf("Card has been drawn : " + lastPickTableCard.getId()));
+            CardResponse cardResponse = new CardResponse(lastPickTableCard.getCardConfig().getId(),
+                    lastPickTableCard.getCardConfig().getNumber(),
+                    lastPickTableCard.getCardConfig().getShape().getName(),
+                    lastPickTableCard.getCardConfig().getRule().getName(),
+                    lastPickTableCard.getCardConfig().getGame().getName(),
+                    lastPickTableCard.getState().getName()
+            );
+
+            List<CardResponse> pickedCard = new ArrayList<>();
+            pickedCard.add(cardResponse);
+
+            return new ActionResponse(UUID.randomUUID().toString(),"valid",null,username,pickedCard);
         } catch (GameNotFoundException exception) {
             LoggerFactory.getLogger(this.getClass()).info("Game with name (" + gameName + ") not found!");
             return new ActionResponse(UUID.randomUUID().toString(), "invalid", new Message("error", exception.getMessage()), username, null);
@@ -146,8 +175,22 @@ public class GameProgressWSController {
             LoggerFactory.getLogger(this.getClass()).info("User with name (" + username + ") not found!");
             return new ActionResponse(UUID.randomUUID().toString(), "invalid", new Message("error", exception.getMessage()), username, null);
 
+        } catch (CantPickUpCardException exception) {
+            LoggerFactory.getLogger(this.getClass()).info("User with name (" + username + ") cannot pick up these cards because of large pick up array " +
+                    "or just no more pick cards left " +
+                    "or just not correct tableCard(the last one)");
+            return new ActionResponse(UUID.randomUUID().toString(), "invalid", new Message("error", exception.getMessage()), username, null);
+
+        } catch (CardConfigNotFound exception) {
+            LoggerFactory.getLogger(this.getClass()).info("Card not found");
+            return new ActionResponse(UUID.randomUUID().toString(), "invalid", new Message("error", exception.getMessage()), username, null);
+
+        } catch (TableCardNotFoundException exception) {
+            LoggerFactory.getLogger(this.getClass()).info("Table Card not found");
+            return new ActionResponse(UUID.randomUUID().toString(), "invalid", new Message("error", exception.getMessage()), username, null);
+
         } catch (Exception exception) {
-            LoggerFactory.getLogger(this.getClass()).info("You Can't Play these Cards");
+            LoggerFactory.getLogger(this.getClass()).info("You Can't pick up these card");
             return new ActionResponse(UUID.randomUUID().toString(), "invalid", new Message("error", exception.getMessage()), username, null);
         }
     }
