@@ -76,4 +76,5 @@ Játékosoknak mostmár van egy állapota(Uj,Folyamatban,Befejezte) ugyanaz ami 
 Pluszban kaptak még egy helyezés adattagot ami azt mondja meg hogy hanyadikként fejezték be a játékot.
 
 ## 13.hét
-Ezen héten csak kisebb bugokat warningokat javitottam amiket a SonarLint javasolt
+Ennek a hétnek az elején csak kisebb bugokat, warningokat javitottam amiket a SonarLint javasolt.
+A hét második részében meg megirtam a kártya húzási mechanikát ,amivel úgy érzem, hogy backenden készen van a játék logikája.
