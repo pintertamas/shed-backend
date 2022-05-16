@@ -137,7 +137,7 @@ public class GameProgressWSController {
 
             Game game = gameService.getGameByName(gameName);
             Player player = playerService.getPlayerByUsername(username);
-            if(actionRequest.getCards().size() > 1){   // if he want to pick up more than one then throw an error
+            if (actionRequest.getCards().size() > 1) {   // if he want to pick up more than one then throw an error
                 throw new CantPickUpCardException();
             }
             if (tableCardService.getAllByTableCardStateAndGame(TableCardState.PICK, game).size() == 0) { //If no more pick card then ha can't pick up cards
@@ -145,10 +145,10 @@ public class GameProgressWSController {
             }
 
             CardConfig cardConfig = cardConfigService.getCardConfigById(actionRequest.getCards().get(0).getCardConfigId());//Checked if its real if its not then throw error
-            TableCard tableCard = tableCardService.getTableCardByCardConfig(cardConfig,TableCardState.PICK);
-            TableCard lastPickTableCard = tableCardService.getLastTableCard(TableCardState.PICK,game);
+            TableCard tableCard = tableCardService.getTableCardByCardConfig(cardConfig, TableCardState.PICK);
+            TableCard lastPickTableCard = tableCardService.getLastTableCard(TableCardState.PICK, game);
 
-            if(tableCard.getCardConfig() != lastPickTableCard.getCardConfig()){ //Cant pick up a card if its not the last one in the row
+            if (tableCard.getCardConfig() != lastPickTableCard.getCardConfig()) { //Cant pick up a card if its not the last one in the row
                 throw new CantPickUpCardException();
             }
 
@@ -166,7 +166,7 @@ public class GameProgressWSController {
             List<CardResponse> pickedCard = new ArrayList<>();
             pickedCard.add(cardResponse);
 
-            return new ActionResponse(UUID.randomUUID().toString(),"valid",null,username,pickedCard);
+            return new ActionResponse(UUID.randomUUID().toString(), "valid", null, username, pickedCard);
         } catch (GameNotFoundException exception) {
             LoggerFactory.getLogger(this.getClass()).info("Game with name (" + gameName + ") not found!");
             return new ActionResponse(UUID.randomUUID().toString(), "invalid", new Message("error", exception.getMessage()), username, null);
