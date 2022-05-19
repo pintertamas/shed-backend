@@ -50,7 +50,9 @@ public class PlayerCardService {
         playerCardRepository.save(playerCard);
     }
 
-    public void setStateOfPlayerCardConfig() {
+    public void setStateOfPlayerCard(PlayerCard playerCard, PlayerCardState playerCardState) {
+        playerCard.setState(playerCardState);
+        playerCardRepository.save(playerCard);
     }
 
     @Transactional()
