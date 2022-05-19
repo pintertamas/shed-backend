@@ -72,7 +72,7 @@ public class GameProgressWSController {
             List<PlayerCard> inHandsCards = playerCardService.getAllPlayerCardsByPlayerAndState(player, PlayerCardState.HAND);
             LoggerFactory.getLogger(this.getClass()).info("Player HandCard size: " + inHandsCards.size());
 
-            while (inHandsCards.size() < 3) { //Pick up cards for the player while he have at least 3 cards in his hands
+            while (inHandsCards.size() < game.getCardsInHand()) { //Pick up cards for the player while he have at least 3 cards in his hands
 
                 if (tableCardService.getAllByTableCardStateAndGame(TableCardState.PICK, game).size() == 0) { //If no more pick card then ha can't pick up cards
                     break;
