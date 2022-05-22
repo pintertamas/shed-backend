@@ -16,7 +16,11 @@ Csináltunk egy SSL Certificatet az alábbi [tutorial](https://www.thomasvitale.
 
 ## 4-5. hét
 Az elmúlt két alatt nagyon sok mindent csináltunk.Először is elkészitettünk(rajzoltunk) egy adatbázis sémát [paintben](https://github.com/pintertamas/shed-backend/blob/master/docs/datamodel_sketch.png?raw=true) és [draw.io-n](https://github.com/pintertamas/shed-backend/blob/master/docs/db_plan.png?raw=true) is, ami alapján már tudtunk normális adatmodelt készíteni.
-Az adatmodelt a két hét alatt nagyon sokat változtattuk, de úgy érzem az [aktuális verzió](https://github.com/pintertamas/shed-backend/blob/master/docs/data_model_4.png?raw=true) lesz az utolsó módósítás.Ez a sok modositás azért volt fájó mivel a backenden mindig át kellett irni a már meglévő modelleket és a felsőbb rétegekbe is bele kellett néha nyúlni.
+Az adatmodelt a két hét alatt nagyon sokat változtattuk, de úgy érzem az [aktuális verzió](https://github.com/pintertamas/shed-backend/blob/master/docs/data_model_4.png?raw=true) lesz az utolsó módósítás.
+
+Aktuális verzió : ![aktuális verzió](https://github.com/pintertamas/shed-backend/blob/master/docs/data_model_4.png?raw=true)
+
+Ez a sok modositás azért volt fájó mivel a backenden mindig át kellett irni a már meglévő modelleket és a felsőbb rétegekbe is bele kellett néha nyúlni.
 A backenden elkészítettem a modelleket illetve néhány service-t és controller-t is megírtam már. Tudunk már regisztrálni és bejelentkezni is már ezekhez jwt tokenes megoldást használunk.
 Problémát jelentett a kapcsolatok jelőlése erre a konzin remelém majd tudok választ kapni hogy ezek megfelelnek-e így.
 Adatbázisnak először mongodb-t használtunk mert témalabról ezzel már van tapasztalatunk de hosszas tanakodás után átáltunk sql alapú adatbázisra(postgresql) mivel szerétnek ezzel is megismerkedni.
