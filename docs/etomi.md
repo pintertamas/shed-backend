@@ -78,3 +78,4 @@ Pluszban kaptak még egy helyezés adattagot ami azt mondja meg hogy hanyadikké
 ## 13.hét
 Ennek a hétnek az elején csak kisebb bugokat, warningokat javitottam amiket a SonarLint javasolt.
 A hét második részében meg megirtam a kártya húzási mechanikát ,amivel úgy érzem, hogy backenden készen van a játék logikája.
+Ezen héten tisztáztuk a játék szabályokkal való félreértéseinket is amik miatt át kellett irni egy két helyen a játék logikáját.
