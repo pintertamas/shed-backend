@@ -113,3 +113,20 @@ Ezek után fogom majd a webes képernyőt megcsinálni.
 ## 12. hét
 A kártya rakás hibáin dolgoztam, hogy rendesen lehessen rakni kártyát a játékosoknak, ami után a képernyő frissül és az újonnan húzott kártyák is látszódnak.
 Egyelőre nem működik a képernyő frissítés és a húzott kártyák parsolása, de a websocketen való rakó kártyák küldése működik és a visszajövő üzeneteket is le tudja már kezelni az alkalmazás.
+
+## 13. hét
+Az előző heti problémát sikerült végre megoldanom. Arra a problémára, hogy a provider ne a StreamBuilder return-je előtt, a snapshot kiértékelése közben változtassa az adatokat ezzel túl korán (a notifyListeners függvény miatt) setState-et hívva, beleraktam a kód blokkot egy WidgetsBinding callbackbe a következő módon:
+```
+WidgetsBinding.instance?.addPostFrameCallback(
+    (_) => {
+        game.deletePlayedCards(),
+        getGameCards.then((value) => {
+            game.setCards(value),
+        },
+    ),
+},
+```
+Így most a kód csak az után fut le, hogy a widgetek betöltöttek ezzel elkerülve a korai újrabuildelésüket.
+Szintén a game_screen.dart fájlban változtattam a loadData függvényen, így minden provider változtatáskor szinkronizálom a szerveren lévő adatokat a mobillal amiről egy FutureBuilder gondoskodik.
+Egy probléma azomban felmerült, ami az, hogy egészen lassan töltenek be a kártyák a lap rakás után, ami kicsit rontja a felhasználói élményt. Ez valószínűleg a WidgetsBinding-nak tudható be, de egyelőre nem tudtam megtalálni az okát.
+Sajnos belefutottunk egy nagyobb problémába is, amiből sokat tanultunk. A szabályokat nem beszéltük meg elég részletességgel és emiatt lettek félreértések a kódban, amiket nehéz volt megjavítani, néhányat el is vetettünk. Azt tanultuk meg ebből, hogy a specifikációnak elegendően részletesnek kell lennie, ahol meg homályos valami mégis, ott meg pontosítást kell kérni róla.
