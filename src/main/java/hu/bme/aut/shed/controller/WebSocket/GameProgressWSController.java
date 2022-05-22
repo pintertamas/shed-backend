@@ -46,8 +46,14 @@ public class GameProgressWSController {
                 throw new NotYourRoundException();
             }
 
-            if (actionRequest.getCards().size() == 0) {
+            if (actionRequest.getCards().isEmpty()) {
                 throw new NoCardsSelectedException();
+            }
+
+            for(int i = 0 ; i < actionRequest.getCards().size() - 1; i++){
+                if(actionRequest.getCards().get(i).getNumber() != actionRequest.getCards().get(i+1).getNumber()){
+                    throw new CantThrowCardException();
+                }
             }
 
             for (int i = 0; i < actionRequest.getCards().size(); i++) {
@@ -116,7 +122,7 @@ public class GameProgressWSController {
             return new ActionResponse(UUID.randomUUID().toString(), "invalid", new Message("error", exception.getMessage()), username, null);
 
         } catch (CantThrowCardException exception) {
-            LoggerFactory.getLogger(this.getClass()).info("Can't throw this card");
+            LoggerFactory.getLogger(this.getClass()).info("Can't throw this card(s)");
             return new ActionResponse(UUID.randomUUID().toString(), "invalid", new Message("error", exception.getMessage()), username, null);
 
         } catch (CardConfigNotFound exception) {
