@@ -51,7 +51,11 @@ public class PlayerCardStateHelperService {
 
     public void throwCard(Player playerFrom, TableCard tableCard, PlayerCard playerCard) throws CantThrowCardException {
         if (playerCard.getState() == PlayerCardState.HAND) {
-            this.throwCardByRuleStrategy(playerFrom, tableCard, playerCard);
+            try{
+                this.throwCardByRuleStrategy(playerFrom, tableCard, playerCard);
+            } catch (CantThrowCardException exception){
+                pickUpAllThrowCards(playerFrom, playerCard);
+            }
         }
         if (playerCard.getState() == PlayerCardState.VISIBLE) {
             try {
