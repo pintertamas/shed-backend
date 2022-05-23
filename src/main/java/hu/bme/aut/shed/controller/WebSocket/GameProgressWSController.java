@@ -140,9 +140,15 @@ public class GameProgressWSController {
     @SendTo("/topic/{gameName}")
     public ActionResponse pickACard(@DestinationVariable String gameName, @DestinationVariable String username, ActionRequest actionRequest) {
         try {
-
             Game game = gameService.getGameByName(gameName);
             Player player = playerService.getPlayerByUsername(username);
+            player.setCards(playerCardService.getPlayerCardsByPlayer(player)); //I set the players cards list for safety purposes
+
+            LoggerFactory.getLogger(this.getClass()).info("Player : " + player.getUsername() + player.getId());
+            LoggerFactory.getLogger(this.getClass()).info("CurrentPlayer : " + player.getGame().getCurrentPlayer().getUsername() + player.getGame().getCurrentPlayer().getId());
+            if (!Objects.equals(game.getCurrentPlayer().getId(), player.getId())) {
+                throw new NotYourRoundException();
+            }
             if (actionRequest.getCards().size() > 1) {   // if he want to pick up more than one then throw an error
                 throw new CantPickUpCardException();
             }
@@ -172,7 +178,11 @@ public class GameProgressWSController {
             List<CardResponse> pickedCard = new ArrayList<>();
             pickedCard.add(cardResponse);
 
-            return new ActionResponse(UUID.randomUUID().toString(), "valid", null, username, pickedCard);
+            gameService.setNextPlayer(game);
+            LoggerFactory.getLogger(this.getClass()).info(String.valueOf("NextPlayer :" + game.getCurrentPlayer().getUsername()));
+            LoggerFactory.getLogger(this.getClass()).info(String.valueOf("DrawCardMethodEnds"));
+
+            return new ActionResponse(UUID.randomUUID().toString(), "draw", null, username, pickedCard);
         } catch (GameNotFoundException exception) {
             LoggerFactory.getLogger(this.getClass()).info("Game with name (" + gameName + ") not found!");
             return new ActionResponse(UUID.randomUUID().toString(), "invalid", new Message("error", exception.getMessage()), username, null);
@@ -187,7 +197,11 @@ public class GameProgressWSController {
                     "or just not correct tableCard(the last one)");
             return new ActionResponse(UUID.randomUUID().toString(), "invalid", new Message("error", exception.getMessage()), username, null);
 
-        } catch (CardConfigNotFound exception) {
+        } catch (NotYourRoundException exception) {
+            LoggerFactory.getLogger(this.getClass()).info("Not your round");
+            return new ActionResponse(UUID.randomUUID().toString(), "invalid", new Message("error", exception.getMessage()), username, null);
+
+        }  catch (CardConfigNotFound exception) {
             LoggerFactory.getLogger(this.getClass()).info("Card not found");
             return new ActionResponse(UUID.randomUUID().toString(), "invalid", new Message("error", exception.getMessage()), username, null);
 
