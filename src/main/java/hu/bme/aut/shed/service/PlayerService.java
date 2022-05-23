@@ -127,33 +127,34 @@ public class PlayerService {
         game.setPlayers(this.getPlayersByGame(game)); //Spring array list novelo hiba miatt
         LoggerFactory.getLogger(this.getClass()).info("Players in tables" + String.valueOf(game.getPlayers().size()));
 
-        if(Objects.equals(game.getCurrentPlayer().getUsername(), player.getUsername())){
-            if (game.getPlayers().size() == 1) {
-                game.setCurrentPlayer(null);
-                gameRepository.save(game);
-            } else {
+        if(game.getStatus() != GameStatus.NEW){
+            if(Objects.equals(game.getCurrentPlayer().getUsername(), player.getUsername())){
+                if (game.getPlayers().size() <= 1) {
+                    game.setCurrentPlayer(null);
+                    gameRepository.save(game);
+                } else {
+                    Player currentPlayer = game.getCurrentPlayer();
+                    int currentPlayerIndex = game.getPlayers().indexOf(currentPlayer);
+                    int lastPlayerIndex = game.getPlayers().size() - 1;
 
-                Player currentPlayer = game.getCurrentPlayer();
-                int currentPlayerIndex = game.getPlayers().indexOf(currentPlayer);
-                int lastPlayerIndex = game.getPlayers().size() - 1;
-
-                for (Player gamePlayer : game.getPlayers()){
-                    if (Objects.equals(gamePlayer.getUsername(), currentPlayer.getUsername())){
-                        currentPlayerIndex = game.getPlayers().indexOf(gamePlayer);
-                    }
-                }
-
-                Player nextPlayer = new Player();
-                while (nextPlayer.getStatus() != GameStatus.IN_PROGRESS) {
-                    if (currentPlayerIndex + 1 > lastPlayerIndex) { //if index bigger than the last index than then we go back to the first index
-                        nextPlayer = game.getPlayers().get(0); //first player of the list
-                        game.setCurrentPlayer(nextPlayer);
-                    } else {
-                        currentPlayerIndex++;
-                        nextPlayer = game.getPlayers().get(currentPlayerIndex);
-                        game.setCurrentPlayer(nextPlayer);
+                    for (Player gamePlayer : game.getPlayers()){
+                        if (Objects.equals(gamePlayer.getUsername(), currentPlayer.getUsername())){
+                            currentPlayerIndex = game.getPlayers().indexOf(gamePlayer);
+                        }
                     }
 
+                    Player nextPlayer = new Player();
+                    while (nextPlayer.getStatus() != GameStatus.IN_PROGRESS) {
+                        if (currentPlayerIndex + 1 > lastPlayerIndex) { //if index bigger than the last index than then we go back to the first index
+                            nextPlayer = game.getPlayers().get(0); //first player of the list
+                            game.setCurrentPlayer(nextPlayer);
+                        } else {
+                            currentPlayerIndex++;
+                            nextPlayer = game.getPlayers().get(currentPlayerIndex);
+                            game.setCurrentPlayer(nextPlayer);
+                        }
+
+                    }
                 }
             }
         }
