@@ -126,16 +126,19 @@ public class GameService {
         }
 
         int currentPlayerIndex = game.getPlayers().indexOf(player);
+        LoggerFactory.getLogger(this.getClass()).info("Current Player index : " + currentPlayerIndex );
         int lastPlayerIndex = game.getPlayers().size() - 1;
 
         Player nextPlayer = new Player();
         while (nextPlayer.getStatus() != GameStatus.IN_PROGRESS) {
-            if (currentPlayerIndex + 1 > lastPlayerIndex) {
+            if (currentPlayerIndex + 1 > lastPlayerIndex) { //if index bigger than the last index than then we go back to the first index
                 nextPlayer = game.getPlayers().get(0); //first player of the list
                 game.setCurrentPlayer(nextPlayer);
                 LoggerFactory.getLogger(this.getClass()).info("1." + nextPlayer.getUsername());
             } else {
-                nextPlayer = game.getPlayers().get(currentPlayerIndex + 1); //if index bigger than the last index than then we go back to the first index
+                LoggerFactory.getLogger(this.getClass()).info("Current Player index : " + currentPlayerIndex );
+                currentPlayerIndex++;
+                nextPlayer = game.getPlayers().get(currentPlayerIndex);
                 game.setCurrentPlayer(nextPlayer);
                 LoggerFactory.getLogger(this.getClass()).info("2." + nextPlayer.getUsername());
             }

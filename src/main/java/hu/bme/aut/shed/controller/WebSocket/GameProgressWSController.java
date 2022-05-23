@@ -105,7 +105,7 @@ public class GameProgressWSController {
             //gameService.checkEndCondition(game);
 
             gameService.setNextPlayer(game);
-            LoggerFactory.getLogger(this.getClass()).info(String.valueOf("NextPlayer :" + game.getCurrentPlayer()));
+            LoggerFactory.getLogger(this.getClass()).info(String.valueOf("NextPlayer :" + game.getCurrentPlayer().getUsername()));
             LoggerFactory.getLogger(this.getClass()).info(String.valueOf("ThrowCardMethodEnds"));
             return new ActionResponse(UUID.randomUUID().toString(), "valid", null, username, pickPlayerCards);
 
