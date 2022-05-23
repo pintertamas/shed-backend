@@ -40,11 +40,11 @@ public class CardsController {
     @RequestMapping(value = "/player/{username}/{playerCardState}", method = {RequestMethod.GET}, produces = "application/json")
     public ResponseEntity<?> getPlayerCards(@PathVariable String username, @PathVariable String playerCardState) {
         try {
-            String token = JwtTokenUtil.getToken();
+            /*String token = JwtTokenUtil.getToken();
             User currentUser = jwtTokenUtil.getUserFromToken(token);
             if (!username.equals(currentUser.getUsername())) {
                 throw new AuthorizationServiceException("You dont have permission to get data");
-            }
+            }*/
 
             Player player = playerService.getPlayerByUsername(username);
 

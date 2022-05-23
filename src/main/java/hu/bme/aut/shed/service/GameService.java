@@ -121,13 +121,18 @@ public class GameService {
         game.setPlayers(playerService.getPlayersByGame(game));//Spring array list novelo hiba miatt
         Player player = game.getCurrentPlayer();
 
-        for (Player player1 : game.getPlayers()){
-            LoggerFactory.getLogger(this.getClass()).info("Next Player Method : Players in Game : " + player1.getId() + player1.getUsername() );
+
+        int currentPlayerIndex =  game.getPlayers().indexOf(player);
+        int lastPlayerIndex = game.getPlayers().size() - 1;
+
+        for (Player gamePlayer : game.getPlayers()){
+            LoggerFactory.getLogger(this.getClass()).info("Next Player Method : Players in Game : " + gamePlayer.getId() + gamePlayer.getUsername() );
+            if (Objects.equals(gamePlayer.getUsername(), player.getUsername())){
+                currentPlayerIndex = game.getPlayers().indexOf(gamePlayer);
+            }
         }
 
-        int currentPlayerIndex = game.getPlayers().indexOf(player);
         LoggerFactory.getLogger(this.getClass()).info("Current Player index : " + currentPlayerIndex );
-        int lastPlayerIndex = game.getPlayers().size() - 1;
 
         Player nextPlayer = new Player();
         while (nextPlayer.getStatus() != GameStatus.IN_PROGRESS) {
