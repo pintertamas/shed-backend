@@ -121,19 +121,25 @@ public class GameService {
         game.setPlayers(playerService.getPlayersByGame(game));//Spring array list novelo hiba miatt
         Player player = game.getCurrentPlayer();
 
-        int index = game.getPlayers().indexOf(player);
+        for (Player player1 : game.getPlayers()){
+            LoggerFactory.getLogger(this.getClass()).info("Next Player Method : Players in Game : " + player1.getId() + player1.getUsername() );
+        }
+
+        int currentPlayerIndex = game.getPlayers().indexOf(player);
         int lastPlayerIndex = game.getPlayers().size() - 1;
 
         Player nextPlayer = new Player();
         while (nextPlayer.getStatus() != GameStatus.IN_PROGRESS) {
-            if (index + 1 > lastPlayerIndex) {
+            if (currentPlayerIndex + 1 > lastPlayerIndex) {
                 nextPlayer = game.getPlayers().get(0); //first player of the list
                 game.setCurrentPlayer(nextPlayer);
-
+                LoggerFactory.getLogger(this.getClass()).info("1." + nextPlayer.getUsername());
             } else {
-                nextPlayer = game.getPlayers().get(index + 1); //if index bigger than the last index than then we go back to the first index
+                nextPlayer = game.getPlayers().get(currentPlayerIndex + 1); //if index bigger than the last index than then we go back to the first index
                 game.setCurrentPlayer(nextPlayer);
+                LoggerFactory.getLogger(this.getClass()).info("2." + nextPlayer.getUsername());
             }
+
         }
 
         gameRepository.save(game);
