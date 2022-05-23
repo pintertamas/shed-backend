@@ -105,7 +105,7 @@ public class PlayerService {
         return connectedPlayer;
     }
 
-    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public void disconnectPlayer(String username) {
 
         Player player = playerRepository.findByUsername(username);
@@ -126,7 +126,7 @@ public class PlayerService {
 
         game.setPlayers(this.getPlayersByGame(game)); //Spring array list novelo hiba miatt
         LoggerFactory.getLogger(this.getClass()).info("Players in tables" + String.valueOf(game.getPlayers().size()));
-        if (game.getPlayers().size() == 1) {
+        if (game.getPlayers().size() <= 1) {
             game.setCurrentPlayer(null);
         } else {
 

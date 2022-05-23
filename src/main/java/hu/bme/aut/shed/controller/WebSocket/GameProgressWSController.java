@@ -138,7 +138,7 @@ public class GameProgressWSController {
 
     @MessageMapping("/pick-a-card/{gameName}/{username}")
     @SendTo("/topic/{gameName}")
-    public ActionResponse pickACard(@DestinationVariable String gameName, @DestinationVariable String username, ActionRequest actionRequest) {
+    public ActionResponse pickACard(@DestinationVariable String gameName, @DestinationVariable String username) {
         try {
             Game game = gameService.getGameByName(gameName);
             Player player = playerService.getPlayerByUsername(username);
@@ -149,21 +149,12 @@ public class GameProgressWSController {
             if (!Objects.equals(game.getCurrentPlayer().getId(), player.getId())) {
                 throw new NotYourRoundException();
             }
-            if (actionRequest.getCards().size() > 1) {   // if he want to pick up more than one then throw an error
-                throw new CantPickUpCardException();
-            }
+
             if (tableCardService.getAllByTableCardStateAndGame(TableCardState.PICK, game).size() == 0) { //If no more pick card then ha can't pick up cards
                 throw new CantPickUpCardException();
             }
 
-            CardConfig cardConfig = cardConfigService.getCardConfigById(actionRequest.getCards().get(0).getCardConfigId());//Checked if its real if its not then throw error
-            TableCard tableCard = tableCardService.getTableCardByCardConfig(cardConfig, TableCardState.PICK);
             TableCard lastPickTableCard = tableCardService.getLastTableCard(TableCardState.PICK, game);
-
-            if (tableCard.getCardConfig() != lastPickTableCard.getCardConfig()) { //Cant pick up a card if its not the last one in the row
-                throw new CantPickUpCardException();
-            }
-
             playerService.pickCard(player, lastPickTableCard);
 
             LoggerFactory.getLogger(this.getClass()).info(String.valueOf("Card has been drawn : " + lastPickTableCard.getId()));
@@ -199,14 +190,6 @@ public class GameProgressWSController {
 
         } catch (NotYourRoundException exception) {
             LoggerFactory.getLogger(this.getClass()).info("Not your round");
-            return new ActionResponse(UUID.randomUUID().toString(), "invalid", new Message("error", exception.getMessage()), username, null);
-
-        }  catch (CardConfigNotFound exception) {
-            LoggerFactory.getLogger(this.getClass()).info("Card not found");
-            return new ActionResponse(UUID.randomUUID().toString(), "invalid", new Message("error", exception.getMessage()), username, null);
-
-        } catch (TableCardNotFoundException exception) {
-            LoggerFactory.getLogger(this.getClass()).info("Table Card not found");
             return new ActionResponse(UUID.randomUUID().toString(), "invalid", new Message("error", exception.getMessage()), username, null);
 
         } catch (Exception exception) {
