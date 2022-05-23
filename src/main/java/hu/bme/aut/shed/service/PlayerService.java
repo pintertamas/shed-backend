@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @AllArgsConstructor
@@ -128,15 +129,28 @@ public class PlayerService {
         if (game.getPlayers().size() == 1) {
             game.setCurrentPlayer(null);
         } else {
+
             Player currentPlayer = game.getCurrentPlayer();
-            int index = game.getPlayers().indexOf(currentPlayer);
+            int currentPlayerIndex = game.getPlayers().indexOf(currentPlayer);
             int lastPlayerIndex = game.getPlayers().size() - 1;
-            if (index + 1 > lastPlayerIndex) {
-                Player firstPlayerOfTheList = game.getPlayers().get(0);
-                game.setCurrentPlayer(firstPlayerOfTheList);
-            } else {
-                Player nextPlayer = game.getPlayers().get(index + 1);
-                game.setCurrentPlayer(nextPlayer);
+
+            for (Player gamePlayer : game.getPlayers()){
+                if (Objects.equals(gamePlayer.getUsername(), currentPlayer.getUsername())){
+                    currentPlayerIndex = game.getPlayers().indexOf(gamePlayer);
+                }
+            }
+
+            Player nextPlayer = new Player();
+            while (nextPlayer.getStatus() != GameStatus.IN_PROGRESS) {
+                if (currentPlayerIndex + 1 > lastPlayerIndex) { //if index bigger than the last index than then we go back to the first index
+                    nextPlayer = game.getPlayers().get(0); //first player of the list
+                    game.setCurrentPlayer(nextPlayer);
+                } else {
+                    currentPlayerIndex++;
+                    nextPlayer = game.getPlayers().get(currentPlayerIndex);
+                    game.setCurrentPlayer(nextPlayer);
+                }
+
             }
         }
 
