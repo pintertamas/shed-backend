@@ -130,3 +130,6 @@ WidgetsBinding.instance?.addPostFrameCallback(
 Szintén a game_screen.dart fájlban változtattam a loadData függvényen, így minden provider változtatáskor szinkronizálom a szerveren lévő adatokat a mobillal amiről egy FutureBuilder gondoskodik.
 Egy probléma azomban felmerült, ami az, hogy egészen lassan töltenek be a kártyák a lap rakás után, ami kicsit rontja a felhasználói élményt. Ez valószínűleg a WidgetsBinding-nak tudható be, de egyelőre nem tudtam megtalálni az okát.
 Sajnos belefutottunk egy nagyobb problémába is, amiből sokat tanultunk. A szabályokat nem beszéltük meg elég részletességgel és emiatt lettek félreértések a kódban, amiket nehéz volt megjavítani, néhányat el is vetettünk. Azt tanultuk meg ebből, hogy a specifikációnak elegendően részletesnek kell lennie, ahol meg homályos valami mégis, ott meg pontosítást kell kérni róla.
+
+## 14. hét
+Ezen a héten a dokumentációt és a prezentációt készítettem el, ezekhez létrehoztam mockupokat is a mobilos és webes screenshotokról.
