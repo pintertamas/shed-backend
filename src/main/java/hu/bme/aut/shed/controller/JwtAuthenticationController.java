@@ -87,16 +87,8 @@ public class JwtAuthenticationController {
                 throw new Exception("wrong one time password");
             User user = userService.register(newUser);
             LoggerFactory.getLogger(this.getClass()).info("USER CREATED: " + newUser);
-            emailService.sendMessage(newUser.getEmail(), "Registration successful",
-                    "Welcome to Shed " + newUser.getUsername() + "!"
-                            + "\n"
-                            + "Good Luck Have Fun"
-                            + "\n"
-                            + "\n"
-                            + "Greetings"
-                            + "\n"
-                            + "Shed team"
-            );
+            if (!emailService.sendRegistrationSuccessfulMessage(newUser.getEmail(), newUser.getUsername()))
+                throw new Exception("Could not send Email to: " + newUser.getEmail());
             return ResponseEntity.ok(user);
         } catch (UserAlreadyExistsException exception) {
             LoggerFactory.getLogger(this.getClass()).error("USER ALREADY EXISTS: " + exception.getExistingUser());
