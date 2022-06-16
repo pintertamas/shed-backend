@@ -38,10 +38,10 @@ public class UserService {
     private PasswordEncoder bcryptEncoder;
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    EmailService emailService;
+    private EmailService emailService;
 
     private void authenticate(String username, String password) throws Exception {
         try {
