@@ -167,9 +167,9 @@ public class GameService {
         List<Game> deletedGames = new ArrayList<>();
         Optional<List<Game>> finishedGames = gameRepository.findAllByStatus(GameStatus.FINISHED);
         Optional<List<Game>> inProgressGames = gameRepository.findAllByStatus(GameStatus.IN_PROGRESS);
-        Optional<List<Game>> NewGames = gameRepository.findAllByStatus(GameStatus.NEW);
-        if (NewGames.isPresent()) {                   //new games will be deleted if they are created for than 1 hour ago
-            for (Game game : NewGames.get()) {
+        Optional<List<Game>> newGames = gameRepository.findAllByStatus(GameStatus.NEW);
+        if (newGames.isPresent()) {                   //new games will be deleted if they are created for than 1 hour ago
+            for (Game game : newGames.get()) {
                 Duration difference = Duration.between(game.getCreationTime(), LocalDateTime.now());
                 if (difference.toHours() >= 1) {
                     deletedGames.add(game);
