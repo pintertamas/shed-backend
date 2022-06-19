@@ -21,7 +21,7 @@ import javax.validation.Valid;
 
 @RestController
 @CrossOrigin
-public class JwtAuthenticationController {
+public class AuthenticationController {
 
     @Autowired
     private UserService userService;
